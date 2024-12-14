@@ -12,6 +12,19 @@ class InitializationPage extends StatefulWidget {
 
 class _InitializationPageState extends State<InitializationPage> {
   @override
+  void initState() {
+    initializationCheck();
+    super.initState();
+  }
+
+  void initializationCheck() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+    // context.go(AppPaths.home);
+    context.goWithTransition(AppPaths.home, direction: TransitionDirection.leftToRight);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

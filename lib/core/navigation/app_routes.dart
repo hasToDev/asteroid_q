@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:asteroid_q/core/core.dart';
 import 'package:asteroid_q/pages/pages.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ class AppRoutes {
   static final GoRouter router = GoRouter(
     debugLogDiagnostics: true,
     initialLocation: AppPaths.initialization,
+    extraCodec: const _AppExtraCodec(),
     routes: [
       GoRoute(
         path: AppPaths.initialization,
@@ -99,5 +102,51 @@ class AppRoutes {
       case TransitionDirection.bottomToTop:
         return const Offset(0.0, 1.0);
     }
+  }
+}
+
+/// A codec for GoRouter
+class _AppExtraCodec extends Codec<Object?, Object?> {
+  const _AppExtraCodec();
+
+  @override
+  Converter<Object?, Object?> get decoder => const _AppExtraDecoder();
+
+  @override
+  Converter<Object?, Object?> get encoder => const _AppExtraEncoder();
+}
+
+/// Encoder
+class _AppExtraEncoder extends Converter<Object?, Object?> {
+  const _AppExtraEncoder();
+
+  @override
+  Object? convert(Object? input) {
+    if (input == null) {
+      return null;
+    }
+    switch (input) {
+      case TransitionDirection _:
+        return <Object?>['TransitionDirection', input.getString];
+      default:
+        throw FormatException('GoRouter _AppExtraEncoder cannot encode type ${input.runtimeType}');
+    }
+  }
+}
+
+/// Decoder
+class _AppExtraDecoder extends Converter<Object?, Object?> {
+  const _AppExtraDecoder();
+
+  @override
+  Object? convert(Object? input) {
+    if (input == null) {
+      return null;
+    }
+    final List<Object?> inputAsList = input as List<Object?>;
+    if (inputAsList[0] == 'TransitionDirection') {
+      return (inputAsList[1] as String).getTransitionDirection;
+    }
+    throw FormatException('GoRouter _AppExtraDecoder unable to parse input: $input');
   }
 }
