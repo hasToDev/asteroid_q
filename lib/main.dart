@@ -1,8 +1,7 @@
-import 'package:asteroid_q/pages/pages.dart';
+import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import 'core/core.dart'; 
+//TODO: change Outlined & Elevated Button to Container due to extra padding bug in mobile web
 
 void main() {
   runApp(const MyApp());
