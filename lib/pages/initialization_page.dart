@@ -2,14 +2,14 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+class InitializationPage extends StatefulWidget {
+  const InitializationPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<InitializationPage> createState() => _InitializationPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _InitializationPageState extends State<InitializationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -5,13 +5,15 @@ import 'package:go_router/go_router.dart';
 
 class AppRoutes {
   static final GoRouter router = GoRouter(
+    debugLogDiagnostics: true,
+    initialLocation: AppPaths.initialization,
     routes: [
       GoRoute(
-        path: AppPaths.splash,
+        path: AppPaths.initialization,
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: const SplashPage(),
+          child: const InitializationPage(),
         ),
       ),
       GoRoute(
