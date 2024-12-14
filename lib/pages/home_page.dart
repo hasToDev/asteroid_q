@@ -1,4 +1,5 @@
 import 'package:asteroid_q/core/core.dart';
+import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,14 +16,33 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Center(
         child: Column(
+          spacing: 10,
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Home Page'),
-            ElevatedButton(
+            AppElevatedButton(
+              title: 'Start',
               onPressed: () {
                 context.go(AppPaths.gameplay);
               },
-              child: const Text('Start Game'),
+            ),
+            AppElevatedButton(
+              title: 'Leaderboard',
+              onPressed: () {
+                context.go(AppPaths.leaderboard);
+              },
+            ),
+            AppElevatedButton(
+              title: 'Username',
+              onPressed: () {
+                context.go(AppPaths.username);
+              },
+            ),
+            AppElevatedButton(
+              title: 'Audio',
+              onPressed: () {
+                context.go(AppPaths.audio);
+              },
             ),
           ],
         ),
