@@ -1,4 +1,5 @@
 import 'package:asteroid_q/core/core.dart';
+import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,7 @@ class _InitializationPageState extends State<InitializationPage> {
     return Scaffold(
       body: Center(
         child: Column(
+          spacing: 8,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Splash Page'),
@@ -23,6 +25,12 @@ class _InitializationPageState extends State<InitializationPage> {
                 context.go(AppPaths.home);
               },
               child: const Text('Go to Home'),
+            ),
+            AppElevatedButton(
+              title: 'Elevated Button',
+              onPressed: () {
+                // context.go(AppPaths.home);
+              },
             ),
           ],
         ),
