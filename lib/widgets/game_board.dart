@@ -68,21 +68,25 @@ class _GameBoardState extends State<GameBoard> {
                       child: SizedBox(
                         width: sizedBoxSize,
                         height: sizedBoxSize,
-                        child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: boxNumber,
-                            mainAxisSpacing: axisSpacing,
-                            crossAxisSpacing: axisSpacing,
+                        child: ScrollConfiguration(
+                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                          child: GridView.builder(
+                            padding: EdgeInsets.zero,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: boxNumber,
+                              mainAxisSpacing: axisSpacing,
+                              crossAxisSpacing: axisSpacing,
+                            ),
+                            itemCount: itemCount,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(borderRadius),
+                                ),
+                              );
+                            },
                           ),
-                          itemCount: itemCount,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(borderRadius),
-                              ),
-                            );
-                          },
                         ),
                       ),
                     );
