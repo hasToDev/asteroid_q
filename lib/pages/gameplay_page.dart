@@ -12,6 +12,11 @@ class GameplayPage extends StatefulWidget {
 
 class _GameplayPageState extends State<GameplayPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -19,13 +24,15 @@ class _GameplayPageState extends State<GameplayPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go(AppPaths.home);
-                  },
-                  child: const Text('Back to Home'),
+              ExcludeFocus(
+                child: SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.go(AppPaths.home);
+                    },
+                    child: const Text('Back to Home'),
+                  ),
                 ),
               ),
               const Expanded(
