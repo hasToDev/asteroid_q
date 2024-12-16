@@ -1,9 +1,12 @@
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //TODO: change Outlined & Elevated Button to Container due to extra padding bug in mobile web
 
-void main() {
+void main() async {
+  await DependencyInjection.init();
+
   runApp(const MyApp());
 }
 
@@ -12,13 +15,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Asteroid Q',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),
+      ],
+      child: MaterialApp.router(
+        title: 'Asteroid Q',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        routerConfig: AppRoutes.router,
       ),
-      routerConfig: AppRoutes.router,
     );
   }
 }

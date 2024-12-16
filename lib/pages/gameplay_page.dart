@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:asteroid_q/assets/assets.dart';
 import 'package:asteroid_q/core/core.dart';
+import 'package:asteroid_q/widgets/fighter_jet.dart';
 import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -44,6 +48,15 @@ class _GameplayPageState extends State<GameplayPage> {
               ),
             ],
           ),
+          LayoutBuilder(builder: (context, constraints) {
+            Offset centerOffset = Offset(constraints.maxWidth / 2, constraints.maxHeight / 2);
+            return FighterJet(
+              initialIndex: SpaceTilePosition.center.id,
+              initialOffset: centerOffset,
+              initialConstraints: constraints,
+              imageBytes: base64.decode(fighterJet),
+            );
+          }),
         ],
       ),
     );

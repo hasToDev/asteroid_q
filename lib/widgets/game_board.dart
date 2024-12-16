@@ -17,7 +17,8 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
-  int boxNumber = 17;
+  int boxNumber = gridBoxNumber;
+  double innerShortestSide = 0;
 
   Offset selectedOffset = Offset.zero;
   ValueNotifier<int> focusedIndex = ValueNotifier<int>(SpaceTilePosition.center.id);
@@ -34,6 +35,7 @@ class _GameBoardState extends State<GameBoard> {
     rows = boxNumber;
     columns = boxNumber;
     _focusNode = FocusNode();
+    // selectedOffset = Offset(MediaQuery.sizeOf(context).width / 2, MediaQuery.sizeOf(context).height / 2);
 
     if (widget.initialFocusIndex != null) {
       focusedIndex = ValueNotifier<int>(widget.initialFocusIndex!);
@@ -51,11 +53,15 @@ class _GameBoardState extends State<GameBoard> {
     // update focused index
     focusedIndex.value = index;
 
+    // only update selectedOffset for space tile
+    // next galaxy tile is excluded
+    if (index > 288) return;
+
     // Calculate grid item position
     final row = index ~/ columns;
     final col = index % columns;
 
-    final itemSize = MediaQuery.sizeOf(context).shortestSide / columns;
+    final itemSize = innerShortestSide / columns;
     final gridSize = itemSize * columns;
 
     // Calculate the actual position considering grid is centered
@@ -79,6 +85,9 @@ class _GameBoardState extends State<GameBoard> {
         break;
       case KeyboardAction.move:
         // TODO: implement select action
+        debugPrint('move');
+        if (selectedOffset == const Offset(0.0, 0.0)) return;
+        getIt<FighterJetProvider>().moveJet(selectedOffset, focusedIndex.value);
         break;
       case KeyboardAction.upgrade:
         // TODO: Handle this case.
@@ -105,7 +114,7 @@ class _GameBoardState extends State<GameBoard> {
           double outerShortestSide =
               constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
 
-          double outerItemSize = (outerShortestSide / (boxNumber + 2)).floorToDouble();
+          double outerItemSize = (outerShortestSide / (boxNumber + 2));
           double outerBorderRadius = outerItemSize * 0.25;
           double outerAxisSpacing = outerItemSize * 0.125;
           double outerSizedBoxSize = outerItemSize * boxNumber;
@@ -128,7 +137,7 @@ class _GameBoardState extends State<GameBoard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 8),
+                  const SizedBox(height: spaceFromScreenEdge),
                   NextGalaxyTile(
                     position: NextGalaxy.top,
                     width: outerSizedBoxSize,
@@ -143,10 +152,16 @@ class _GameBoardState extends State<GameBoard> {
                   SizedBox(height: outerAxisSpacing),
                   Expanded(
                     child: LayoutBuilder(builder: (context, constraints) {
-                      double shortestSide =
+                      // ! NOTE
+                      // ! innerShortestSide is always smaller than outerShortestSide
+                      // ! because there are NextGalaxyTile wrapping GridView
+
+                      // ! always use itemSize calculated with innerShortestSide
+                      // ! to get correct offset or recalculated offset for the game
+                      innerShortestSide =
                           constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
 
-                      double itemSize = (shortestSide / boxNumber).floorToDouble();
+                      double itemSize = (innerShortestSide / boxNumber);
                       double borderRadius = itemSize * 0.25;
                       double axisSpacing = itemSize * 0.017;
                       double sizedBoxSize = itemSize * boxNumber;
@@ -191,7 +206,7 @@ class _GameBoardState extends State<GameBoard> {
                       //
                     },
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: spaceFromScreenEdge),
                 ],
               ),
               SizedBox(width: outerAxisSpacing * 2),

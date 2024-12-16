@@ -106,3 +106,29 @@ extension StringX on String {
     }
   }
 }
+
+extension OffsetX on Offset {
+  /// Recalculates an offset based on screen size changes.
+  Offset recalculateOffset({
+    required int gridIndex,
+    required int gridBoxNumber,
+    required double innerShortestSide,
+    required BoxConstraints newConstraints,
+  }) {
+    // Calculate grid item position
+    final row = gridIndex ~/ gridBoxNumber;
+    final col = gridIndex % gridBoxNumber;
+
+    final itemSize = innerShortestSide / gridBoxNumber;
+    final gridSize = itemSize * gridBoxNumber;
+
+    // Calculate the actual position considering grid is centered
+    final leftOffset = (newConstraints.maxWidth - gridSize) / 2;
+    final topOffset = (newConstraints.maxHeight - gridSize) / 2;
+
+    final itemX = leftOffset + (col * itemSize) + (itemSize / 2);
+    final itemY = topOffset + (row * itemSize) + (itemSize / 2);
+
+    return Offset(itemX, itemY);
+  }
+}
