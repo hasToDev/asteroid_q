@@ -26,6 +26,10 @@ extension GoRouterStateX on GoRouterState {
   }
 }
 
+extension BoxConstraintsX on BoxConstraints {
+  bool isEqual(BoxConstraints constraints) => constraints.maxHeight == maxHeight && constraints.maxWidth == maxWidth;
+}
+
 extension BuildContextX on BuildContext {
   void goWithTransition(String location, {TransitionDirection? direction}) {
     // final extra = direction != null ? {'transitionDirection': direction} : null;
@@ -37,6 +41,38 @@ extension BuildContextX on BuildContext {
 
   /// [style] shorten syntax for textTheme
   TextTheme get style => Theme.of(this).textTheme;
+}
+
+extension NextGalaxyX on NextGalaxy {
+  int get id {
+    switch (this) {
+      case NextGalaxy.top:
+        return 1111;
+      case NextGalaxy.right:
+        return 2222;
+      case NextGalaxy.bottom:
+        return 3333;
+      case NextGalaxy.left:
+        return 4444;
+    }
+  }
+}
+
+extension SpaceTilePositionX on SpaceTilePosition {
+  int get id {
+    switch (this) {
+      case SpaceTilePosition.center:
+        return 144;
+      case SpaceTilePosition.top:
+        return 8;
+      case SpaceTilePosition.bottom:
+        return 280;
+      case SpaceTilePosition.left:
+        return 136;
+      case SpaceTilePosition.right:
+        return 152;
+    }
+  }
 }
 
 extension TransitionDirectionX on TransitionDirection {
