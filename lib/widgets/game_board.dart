@@ -35,7 +35,6 @@ class _GameBoardState extends State<GameBoard> {
     rows = boxNumber;
     columns = boxNumber;
     _focusNode = FocusNode();
-    // selectedOffset = Offset(MediaQuery.sizeOf(context).width / 2, MediaQuery.sizeOf(context).height / 2);
 
     if (widget.initialFocusIndex != null) {
       focusedIndex = ValueNotifier<int>(widget.initialFocusIndex!);
@@ -57,22 +56,7 @@ class _GameBoardState extends State<GameBoard> {
     // next galaxy tile is excluded
     if (index > 288) return;
 
-    // Calculate grid item position
-    final row = index ~/ columns;
-    final col = index % columns;
-
-    final itemSize = innerShortestSide / columns;
-    final gridSize = itemSize * columns;
-
-    // Calculate the actual position considering grid is centered
-    final screenSize = MediaQuery.sizeOf(context);
-    final leftOffset = (screenSize.width - gridSize) / 2;
-    final topOffset = (screenSize.height - gridSize) / 2;
-
-    final itemX = leftOffset + (col * itemSize) + (itemSize / 2);
-    final itemY = topOffset + (row * itemSize) + (itemSize / 2);
-
-    selectedOffset = Offset(itemX, itemY);
+    selectedOffset = FighterJetUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
   }
 
   void _handleKeyEvent(KeyEvent event) {
@@ -84,10 +68,8 @@ class _GameBoardState extends State<GameBoard> {
         }
         break;
       case KeyboardAction.move:
-        // TODO: implement select action
-        debugPrint('move');
         if (selectedOffset == const Offset(0.0, 0.0)) return;
-        getIt<FighterJetProvider>().moveJet(selectedOffset, focusedIndex.value);
+        getIt<FighterJetProvider>().moveJet(focusedIndex.value, MediaQuery.sizeOf(context), innerShortestSide);
         break;
       case KeyboardAction.upgrade:
         // TODO: Handle this case.

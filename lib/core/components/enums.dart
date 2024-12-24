@@ -51,7 +51,7 @@ enum FighterJetDirection {
   left(270),
   upLeft(315);
 
-  final int angle;
+  final double angle;
 
   const FighterJetDirection(this.angle);
 }
@@ -61,6 +61,10 @@ enum FighterJetAction {
   refuel,
   shoot,
   move,
-  rotate,
   none,
+}
+
+enum FighterJetPath {
+  direct,
+  transit,
 }
