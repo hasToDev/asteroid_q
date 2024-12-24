@@ -79,24 +79,24 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     moveJET(command);
   }
 
-  void moveJET(FighterJetCommand command) {
+  void moveJET(FighterJetCommand command) async {
+    await Future.delayed(const Duration(milliseconds: 75));
+
     _animationMOVE = Tween<Offset>(
       begin: _currentOffset,
       end: command.offset,
     ).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut));
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controlMOVE
-        ..duration = const Duration(milliseconds: 500)
-        ..forward(from: 0).then((_) {
-          statsMOVE++;
-          _currentOffset = _animationMOVE.value;
-          bool nextCommandExists = context.read<FighterJetProvider>().commands.isNotEmpty;
-          if (nextCommandExists) executeMOVE(context.read<FighterJetProvider>().commands.removeAt(0));
-          // TODO: delete later
-          if (!nextCommandExists) debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
-        });
-    });
+    _controlMOVE
+      ..duration = const Duration(milliseconds: 500)
+      ..forward(from: 0).then((_) {
+        statsMOVE++;
+        _currentOffset = _animationMOVE.value;
+        bool nextCommandExists = context.read<FighterJetProvider>().commands.isNotEmpty;
+        if (nextCommandExists) executeMOVE(context.read<FighterJetProvider>().commands.removeAt(0));
+        // TODO: delete later
+        if (!nextCommandExists) debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
+      });
   }
 
   void rotateJET(FighterJetCommand command) async {
@@ -109,7 +109,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     if (angleDifference > 180) endAngle = endAngle - 360;
     if (angleDifference < -180) endAngle = endAngle + 360;
 
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 75));
 
     _animationROTATE = Tween<double>(begin: startAngle, end: endAngle).animate(
       CurvedAnimation(parent: _controlROTATE, curve: Curves.easeInOut),
@@ -208,7 +208,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                       return Transform(
                         alignment: Alignment.center,
                         transform: Matrix4.rotationZ(_animationROTATE.value * piMultiplier),
-                        filterQuality: FilterQuality.high,
+                        filterQuality: FilterQuality.medium,
                         child: child,
                       );
                     },
@@ -221,7 +221,6 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                             height: itemSize,
                             width: itemSize,
                             fit: BoxFit.fitHeight,
-                            filterQuality: FilterQuality.high,
                             gaplessPlayback: true,
                             isAntiAlias: true,
                           ),
