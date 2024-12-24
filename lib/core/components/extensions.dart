@@ -43,53 +43,6 @@ extension BuildContextX on BuildContext {
   TextTheme get style => Theme.of(this).textTheme;
 }
 
-extension NextGalaxyX on NextGalaxy {
-  int get id {
-    switch (this) {
-      case NextGalaxy.top:
-        return 1111;
-      case NextGalaxy.right:
-        return 2222;
-      case NextGalaxy.bottom:
-        return 3333;
-      case NextGalaxy.left:
-        return 4444;
-    }
-  }
-}
-
-extension SpaceTilePositionX on SpaceTilePosition {
-  int get id {
-    switch (this) {
-      case SpaceTilePosition.center:
-        return 144;
-      case SpaceTilePosition.top:
-        return 8;
-      case SpaceTilePosition.bottom:
-        return 280;
-      case SpaceTilePosition.left:
-        return 136;
-      case SpaceTilePosition.right:
-        return 152;
-    }
-  }
-}
-
-extension TransitionDirectionX on TransitionDirection {
-  String get getString {
-    switch (this) {
-      case TransitionDirection.bottomToTop:
-        return 'bottomToTop';
-      case TransitionDirection.leftToRight:
-        return 'leftToRight';
-      case TransitionDirection.rightToLeft:
-        return 'rightToLeft';
-      case TransitionDirection.topToBottom:
-        return 'topToBottom';
-    }
-  }
-}
-
 extension StringX on String {
   TransitionDirection get getTransitionDirection {
     switch (this) {

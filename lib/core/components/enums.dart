@@ -1,8 +1,12 @@
 enum TransitionDirection {
-  leftToRight,
-  rightToLeft,
-  topToBottom,
-  bottomToTop,
+  leftToRight('leftToRight'),
+  rightToLeft('rightToLeft'),
+  topToBottom('topToBottom'),
+  bottomToTop('bottomToTop');
+
+  final String getString;
+
+  const TransitionDirection(this.getString);
 }
 
 enum KeyboardAction {
@@ -15,18 +19,26 @@ enum KeyboardAction {
 }
 
 enum NextGalaxy {
-  top,
-  bottom,
-  left,
-  right,
+  top(1111),
+  bottom(3333),
+  left(4444),
+  right(2222);
+
+  final int id;
+
+  const NextGalaxy(this.id);
 }
 
 enum SpaceTilePosition {
-  center,
-  top,
-  bottom,
-  left,
-  right,
+  center(144),
+  top(8),
+  bottom(280),
+  left(136),
+  right(152);
+
+  final int id;
+
+  const SpaceTilePosition(this.id);
 }
 
 enum FighterJetDirection {
@@ -40,6 +52,7 @@ enum FighterJetDirection {
   upLeft(315);
 
   final int angle;
+
   const FighterJetDirection(this.angle);
 }
 

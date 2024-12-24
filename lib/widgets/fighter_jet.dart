@@ -112,6 +112,7 @@ class _FighterJetState extends State<FighterJet> with SingleTickerProviderStateM
 
                   if (_controlMOVE.isAnimating) {
                     offsetUsed = _animationMOVE.value;
+                    _currentOffset = _animationMOVE.value;
                   }
 
                   double outerShortestSide =
