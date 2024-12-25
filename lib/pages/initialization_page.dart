@@ -20,7 +20,6 @@ class _InitializationPageState extends State<InitializationPage> {
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
     context.go(AppPaths.home);
-    // context.goWithTransition(AppPaths.home, direction: TransitionDirection.leftToRight);
   }
 
   @override

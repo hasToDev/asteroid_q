@@ -8,12 +8,18 @@ class FighterJetProvider extends ChangeNotifier {
   FighterJetDirection currentDirection = FighterJetDirection.up;
   int updateMarks = 0;
   int currentIndex = 0;
+  bool isJetMoving = false;
 
   void setGridIndex(int index) {
     currentIndex = index;
   }
 
+  void jetFinishMoving() => isJetMoving = false;
+
   void moveJet(int targetIndex, Size screenSize, double innerShortestSide) {
+    if (isJetMoving) return;
+    isJetMoving = true;
+
     // create first Command
     FighterJetCommand commandA = FighterJetUtils.findShortestPath(
         currentIndex, targetIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);

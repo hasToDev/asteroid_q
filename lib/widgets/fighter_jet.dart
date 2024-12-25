@@ -93,9 +93,13 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
         statsMOVE++;
         _currentOffset = _animationMOVE.value;
         bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
-        if (nextCommandExists) executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
-        // TODO: delete later
-        if (!nextCommandExists) debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
+        if (nextCommandExists) {
+          executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
+        } else {
+          getIt<FighterJetProvider>().jetFinishMoving();
+          // TODO: delete later
+          debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
+        }
       });
   }
 
