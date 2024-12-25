@@ -56,7 +56,7 @@ class _GameBoardState extends State<GameBoard> {
     // next galaxy tile is excluded
     if (index > 288) return;
 
-    selectedOffset = FighterJetUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
+    selectedOffset = GameBoardUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
   }
 
   void _handleKeyEvent(KeyEvent event) {
@@ -145,7 +145,7 @@ class _GameBoardState extends State<GameBoard> {
 
                       double itemSize = (innerShortestSide / boxNumber);
                       double borderRadius = itemSize * 0.25;
-                      double axisSpacing = itemSize * 0.017;
+                      double axisSpacing = itemSize * axisSpacingMultiplier;
                       double sizedBoxSize = itemSize * boxNumber;
 
                       return Center(

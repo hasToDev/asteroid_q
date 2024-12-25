@@ -68,3 +68,8 @@ enum FighterJetPath {
   direct,
   transit,
 }
+
+enum GameObjectType {
+  asteroid,
+  fuelPod,
+}

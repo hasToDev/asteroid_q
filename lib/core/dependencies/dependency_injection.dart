@@ -7,5 +7,10 @@ class DependencyInjection {
   static Future<void> init() async {
     // Provider
     getIt.registerLazySingleton(() => FighterJetProvider());
+
+    // Service
+    getIt.registerLazySingletonAsync<ImageByteService>(() {
+      return ImageByteService().initialize();
+    });
   }
 }

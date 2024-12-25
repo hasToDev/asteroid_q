@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   await DependencyInjection.init();
+  await getIt.isReady<ImageByteService>();
 
   runApp(const MyApp());
 }

@@ -61,7 +61,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _currentConstraints = widget.initialConstraints;
     _currentDirection = widget.initialDirection;
     _currentIndex = widget.initialIndex;
-    context.read<FighterJetProvider>().setGridIndex(_currentIndex);
+    getIt<FighterJetProvider>().setGridIndex(_currentIndex);
   }
 
   @override
@@ -92,8 +92,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..forward(from: 0).then((_) {
         statsMOVE++;
         _currentOffset = _animationMOVE.value;
-        bool nextCommandExists = context.read<FighterJetProvider>().commands.isNotEmpty;
-        if (nextCommandExists) executeMOVE(context.read<FighterJetProvider>().commands.removeAt(0));
+        bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
+        if (nextCommandExists) executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
         // TODO: delete later
         if (!nextCommandExists) debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
       });
@@ -158,44 +158,25 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   _currentOffset = _animationMOVE.value;
                 }
 
-                double outerShortestSide =
-                    constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
-                double outerItemSize = (outerShortestSide / (gridBoxNumber + 2));
-                double outerAxisSpacing = outerItemSize * 0.125;
-
-                // shortest side is HEIGHT
-                if (constraints.maxHeight < constraints.maxWidth) {
-                  // * get the innerShortestSide by reducing outerShortestSide
-                  // * with SizedBox height and NextGalaxyTile height in COLUMN children of game_board.dart
-                  outerShortestSide = outerShortestSide -
-                      (spaceFromScreenEdge * 2) -
-                      ((outerItemSize * 0.5) * 2) -
-                      (outerAxisSpacing * 2);
-                }
-                // shortest side is WIDTH
-                if (constraints.maxWidth < constraints.maxHeight) {
-                  // * get the innerShortestSide by reducing outerShortestSide
-                  // * with SizedBox width and NextGalaxyTile width in ROW children of game_board.dart
-                  outerShortestSide = outerShortestSide - ((outerItemSize * 0.5) * 2) - ((outerAxisSpacing * 2) * 2);
-                }
-
-                double innerShortestSide = outerShortestSide;
+                double innerShortestSide = GameBoardUtils.calculateInnerShortestSide(constraints);
 
                 // detect changes in layout
                 // either because browser being resized or rotated screen
                 if (!constraints.isEqual(_currentConstraints) && !_controlMOVE.isAnimating) {
-                  _currentOffset = _currentOffset.recalculateOffset(
-                    gridIndex: _currentIndex,
-                    gridBoxNumber: gridBoxNumber,
-                    innerShortestSide: innerShortestSide,
-                    newConstraints: constraints,
-                  );
+                  // _currentOffset = _currentOffset.recalculateOffset(
+                  //   gridIndex: _currentIndex,
+                  //   gridBoxNumber: gridBoxNumber,
+                  //   innerShortestSide: innerShortestSide,
+                  //   newConstraints: constraints,
+                  // );
+                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, gridBoxNumber, innerShortestSide,
+                      Size(constraints.maxWidth, constraints.maxHeight));
                   _currentConstraints = constraints;
                   offsetUsed = _currentOffset;
                 }
 
                 double itemSize = (innerShortestSide / gridBoxNumber);
-                double axisSpacing = itemSize * 0.017;
+                double axisSpacing = itemSize * axisSpacingMultiplier;
                 itemSize = itemSize - axisSpacing;
                 Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
 

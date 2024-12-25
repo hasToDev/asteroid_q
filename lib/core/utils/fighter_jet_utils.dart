@@ -42,7 +42,7 @@ class FighterJetUtils {
       FighterJetDirection direction = findNewDirection(startRow, startCol, targetRow, targetCol, currentDirection);
 
       // calculate new offset
-      Offset targetOffset = FighterJetUtils.findIndexOffset(targetIndex, gridSize, innerShortestSide, screenSize);
+      Offset targetOffset = GameBoardUtils.findIndexOffset(targetIndex, gridSize, innerShortestSide, screenSize);
 
       return FighterJetCommand(
           step: steps, index: targetIndex, offset: targetOffset, direction: direction, pathType: FighterJetPath.direct);
@@ -60,7 +60,7 @@ class FighterJetUtils {
         findNewDirection(startRow, startCol, intermediateRow, intermediateCol, currentDirection);
 
     // calculate new offset
-    Offset targetOffset = FighterJetUtils.findIndexOffset(intermediateIndex, gridSize, innerShortestSide, screenSize);
+    Offset targetOffset = GameBoardUtils.findIndexOffset(intermediateIndex, gridSize, innerShortestSide, screenSize);
 
     return FighterJetCommand(
       step: stepsToIntermediate,
@@ -160,23 +160,5 @@ class FighterJetUtils {
 
     // Fallback to current direction (should never reach here)
     return currentDirection;
-  }
-
-  static Offset findIndexOffset(int targetIndex, int gridColumnSpan, double innerShortestSide, Size screenSize) {
-    // Calculate grid item position
-    int row = targetIndex ~/ gridColumnSpan;
-    int col = targetIndex % gridColumnSpan;
-
-    double itemSize = innerShortestSide / gridColumnSpan;
-    double gridSize = itemSize * gridColumnSpan;
-
-    // Calculate the actual position considering grid is centered
-    double leftOffset = (screenSize.width - gridSize) / 2;
-    double topOffset = (screenSize.height - gridSize) / 2;
-
-    double itemX = leftOffset + (col * itemSize) + (itemSize / 2);
-    double itemY = topOffset + (row * itemSize) + (itemSize / 2);
-
-    return Offset(itemX, itemY);
   }
 }
