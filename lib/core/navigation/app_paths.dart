@@ -7,4 +7,5 @@ class AppPaths {
   static const String username = '/username';
   static const String gameplay = '/gameplay';
   static const String leaderboard = '/leaderboard';
+  static const String warp = '/warp';
 }

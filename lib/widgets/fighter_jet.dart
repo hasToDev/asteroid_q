@@ -139,7 +139,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   _currentIndex = operation.currentIndex;
                   switch (operation.action) {
                     case FighterJetAction.move:
-                      executeMOVE(operation.commands.removeAt(0));
+                      if (operation.commands.isNotEmpty) executeMOVE(operation.commands.removeAt(0));
                       break;
                     default:
                       break;

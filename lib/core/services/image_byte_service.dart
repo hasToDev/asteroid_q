@@ -7,12 +7,14 @@ class ImageByteService {
   final Uint8List? asteroid;
   final Uint8List? fuelPod;
   final Uint8List? missile;
+  final Uint8List? animationWARP;
 
   ImageByteService({
     this.fighterJet,
     this.asteroid,
     this.fuelPod,
     this.missile,
+    this.animationWARP,
   });
 
   Future<ImageByteService> initialize() async {
@@ -21,6 +23,7 @@ class ImageByteService {
       asteroid: base64.decode(asteroidBASE64),
       fuelPod: base64.decode(fuelBASE64),
       missile: base64.decode(missileBASE64),
+      animationWARP: base64.decode(warpBASE64),
     );
   }
 }

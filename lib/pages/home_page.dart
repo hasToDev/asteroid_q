@@ -23,7 +23,13 @@ class _HomePageState extends State<HomePage> {
             AppElevatedButton(
               title: 'Start',
               onPressed: () {
-                context.go(AppPaths.gameplay);
+                context.goWarp(
+                  WarpLoadingPageExtra(
+                    currentJetPositionIndex: SpaceTilePosition.center.id,
+                    jetDirection: FighterJetDirection.up,
+                    transitionDirection: TransitionDirection.bottomToTop,
+                  ),
+                );
               },
             ),
             AppElevatedButton(

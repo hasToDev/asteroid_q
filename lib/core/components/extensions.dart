@@ -1,7 +1,6 @@
+import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'enums.dart';
 
 extension GlobalKeyExtension on GlobalKey {
   Rect? get globalPaintBounds {
@@ -24,6 +23,14 @@ extension GoRouterStateX on GoRouterState {
 
     return extra is TransitionDirection ? extra as TransitionDirection : null;
   }
+
+  GamePlayPageExtra? get gamePlayExtra {
+    return extra is GamePlayPageExtra ? extra as GamePlayPageExtra : null;
+  }
+
+  WarpLoadingPageExtra? get warpExtra {
+    return extra is WarpLoadingPageExtra ? extra as WarpLoadingPageExtra : null;
+  }
 }
 
 extension BoxConstraintsX on BoxConstraints {
@@ -38,6 +45,10 @@ extension BuildContextX on BuildContext {
     final extra = direction;
     go(location, extra: extra);
   }
+
+  void goWarp(WarpLoadingPageExtra data) => go(AppPaths.warp, extra: data);
+
+  void goGamePlay(GamePlayPageExtra data) => go(AppPaths.gameplay, extra: data);
 
   /// [style] shorten syntax for textTheme
   TextTheme get style => Theme.of(this).textTheme;

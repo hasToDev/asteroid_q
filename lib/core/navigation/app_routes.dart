@@ -40,7 +40,7 @@ class AppRoutes {
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: const GameplayPage(),
+          child: GameplayPage(data: state.gamePlayExtra!),
         ),
       ),
       GoRoute(
@@ -59,6 +59,14 @@ class AppRoutes {
           child: const UsernamePage(),
         ),
       ),
+      GoRoute(
+        path: AppPaths.warp,
+        pageBuilder: (context, state) => _buildPageTransition(
+          context: context,
+          state: state,
+          child: WarpLoadingPage(data: state.warpExtra!),
+        ),
+      ),
     ],
   );
 
@@ -69,6 +77,16 @@ class AppRoutes {
   }) {
     TransitionDirection? direction = state.transitionDirection;
 
+    // check direction in GamePlayPageExtra
+    if (direction == null && state.gamePlayExtra != null) {
+      direction = state.gamePlayExtra!.transitionDirection;
+    }
+
+    // check direction in WarpLoadingPageExtra
+    if (direction == null && state.warpExtra != null) {
+      direction = state.warpExtra!.transitionDirection;
+    }
+
     if (direction == null) {
       return MaterialPage<T>(child: child);
     }
@@ -76,7 +94,7 @@ class AppRoutes {
     return CustomTransitionPage<T>(
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final begin = _getBeginOffset(direction);
+        final begin = _getBeginOffset(direction!);
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
@@ -128,6 +146,10 @@ class _AppExtraEncoder extends Converter<Object?, Object?> {
     switch (input) {
       case TransitionDirection _:
         return <Object?>['TransitionDirection', input.getString];
+      case GamePlayPageExtra _:
+        return <Object?>['GamePlayPageExtra', input];
+      case WarpLoadingPageExtra _:
+        return <Object?>['WarpLoadingPageExtra', input];
       default:
         throw FormatException('GoRouter _AppExtraEncoder cannot encode type ${input.runtimeType}');
     }
@@ -146,6 +168,12 @@ class _AppExtraDecoder extends Converter<Object?, Object?> {
     final List<Object?> inputAsList = input as List<Object?>;
     if (inputAsList[0] == 'TransitionDirection') {
       return (inputAsList[1] as String).getTransitionDirection;
+    }
+    if (inputAsList[0] == 'GamePlayPageExtra') {
+      return inputAsList[1] as GamePlayPageExtra;
+    }
+    if (inputAsList[0] == 'WarpLoadingPageExtra') {
+      return inputAsList[1] as WarpLoadingPageExtra;
     }
     throw FormatException('GoRouter _AppExtraDecoder unable to parse input: $input');
   }
