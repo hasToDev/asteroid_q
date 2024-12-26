@@ -24,11 +24,13 @@ class _HomePageState extends State<HomePage> {
               title: 'Start',
               onPressed: () {
                 // TODO: create a check if there's a previous game that can be continue
+                // TODO: use previous game GalaxyCoordinates as input parameter if any
                 context.goWarp(
                   WarpLoadingPageExtra(
                     currentJetPositionIndex: SpaceTilePosition.center.id,
                     jetDirection: FighterJetDirection.up,
                     transitionDirection: TransitionDirection.bottomToTop,
+                    galaxyCoordinates: getIt<GameStatsProvider>().currentCoordinate,
                   ),
                 );
               },

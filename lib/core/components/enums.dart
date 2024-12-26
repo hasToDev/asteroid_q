@@ -74,3 +74,12 @@ enum GameObjectType {
   asteroid,
   fuelPod,
 }
+
+enum GalaxySize {
+  normal(13),
+  small(9);
+
+  final int gridSpan;
+
+  const GalaxySize(this.gridSpan);
+}

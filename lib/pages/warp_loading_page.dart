@@ -25,19 +25,26 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
 
   loadingLogic() async {
     int jetPositionIndex = widget.data.currentJetPositionIndex;
-    GalaxyData playData = GalaxyData(
-      name: 'data',
-      items: GameBoardUtils.generateGamePositions(fighterJetPosition: jetPositionIndex),
-    );
 
-    await Future.delayed(const Duration(seconds: 1));
+    GalaxyData? dataOnCoordinate = getIt<GameStatsProvider>().getGridData(widget.data.galaxyCoordinates);
+    if (dataOnCoordinate == null) {
+      dataOnCoordinate = GalaxyData(
+        name: widget.data.galaxyCoordinates.coordinateToKey(),
+        items: GameBoardUtils.generateGamePositions(fighterJetPosition: jetPositionIndex),
+      );
+      getIt<GameStatsProvider>().saveGalaxyData(widget.data.galaxyCoordinates, dataOnCoordinate);
+    }
+
+    getIt<GameStatsProvider>().saveCoordinate(widget.data.galaxyCoordinates);
+
+    await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
     context.goGamePlay(
       GamePlayPageExtra(
         jetPositionIndex: jetPositionIndex,
         jetDirection: widget.data.jetDirection,
-        galaxyData: playData,
+        galaxyData: dataOnCoordinate,
         transitionDirection: widget.data.transitionDirection,
       ),
     );

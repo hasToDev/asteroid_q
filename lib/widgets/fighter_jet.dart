@@ -105,11 +105,14 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
         } else {
           if (getIt<FighterJetProvider>().nextGalaxyDestination != null) {
+            GalaxyCoordinates nextCoordinate = GridCoordinateUtils.getNextCoordinate(
+                getIt<FighterJetProvider>().nextGalaxyDestination!, getIt<GameStatsProvider>().currentCoordinate);
             context.goWarp(
               WarpLoadingPageExtra(
                 currentJetPositionIndex: getIt<FighterJetProvider>().nextGalaxyStartingIndex!,
                 jetDirection: _currentDirection,
                 transitionDirection: getIt<FighterJetProvider>().nextGalaxyDestination!.transitionDirection,
+                galaxyCoordinates: nextCoordinate,
               ),
             );
             getIt<FighterJetProvider>().jetMovingToNewGalaxy();
