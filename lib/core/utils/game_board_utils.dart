@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class GameBoardUtils {
   GameBoardUtils._();
 
-  /// Generates random positions for fuel pods and asteroids on a 17x17 game board.
+  /// Generates random positions for fuel pods and asteroids on game board.
   /// The positions will not overlap with the fighter jet position or each other.
   static List<GameObjectPosition> generateGamePositions({
     required int fighterJetPosition,
@@ -46,7 +46,7 @@ class GameBoardUtils {
   static double calculateInnerShortestSide(BoxConstraints constraints) {
     double outerShortestSide =
         constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
-    double outerItemSize = (outerShortestSide / (gridBoxNumber + 2));
+    double outerItemSize = (outerShortestSide / (getIt<GameBoardProvider>().gridSize + 2));
     double outerAxisSpacing = outerItemSize * 0.125;
 
     // shortest side is HEIGHT
@@ -83,5 +83,22 @@ class GameBoardUtils {
     double itemY = topOffset + (row * itemSize) + (itemSize / 2);
 
     return Offset(itemX, itemY);
+  }
+
+  /// Finds the furthest available indices in all four directions from the current position
+  ///
+  /// [currentIndex] - The starting position index
+  /// Returns a Map with keys 'top', 'bottom', 'left', 'right' containing the furthest indices
+  static FurthestIndex findFurthestIndex(int currentIndex, int gridColumnSpan) {
+    final int row = currentIndex ~/ gridColumnSpan;
+    final int col = currentIndex % gridColumnSpan;
+
+    // Calculate furthest points
+    final int topIndex = col;  // Same column, top row (row 0)
+    final int bottomIndex = (gridColumnSpan - 1) * gridColumnSpan + col;  // Same column, bottom row
+    final int leftIndex = row * gridColumnSpan;  // Same row, leftmost column
+    final int rightIndex = row * gridColumnSpan + (gridColumnSpan - 1);  // Same row, rightmost column
+
+    return FurthestIndex(top: topIndex, right: rightIndex, bottom: bottomIndex, left: leftIndex);
   }
 }

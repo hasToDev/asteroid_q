@@ -70,3 +70,13 @@ extension StringX on String {
     }
   }
 }
+
+extension IntX on int {
+  NextGalaxy get getNextGalaxy {
+    if (this == NextGalaxy.top.id) return NextGalaxy.top;
+    if (this == NextGalaxy.right.id) return NextGalaxy.right;
+    if (this == NextGalaxy.bottom.id) return NextGalaxy.bottom;
+    if (this == NextGalaxy.left.id) return NextGalaxy.left;
+    throw ArgumentError('NextGalaxy index not exist');
+  }
+}

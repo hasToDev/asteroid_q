@@ -19,14 +19,15 @@ enum KeyboardAction {
 }
 
 enum NextGalaxy {
-  top(1111),
-  bottom(3333),
-  left(4444),
-  right(2222);
+  top(1111, TransitionDirection.bottomToTop),
+  bottom(3333, TransitionDirection.topToBottom),
+  left(4444, TransitionDirection.rightToLeft),
+  right(2222, TransitionDirection.leftToRight);
 
   final int id;
+  final TransitionDirection transitionDirection;
 
-  const NextGalaxy(this.id);
+  const NextGalaxy(this.id, this.transitionDirection);
 }
 
 enum SpaceTilePosition {

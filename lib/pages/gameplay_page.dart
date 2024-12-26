@@ -42,8 +42,8 @@ class _GameplayPageState extends State<GameplayPage> {
                   ),
                 ),
               ),
-              const Expanded(
-                child: GameBoard(),
+              Expanded(
+                child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
               ),
               const SizedBox(
                 width: 200,
@@ -70,7 +70,7 @@ class _GameplayPageState extends State<GameplayPage> {
               initialIndex: widget.data.jetPositionIndex,
               initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
               initialConstraints: constraints,
-              initialDirection: FighterJetDirection.up,
+              initialDirection: widget.data.jetDirection,
               imageBytes: getIt<ImageByteService>().fighterJet!,
             );
           }),

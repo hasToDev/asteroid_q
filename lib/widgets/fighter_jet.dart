@@ -53,7 +53,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
         .animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut));
 
     _controlROTATE = AnimationController(vsync: this);
-    _animationROTATE = Tween<double>(begin: 0.0, end: 0.0).animate(
+    _animationROTATE = Tween<double>(begin: widget.initialDirection.angle, end: widget.initialDirection.angle).animate(
       CurvedAnimation(parent: _controlROTATE, curve: Curves.easeInOut),
     );
 
@@ -90,15 +90,27 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _controlMOVE
       ..duration = const Duration(milliseconds: 500)
       ..forward(from: 0).then((_) {
+        // TODO: update stats to its own provider
         statsMOVE++;
         _currentOffset = _animationMOVE.value;
         bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
         if (nextCommandExists) {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
         } else {
-          getIt<FighterJetProvider>().jetFinishMoving();
-          // TODO: delete later
-          debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
+          if (getIt<FighterJetProvider>().nextGalaxyDestination != null) {
+            context.goWarp(
+              WarpLoadingPageExtra(
+                currentJetPositionIndex: getIt<FighterJetProvider>().nextGalaxyStartingIndex!,
+                jetDirection: _currentDirection,
+                transitionDirection: getIt<FighterJetProvider>().nextGalaxyDestination!.transitionDirection,
+              ),
+            );
+            getIt<FighterJetProvider>().jetMovingToNewGalaxy();
+          } else {
+            getIt<FighterJetProvider>().jetFinishMoving();
+            // TODO: delete later
+            debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
+          }
         }
       });
   }
@@ -122,6 +134,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _controlROTATE
       ..duration = const Duration(milliseconds: 500)
       ..forward(from: 0).then((_) async {
+        // TODO: update stats to its own provider
         statsROTATE++;
         _currentDirection = command.direction;
         moveJET(command);
@@ -171,7 +184,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   //   innerShortestSide: innerShortestSide,
                   //   newConstraints: constraints,
                   // );
-                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, gridBoxNumber,
+                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, getIt<GameBoardProvider>().gridSize,
                       getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
                   _currentConstraints = constraints;
                   offsetUsed = _currentOffset;

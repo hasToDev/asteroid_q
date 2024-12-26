@@ -59,6 +59,7 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
+      int gridBoxNumber = getIt<GameBoardProvider>().gridSize;
       double innerShortestSide = GameBoardUtils.calculateInnerShortestSide(constraints);
       Offset offset = GameBoardUtils.findIndexOffset(
           widget.gridIndex, gridBoxNumber, innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));

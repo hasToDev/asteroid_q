@@ -17,7 +17,7 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
-  int boxNumber = gridBoxNumber;
+  int boxNumber = getIt<GameBoardProvider>().gridSize;
   double innerShortestSide = 0;
 
   Offset selectedOffset = Offset.zero;
@@ -48,13 +48,24 @@ class _GameBoardState extends State<GameBoard> {
     super.dispose();
   }
 
+  void moveToNextGalaxy(int index) {
+    NextGalaxy nextGalaxy = index.getNextGalaxy;
+
+    FurthestIndex furthestIndex =
+        GameBoardUtils.findFurthestIndex(getIt<FighterJetProvider>().currentIndex, getIt<GameBoardProvider>().gridSize);
+
+    getIt<FighterJetProvider>().moveJet(
+        furthestIndex.nextFocusedIndex(nextGalaxy), MediaQuery.sizeOf(context), innerShortestSide,
+        furthestIndex: furthestIndex, nextGalaxy: nextGalaxy);
+  }
+
   void _updatePositionOffset(int index) {
     // update focused index
     focusedIndex.value = index;
 
     // only update selectedOffset for space tile
     // next galaxy tile is excluded
-    if (index > 288) return;
+    if (index > getIt<GameBoardProvider>().maxIndexForGRidSize) return;
 
     selectedOffset = GameBoardUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
   }
@@ -69,7 +80,11 @@ class _GameBoardState extends State<GameBoard> {
         break;
       case KeyboardAction.move:
         if (selectedOffset == const Offset(0.0, 0.0)) return;
-        getIt<FighterJetProvider>().moveJet(focusedIndex.value, MediaQuery.sizeOf(context), innerShortestSide);
+        if (focusedIndex.value > getIt<GameBoardProvider>().maxIndexForGRidSize) {
+          moveToNextGalaxy(focusedIndex.value);
+        } else {
+          getIt<FighterJetProvider>().moveJet(focusedIndex.value, MediaQuery.sizeOf(context), innerShortestSide);
+        }
         break;
       case KeyboardAction.upgrade:
         // TODO: Handle this case.
@@ -93,6 +108,13 @@ class _GameBoardState extends State<GameBoard> {
       autofocus: true,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          if (boxNumber != getIt<GameBoardProvider>().gridSize) {
+            boxNumber = getIt<GameBoardProvider>().gridSize;
+            itemCount = boxNumber * boxNumber;
+            rows = boxNumber;
+            columns = boxNumber;
+          }
+
           double outerShortestSide =
               constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
 

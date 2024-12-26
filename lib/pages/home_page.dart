@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
             AppElevatedButton(
               title: 'Start',
               onPressed: () {
+                // TODO: create a check if there's a previous game that can be continue
                 context.goWarp(
                   WarpLoadingPageExtra(
                     currentJetPositionIndex: SpaceTilePosition.center.id,

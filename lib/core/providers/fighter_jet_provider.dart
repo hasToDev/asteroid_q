@@ -10,15 +10,34 @@ class FighterJetProvider extends ChangeNotifier {
   int currentIndex = 0;
   bool isJetMoving = false;
 
+  FurthestIndex? furthestIndexData;
+  NextGalaxy? nextGalaxyDestination;
+  int? nextGalaxyStartingIndex;
+
   void setGridIndex(int index) {
     currentIndex = index;
   }
 
   void jetFinishMoving() => isJetMoving = false;
 
-  void moveJet(int targetIndex, Size screenSize, double innerShortestSide) {
+  void jetMovingToNewGalaxy() {
+    furthestIndexData = null;
+    nextGalaxyDestination = null;
+    nextGalaxyStartingIndex = null;
+    isJetMoving = false;
+  }
+
+  void moveJet(
+    int targetIndex,
+    Size screenSize,
+    double innerShortestSide, {
+    FurthestIndex? furthestIndex,
+    NextGalaxy? nextGalaxy,
+  }) {
     if (isJetMoving) return;
     isJetMoving = true;
+
+    int gridBoxNumber = getIt<GameBoardProvider>().gridSize;
 
     // create first Command
     FighterJetCommand commandA = FighterJetUtils.findShortestPath(
@@ -32,6 +51,13 @@ class FighterJetProvider extends ChangeNotifier {
           commandA.index, targetIndex, gridBoxNumber, commandA.direction, screenSize, innerShortestSide);
       commands.add(commandB);
       currentDirection = commandB.direction;
+    }
+
+    // set data for next galaxy destination
+    if  (furthestIndex != null) {
+      furthestIndexData = furthestIndex;
+      nextGalaxyDestination = nextGalaxy;
+      nextGalaxyStartingIndex = furthestIndex.startingIndexOnNextGalaxy(nextGalaxy!);
     }
 
     action = FighterJetAction.move;
