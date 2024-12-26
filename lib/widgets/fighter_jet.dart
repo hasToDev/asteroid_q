@@ -162,8 +162,6 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   _currentOffset = _animationMOVE.value;
                 }
 
-                double innerShortestSide = GameBoardUtils.calculateInnerShortestSide(constraints);
-
                 // detect changes in layout
                 // either because browser being resized or rotated screen
                 if (!constraints.isEqual(_currentConstraints) && !_controlMOVE.isAnimating) {
@@ -173,15 +171,13 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   //   innerShortestSide: innerShortestSide,
                   //   newConstraints: constraints,
                   // );
-                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, gridBoxNumber, innerShortestSide,
-                      Size(constraints.maxWidth, constraints.maxHeight));
+                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, gridBoxNumber,
+                      getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
                   _currentConstraints = constraints;
                   offsetUsed = _currentOffset;
                 }
 
-                double itemSize = (innerShortestSide / gridBoxNumber);
-                double axisSpacing = itemSize * axisSpacingMultiplier;
-                itemSize = itemSize - axisSpacing;
+                double itemSize = getIt<GameBoardProvider>().gameItemSize;
                 Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
 
                 return Positioned(

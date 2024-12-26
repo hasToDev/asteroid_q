@@ -49,13 +49,9 @@ class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      double innerShortestSide = GameBoardUtils.calculateInnerShortestSide(constraints);
-      Offset offset = GameBoardUtils.findIndexOffset(
-          widget.gridIndex, gridBoxNumber, innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
-      double itemSize = (innerShortestSide / gridBoxNumber);
-      double axisSpacing = itemSize * axisSpacingMultiplier;
-      itemSize = itemSize - axisSpacing;
-      Offset adjustedOffset = Offset(offset.dx - (itemSize / 2), offset.dy - (itemSize / 2));
+      double itemSize = getIt<GameBoardProvider>().gameItemSize;
+      Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
+
       return Stack(
         fit: StackFit.expand,
         alignment: Alignment.center,

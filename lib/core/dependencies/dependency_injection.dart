@@ -6,6 +6,7 @@ final getIt = GetIt.instance;
 class DependencyInjection {
   static Future<void> init() async {
     // Provider
+    getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => FighterJetProvider());
 
     // Service

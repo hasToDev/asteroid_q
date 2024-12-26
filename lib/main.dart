@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<GameBoardProvider>(create: (_) => getIt<GameBoardProvider>()),
         ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),
       ],
       child: MaterialApp.router(

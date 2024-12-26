@@ -20,6 +20,11 @@ class GameplayPage extends StatefulWidget {
 class _GameplayPageState extends State<GameplayPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    double innerShortestSide =
+        GameBoardUtils.calculateInnerShortestSide(BoxConstraints(maxWidth: size.width, maxHeight: size.height));
+    getIt<GameBoardProvider>().setInnerShortestSide(innerShortestSide, size);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -61,10 +66,9 @@ class _GameplayPageState extends State<GameplayPage> {
             ],
           ),
           LayoutBuilder(builder: (context, constraints) {
-            Offset centerOffset = Offset(constraints.maxWidth / 2, constraints.maxHeight / 2);
             return FighterJet(
               initialIndex: widget.data.jetPositionIndex,
-              initialOffset: centerOffset,
+              initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
               initialConstraints: constraints,
               initialDirection: FighterJetDirection.up,
               imageBytes: getIt<ImageByteService>().fighterJet!,
