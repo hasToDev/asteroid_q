@@ -6,7 +6,7 @@ class FighterJetCommand {
   final int step;
   final int index;
   final Offset offset;
-  final FighterJetDirection direction;
+  FighterJetDirection direction;
   final FighterJetPath pathType;
 
   FighterJetCommand({
@@ -16,6 +16,19 @@ class FighterJetCommand {
     required this.direction,
     required this.pathType,
   });
+
+  void setDirectionForNextGalaxy(NextGalaxy nextGalaxy) {
+    switch (nextGalaxy) {
+      case NextGalaxy.top:
+        direction = FighterJetDirection.up;
+      case NextGalaxy.right:
+        direction = FighterJetDirection.right;
+      case NextGalaxy.bottom:
+        direction = FighterJetDirection.down;
+      case NextGalaxy.left:
+        direction = FighterJetDirection.left;
+    }
+  }
 
   @override
   String toString() {

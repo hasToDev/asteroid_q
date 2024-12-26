@@ -54,10 +54,16 @@ class FighterJetProvider extends ChangeNotifier {
     }
 
     // set data for next galaxy destination
-    if  (furthestIndex != null) {
+    if (furthestIndex != null) {
       furthestIndexData = furthestIndex;
       nextGalaxyDestination = nextGalaxy;
       nextGalaxyStartingIndex = furthestIndex.startingIndexOnNextGalaxy(nextGalaxy!);
+
+      // make correction to jet direction for next galaxy if jet currentIndex and targetIndex is the same
+      // FighterJetUtils.findShortestPath will not give the right direction under that circumstances
+      if (commands.length == 1 && commands[0].step == 0) {
+        commands[0].setDirectionForNextGalaxy(nextGalaxy);
+      }
     }
 
     action = FighterJetAction.move;

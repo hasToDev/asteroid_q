@@ -38,6 +38,7 @@ class _GameBoardState extends State<GameBoard> {
 
     if (widget.initialFocusIndex != null) {
       focusedIndex = ValueNotifier<int>(widget.initialFocusIndex!);
+      selectedOffset = getIt<GameBoardProvider>().getIndexOffset(widget.initialFocusIndex!);
     }
   }
 
