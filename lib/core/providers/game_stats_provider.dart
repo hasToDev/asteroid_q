@@ -24,7 +24,7 @@ class GameStatsProvider extends ChangeNotifier {
   }
 
   /// Retrieves data for a specific grid coordinate
-  GalaxyData? getGridData(GalaxyCoordinates coordinate) {
+  GalaxyData? getGalaxyData(GalaxyCoordinates coordinate) {
     String key = coordinate.coordinateToKey();
     return gameMap[key];
   }

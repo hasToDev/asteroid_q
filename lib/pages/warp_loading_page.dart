@@ -26,7 +26,7 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
   loadingLogic() async {
     int jetPositionIndex = widget.data.currentJetPositionIndex;
 
-    GalaxyData? dataOnCoordinate = getIt<GameStatsProvider>().getGridData(widget.data.galaxyCoordinates);
+    GalaxyData? dataOnCoordinate = getIt<GameStatsProvider>().getGalaxyData(widget.data.galaxyCoordinates);
     if (dataOnCoordinate == null) {
       dataOnCoordinate = GalaxyData(
         name: widget.data.galaxyCoordinates.coordinateToKey(),
