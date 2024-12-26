@@ -62,6 +62,9 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _currentDirection = widget.initialDirection;
     _currentIndex = widget.initialIndex;
     getIt<FighterJetProvider>().setGridIndex(_currentIndex);
+
+    statsMOVE = getIt<GameStatsProvider>().move;
+    statsROTATE = getIt<GameStatsProvider>().rotate;
   }
 
   @override
@@ -69,6 +72,10 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _controlMOVE.dispose();
     _controlROTATE.dispose();
     super.dispose();
+  }
+
+  Duration getAnimationDuration(FighterJetCommand command) {
+    return command.step == 0 ? zeroAnimationDuration : normalAnimationDuration;
   }
 
   void executeMOVE(FighterJetCommand command) {
@@ -88,10 +95,10 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     ).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut));
 
     _controlMOVE
-      ..duration = const Duration(milliseconds: 500)
+      ..duration = getAnimationDuration(command)
       ..forward(from: 0).then((_) {
-        // TODO: update stats to its own provider
         statsMOVE++;
+        getIt<GameStatsProvider>().updateMove();
         _currentOffset = _animationMOVE.value;
         bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
         if (nextCommandExists) {
@@ -134,8 +141,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _controlROTATE
       ..duration = const Duration(milliseconds: 500)
       ..forward(from: 0).then((_) async {
-        // TODO: update stats to its own provider
         statsROTATE++;
+        getIt<GameStatsProvider>().updateRotate();
         _currentDirection = command.direction;
         moveJET(command);
       });
