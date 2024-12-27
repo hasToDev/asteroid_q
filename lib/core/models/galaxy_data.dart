@@ -22,6 +22,19 @@ class GalaxyData {
       'items': items.map((item) => item.toJson()).toList(),
     };
   }
+
+  // Create a new GalaxyData with an item removed
+  // returns null if item not found
+  GalaxyData? removeItemIfExists(int index, GameObjectType type) {
+    final itemExists = items.any((item) => item.index == index && item.type == type);
+
+    if (!itemExists) return null;
+
+    return GalaxyData(
+      name: name,
+      items: items.where((item) => !(item.index == index && item.type == type)).toList(),
+    );
+  }
 }
 
 class GameObjectPosition {

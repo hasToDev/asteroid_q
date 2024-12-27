@@ -34,6 +34,8 @@ class FighterJetProvider extends ChangeNotifier {
     FurthestIndex? furthestIndex,
     NextGalaxy? nextGalaxy,
   }) {
+    // TODO: check from game stats provider if the jet still have remaining fuel to move
+
     if (isJetMoving) return;
     isJetMoving = true;
 
@@ -95,11 +97,10 @@ class FighterJetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-// void rotateJet(FighterJetDirection direction, int index) {
-//   action = FighterJetAction.rotate;
-//   currentDirection = direction;
-//   currentIndex = index;
-//   updateMarks++;
-//   notifyListeners();
-// }
+  void recoverFromCollision() {
+    // TODO: check from game stats provider if the jet still have remaining life to recover from asteroid collision
+    action = FighterJetAction.collisionRecover;
+    updateMarks++;
+    notifyListeners();
+  }
 }

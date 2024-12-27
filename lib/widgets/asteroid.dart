@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class Asteroid extends StatefulWidget {
   final int gridIndex;
@@ -18,32 +19,30 @@ class Asteroid extends StatefulWidget {
 }
 
 class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
+  late AnimationController _controlASTEROID;
+  late Animation<double> _animationASTEROID;
+  late Animation<double> _animationBLAST;
+
+  int updateMarks = 0;
+  bool destroyed = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
+    _controlASTEROID = AnimationController(vsync: this, duration: normalAnimationDuration);
+
+    _animationASTEROID = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _controlASTEROID, curve: Curves.easeOutExpo),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    _animationBLAST = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controlASTEROID, curve: Curves.easeIn),
     );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
-
-    // _controller.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controlASTEROID.dispose();
     super.dispose();
   }
 
@@ -53,47 +52,58 @@ class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin
       builder: (context, constraints) {
         double itemSize = getIt<GameBoardProvider>().gameItemSize;
         Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
+        double itemSizeLOTTIE = itemSize * 5;
+        Offset adjustedOffsetLOTTIE =
+            getIt<GameBoardProvider>().getIndexAdjustedOffsetCUSTOMSIZE(widget.gridIndex, itemSizeLOTTIE);
 
         return Stack(
           fit: StackFit.expand,
           alignment: Alignment.center,
           children: [
+            Consumer<AsteroidProvider>(
+              builder: (BuildContext context, operation, Widget? _) {
+                if (!destroyed && widget.gridIndex == operation.asteroidIndex && updateMarks != operation.updateMarks) {
+                  updateMarks = operation.updateMarks;
+                  // TODO: play explosion audio
+                  _controlASTEROID.forward().then((_) async {
+                    destroyed = true;
+                    await getIt<GameStatsProvider>().asteroidDestroyed(widget.gridIndex);
+                    getIt<FighterJetProvider>().recoverFromCollision();
+                  });
+                }
+                return const SizedBox();
+              },
+            ),
             Positioned(
               left: adjustedOffset.dx,
               top: adjustedOffset.dy,
-              child: Image.memory(
-                widget.imageBytes,
-                height: itemSize,
-                width: itemSize,
-                fit: BoxFit.fitHeight,
-                gaplessPlayback: true,
-                isAntiAlias: true,
+              child: ScaleTransition(
+                scale: _animationASTEROID,
+                child: FadeTransition(
+                  opacity: _animationASTEROID,
+                  child: Image.memory(
+                    widget.imageBytes,
+                    height: itemSize,
+                    width: itemSize,
+                    fit: BoxFit.fitHeight,
+                    gaplessPlayback: true,
+                    isAntiAlias: true,
+                  ),
+                ),
               ),
             ),
-            // Positioned(
-            //   left: offset.dx,
-            //   top: offset.dy,
-            //   child: ScaleTransition(
-            //     scale: _scaleAnimation,
-            //     child: FadeTransition(
-            //       opacity: _fadeAnimation,
-            //       child: Stack(
-            //         children: [
-            //           Image.memory(
-            //             widget.imageBytes,
-            //             width: 60,
-            //             height: 60,
-            //           ),
-            //           // Lottie.asset(
-            //           //   'assets/animations/asteroid_effect.json',
-            //           //   width: 80,
-            //           //   height: 80,
-            //           // ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned(
+              left: adjustedOffsetLOTTIE.dx,
+              top: adjustedOffsetLOTTIE.dy,
+              child: Lottie.memory(
+                getIt<AssetByteService>().animationBLAST!,
+                controller: _animationBLAST,
+                fit: BoxFit.contain,
+                height: itemSizeLOTTIE,
+                width: itemSizeLOTTIE,
+                filterQuality: FilterQuality.medium,
+              ),
+            ),
           ],
         );
       },

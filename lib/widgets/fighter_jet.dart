@@ -135,7 +135,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
           } else {
             if (collidedWithAsteroid) {
               // TODO: trigger the asteroid to have fade animation and explosion sounds, then continue to blinkingJET
-              blinkingJET();
+              getIt<AsteroidProvider>().asteroidExplosion(_currentIndex);
               return;
             }
             getIt<FighterJetProvider>().jetFinishMoving();
@@ -173,7 +173,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
   }
 
   void blinkingJET() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 75));
 
     _animationMOVE = Tween<Offset>(
       begin: _currentOffset,
@@ -197,6 +197,10 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..forward(from: 0).then((_) {
         collidedWithAsteroid = false;
         getIt<FighterJetProvider>().jetFinishMoving();
+        // reset _animationOPACITY
+        _animationOPACITY = Tween<double>(begin: 1.0, end: 1.0).animate(
+          CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut),
+        );
       });
   }
 
@@ -225,6 +229,9 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                         collidedWithAsteroid = true;
                         executeMOVE(operation.commands.removeAt(0));
                       }
+                      break;
+                    case FighterJetAction.collisionRecover:
+                      blinkingJET();
                       break;
                     default:
                       break;

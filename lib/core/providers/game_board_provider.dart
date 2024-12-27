@@ -38,4 +38,9 @@ class GameBoardProvider extends ChangeNotifier {
     Offset offset = GameBoardUtils.findIndexOffset(gridIndex, gridSize, innerShortestSide, currentScreenSize);
     return Offset(offset.dx - (gameItemSize / 2), offset.dy - (gameItemSize / 2));
   }
+
+  getIndexAdjustedOffsetCUSTOMSIZE(int gridIndex, double itemSize) {
+    Offset offset = GameBoardUtils.findIndexOffset(gridIndex, gridSize, innerShortestSide, currentScreenSize);
+    return Offset(offset.dx - (itemSize / 2), offset.dy - (itemSize / 2));
+  }
 }
