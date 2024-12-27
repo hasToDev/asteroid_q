@@ -1,1 +1,1 @@
-export 'image_byte_service.dart';
+export 'asset_byte_service.dart';

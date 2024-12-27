@@ -11,8 +11,8 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => FighterJetProvider());
 
     // Service
-    getIt.registerLazySingletonAsync<ImageByteService>(() {
-      return ImageByteService().initialize();
+    getIt.registerLazySingletonAsync<AssetByteService>(() {
+      return AssetByteService().initialize();
     });
   }
 }

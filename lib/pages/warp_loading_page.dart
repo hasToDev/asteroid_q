@@ -61,7 +61,7 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
           return Center(
             child: Lottie.memory(
               key: const ValueKey('animation-warp'),
-              getIt<ImageByteService>().animationWARP!,
+              getIt<AssetByteService>().animationWARP!,
               fit: BoxFit.contain,
               height: heightLimit,
               width: heightLimit,

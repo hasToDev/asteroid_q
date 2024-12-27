@@ -58,9 +58,9 @@ class _GameplayPageState extends State<GameplayPage> {
               ...widget.data.galaxyData.items.map(
                 (position) {
                   if (position.type == GameObjectType.fuelPod) {
-                    return Fuel(gridIndex: position.index, imageBytes: getIt<ImageByteService>().fuelPod!);
+                    return Fuel(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageFUELPOD!);
                   }
-                  return Asteroid(gridIndex: position.index, imageBytes: getIt<ImageByteService>().asteroid!);
+                  return Asteroid(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageASTEROID!);
                 },
               ),
             ],
@@ -71,7 +71,7 @@ class _GameplayPageState extends State<GameplayPage> {
               initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
               initialConstraints: constraints,
               initialDirection: widget.data.jetDirection,
-              imageBytes: getIt<ImageByteService>().fighterJet!,
+              imageBytes: getIt<AssetByteService>().imageFIGHTERJET!,
             );
           }),
         ],
