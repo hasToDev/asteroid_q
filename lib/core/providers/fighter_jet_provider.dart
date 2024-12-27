@@ -9,6 +9,7 @@ class FighterJetProvider extends ChangeNotifier {
   int updateMarks = 0;
   int currentIndex = 0;
   bool isJetMoving = false;
+  bool isJetRefueling = false;
 
   FurthestIndex? furthestIndexData;
   NextGalaxy? nextGalaxyDestination;
@@ -36,7 +37,7 @@ class FighterJetProvider extends ChangeNotifier {
   }) {
     // TODO: check from game stats provider if the jet still have remaining fuel to move
 
-    if (isJetMoving) return;
+    if (isJetMoving || isJetRefueling) return;
     isJetMoving = true;
 
     bool collisionWithAsteroid = false;
@@ -103,4 +104,8 @@ class FighterJetProvider extends ChangeNotifier {
     updateMarks++;
     notifyListeners();
   }
+
+  void refuelingSTART() => isJetRefueling = true;
+
+  void refuelingEND() => isJetRefueling = false;
 }

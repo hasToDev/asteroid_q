@@ -91,7 +91,9 @@ class _GameBoardState extends State<GameBoard> {
         // TODO: Handle this case.
         break;
       case KeyboardAction.refuel:
-        // TODO: Handle this case.
+        if (getIt<FighterJetProvider>().isJetMoving) return;
+        bool fuelExist = getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
+        if (fuelExist) getIt<FuelPodProvider>().fuelPodHarvesting(getIt<FighterJetProvider>().currentIndex);
         break;
       case KeyboardAction.shoot:
         // TODO: Handle this case.

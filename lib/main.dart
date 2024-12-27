@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AsteroidProvider>(create: (_) => getIt<AsteroidProvider>()),
+        ChangeNotifierProvider<FuelPodProvider>(create: (_) => getIt<FuelPodProvider>()),
         ChangeNotifierProvider<GameBoardProvider>(create: (_) => getIt<GameBoardProvider>()),
         ChangeNotifierProvider<GameStatsProvider>(create: (_) => getIt<GameStatsProvider>()),
         ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),

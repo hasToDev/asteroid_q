@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Fuel extends StatefulWidget {
   final int gridIndex;
@@ -17,32 +18,25 @@ class Fuel extends StatefulWidget {
 }
 
 class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
+  late AnimationController _controlFUELPOD;
+  late Animation<double> _animationFUELPOD;
+
+  int updateMarks = 0;
+  bool harvested = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
+    _controlFUELPOD = AnimationController(vsync: this, duration: normalAnimationDuration);
 
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    _animationFUELPOD = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _controlFUELPOD, curve: Curves.easeIn),
     );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
-
-    // _controller.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controlFUELPOD.dispose();
     super.dispose();
   }
 
@@ -56,33 +50,40 @@ class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
         fit: StackFit.expand,
         alignment: Alignment.center,
         children: [
+          Consumer<FuelPodProvider>(
+            builder: (BuildContext context, operation, Widget? _) {
+              if (!harvested && widget.gridIndex == operation.fuelPodIndex && updateMarks != operation.updateMarks) {
+                updateMarks = operation.updateMarks;
+                // TODO: play harvesting audio
+                getIt<FighterJetProvider>().refuelingSTART();
+                _controlFUELPOD.forward().then((_) async {
+                  harvested = true;
+                  await getIt<GameStatsProvider>().fuelPodHarvested(widget.gridIndex);
+                  getIt<FighterJetProvider>().refuelingEND();
+                  getIt<FuelPodProvider>().fuelPodHarvestingDONE();
+                });
+              }
+              return const SizedBox();
+            },
+          ),
           Positioned(
             left: adjustedOffset.dx,
             top: adjustedOffset.dy,
-            child: Image.memory(
-              widget.imageBytes,
-              height: itemSize,
-              width: itemSize,
-              fit: BoxFit.fitHeight,
-              gaplessPlayback: true,
-              isAntiAlias: true,
+            child: ScaleTransition(
+              scale: _animationFUELPOD,
+              child: FadeTransition(
+                opacity: _animationFUELPOD,
+                child: Image.memory(
+                  widget.imageBytes,
+                  height: itemSize,
+                  width: itemSize,
+                  fit: BoxFit.fitHeight,
+                  gaplessPlayback: true,
+                  isAntiAlias: true,
+                ),
+              ),
             ),
           ),
-          // Positioned(
-          //   left: adjustedOffset.dx,
-          //   top: adjustedOffset.dy,
-          //   child: ScaleTransition(
-          //     scale: _scaleAnimation,
-          //     child: FadeTransition(
-          //       opacity: _fadeAnimation,
-          //       child: Image.memory(
-          //         widget.imageBytes,
-          //         width: 40,
-          //         height: 40,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       );
     });
