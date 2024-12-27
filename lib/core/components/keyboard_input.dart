@@ -47,7 +47,6 @@ class KeyboardInput {
           break;
         case LogicalKeyboardKey.keyR:
           // Handle R key -- HARVEST or REFUEL ship
-          debugPrint('Refuel');
           newAction = KeyboardAction.refuel;
           break;
         case LogicalKeyboardKey.space:
@@ -57,7 +56,6 @@ class KeyboardInput {
           break;
         case LogicalKeyboardKey.enter:
           // Handle enter -- MOVE ship
-          debugPrint('Enter');
           newAction = KeyboardAction.move;
           break;
       }

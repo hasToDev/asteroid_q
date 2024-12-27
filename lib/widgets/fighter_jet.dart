@@ -253,12 +253,6 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                 // detect changes in layout
                 // either because browser being resized or rotated screen
                 if (!constraints.isEqual(_currentConstraints) && !_controlMOVE.isAnimating) {
-                  // _currentOffset = _currentOffset.recalculateOffset(
-                  //   gridIndex: _currentIndex,
-                  //   gridBoxNumber: gridBoxNumber,
-                  //   innerShortestSide: innerShortestSide,
-                  //   newConstraints: constraints,
-                  // );
                   _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, getIt<GameBoardProvider>().gridSize,
                       getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
                   _currentConstraints = constraints;
