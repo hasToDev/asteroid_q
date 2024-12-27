@@ -11,6 +11,19 @@ class GameStatsProvider extends ChangeNotifier {
   Map<String, GalaxyData> gameMap = {};
   GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.normal);
 
+  List<int> fuelPodIndices = [];
+  List<int> asteroidIndices = [];
+
+  /// Process current Galaxy Data, separate the FuelPod and Asteroid indices
+  Future<void> processGalaxyData(GalaxyData galaxyData) async {
+    fuelPodIndices = [];
+    asteroidIndices = [];
+    for (GameObjectPosition obj in galaxyData.items) {
+      if (obj.type == GameObjectType.asteroid) asteroidIndices.add(obj.index);
+      if (obj.type == GameObjectType.fuelPod) fuelPodIndices.add(obj.index);
+    }
+  }
+
   void updateMove() => move++;
 
   void updateRotate() => rotate++;

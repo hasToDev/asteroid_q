@@ -37,11 +37,23 @@ class FighterJetProvider extends ChangeNotifier {
     if (isJetMoving) return;
     isJetMoving = true;
 
+    bool collisionWithAsteroid = false;
     int gridBoxNumber = getIt<GameBoardProvider>().gridSize;
 
     // create first Command
     FighterJetCommand commandA = FighterJetUtils.findShortestPath(
         currentIndex, targetIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+
+    // find Asteroid in the path
+    // if any, recalculate commandA to stop at Asteroid index
+    int? asteroidIndex = FighterJetUtils.findBlockingAsteroid(
+        currentIndex, commandA.index, getIt<GameStatsProvider>().asteroidIndices, gridBoxNumber);
+    if (asteroidIndex != null) {
+      collisionWithAsteroid = true;
+      commandA = FighterJetUtils.findShortestPath(
+          currentIndex, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+    }
+    currentIndex = commandA.index;
     commands.add(commandA);
     currentDirection = commandA.direction;
 
@@ -49,6 +61,17 @@ class FighterJetProvider extends ChangeNotifier {
     if (commandA.pathType == FighterJetPath.transit) {
       FighterJetCommand commandB = FighterJetUtils.findShortestPath(
           commandA.index, targetIndex, gridBoxNumber, commandA.direction, screenSize, innerShortestSide);
+
+      // find Asteroid in the path
+      // if any, recalculate commandB to stop at Asteroid index
+      int? asteroidIndex = FighterJetUtils.findBlockingAsteroid(
+          commandA.index, commandB.index, getIt<GameStatsProvider>().asteroidIndices, gridBoxNumber);
+      if (asteroidIndex != null) {
+        collisionWithAsteroid = true;
+        commandB = FighterJetUtils.findShortestPath(
+            commandA.index, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+      }
+      currentIndex = commandB.index;
       commands.add(commandB);
       currentDirection = commandB.direction;
     }
@@ -67,7 +90,7 @@ class FighterJetProvider extends ChangeNotifier {
     }
 
     action = FighterJetAction.move;
-    currentIndex = targetIndex;
+    if (collisionWithAsteroid) action = FighterJetAction.asteroidCollision;
     updateMarks++;
     notifyListeners();
   }

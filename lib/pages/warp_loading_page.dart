@@ -36,6 +36,7 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
     }
 
     getIt<GameStatsProvider>().saveCoordinate(widget.data.galaxyCoordinates);
+    await getIt<GameStatsProvider>().processGalaxyData(dataOnCoordinate);
 
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;

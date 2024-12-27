@@ -58,6 +58,7 @@ enum FighterJetDirection {
 }
 
 enum FighterJetAction {
+  asteroidCollision,
   upgrade,
   refuel,
   shoot,

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../core.dart';
 
@@ -160,5 +161,63 @@ class FighterJetUtils {
 
     // Fallback to current direction (should never reach here)
     return currentDirection;
+  }
+
+  /// Checks if there are any Asteroid blocking the line of sight between start and end positions
+  /// Returns the index of the first blocking Asteroid found, or null if no objects block the line of sight
+  static int? findBlockingAsteroid(
+      int startIndex,
+      int endIndex,
+      List<int> asteroidIndices,
+      int gridSize,
+      ) {
+    // Convert 1D indices to 2D coordinates
+    int startRow = startIndex ~/ gridSize;
+    int startCol = startIndex % gridSize;
+    int endRow = endIndex ~/ gridSize;
+    int endCol = endIndex % gridSize;
+
+    // Calculate differences and steps
+    int dx = (endCol - startCol).abs();
+    int dy = (endRow - startRow).abs();
+    int stepX = startCol < endCol ? 1 : -1;
+    int stepY = startRow < endRow ? 1 : -1;
+
+    // Handle straight lines (horizontal, vertical) and diagonal lines
+    if (dx == 0 || dy == 0 || dx == dy) {
+      final steps = max(dx, dy);
+      int currentRow = startRow;
+      int currentCol = startCol;
+
+      // Check each point along the line
+      for (int i = 0; i <= steps; i++) {
+        int currentIndex = currentRow * gridSize + currentCol;
+
+        // Skip the start position
+        if (i > 0) {
+          // Check if current position contains an Asteroid
+          if (asteroidIndices.contains(currentIndex)) {
+            return currentIndex;
+          }
+        }
+
+        // Move to next position
+        if (dx == dy) {
+          currentRow += stepY;
+          currentCol += stepX;
+        } else if (dx > dy) {
+          currentCol += stepX;
+        } else {
+          currentRow += stepY;
+        }
+      }
+    }
+
+    // Check if end position contains an Asteroid
+    if (asteroidIndices.contains(endIndex)) {
+      return endIndex;
+    }
+
+    return null;
   }
 }

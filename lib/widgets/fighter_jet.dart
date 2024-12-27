@@ -33,6 +33,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
 
   late AnimationController _controlMOVE;
   late Animation<Offset> _animationMOVE;
+  late Animation<double> _animationOPACITY;
+
   late AnimationController _controlROTATE;
   late Animation<double> _animationROTATE;
 
@@ -45,12 +47,17 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
   int statsMOVE = 0;
   int statsROTATE = 0;
 
+  bool collidedWithAsteroid = false;
+
   @override
   void initState() {
     super.initState();
     _controlMOVE = AnimationController(vsync: this);
     _animationMOVE = Tween<Offset>(begin: widget.initialOffset, end: widget.initialOffset)
         .animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut));
+    _animationOPACITY = Tween<double>(begin: 1.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut),
+    );
 
     _controlROTATE = AnimationController(vsync: this);
     _animationROTATE = Tween<double>(begin: widget.initialDirection.angle, end: widget.initialDirection.angle).animate(
@@ -89,10 +96,20 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
   void moveJET(FighterJetCommand command) async {
     await Future.delayed(const Duration(milliseconds: 75));
 
+    bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
+
     _animationMOVE = Tween<Offset>(
       begin: _currentOffset,
       end: command.offset,
     ).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut));
+
+    // fade out jet if it is about to collide with asteroid
+    // only happening on the last step of the command
+    if (collidedWithAsteroid && !nextCommandExists) {
+      _animationOPACITY = Tween<double>(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: _controlMOVE, curve: EndLoadedCurve()),
+      );
+    }
 
     _controlMOVE
       ..duration = getAnimationDuration(command)
@@ -100,7 +117,6 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
         statsMOVE++;
         getIt<GameStatsProvider>().updateMove();
         _currentOffset = _animationMOVE.value;
-        bool nextCommandExists = getIt<FighterJetProvider>().commands.isNotEmpty;
         if (nextCommandExists) {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
         } else {
@@ -117,6 +133,11 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
             );
             getIt<FighterJetProvider>().jetMovingToNewGalaxy();
           } else {
+            if (collidedWithAsteroid) {
+              // TODO: trigger the asteroid to have fade animation and explosion sounds, then continue to blinkingJET
+              blinkingJET();
+              return;
+            }
             getIt<FighterJetProvider>().jetFinishMoving();
             // TODO: delete later
             debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
@@ -151,6 +172,34 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       });
   }
 
+  void blinkingJET() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    _animationMOVE = Tween<Offset>(
+      begin: _currentOffset,
+      end: _currentOffset,
+    ).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.linear));
+
+    // Create a sequence of fade in/out animations for 3 blinks
+    _animationOPACITY = TweenSequence<double>([
+      // First blink
+      TweenSequenceItem(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 16.67),
+      TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 0.0), weight: 16.67),
+      // Second blink
+      TweenSequenceItem(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 16.67),
+      TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 0.0), weight: 16.67),
+      // Third and final blink, higher weight to ensure final opacity is 1.0
+      TweenSequenceItem(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 33.32),
+    ]).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.linear));
+
+    _controlMOVE
+      ..duration = blinkingAnimationDuration
+      ..forward(from: 0).then((_) {
+        collidedWithAsteroid = false;
+        getIt<FighterJetProvider>().jetFinishMoving();
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -166,7 +215,16 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                   _currentIndex = operation.currentIndex;
                   switch (operation.action) {
                     case FighterJetAction.move:
-                      if (operation.commands.isNotEmpty) executeMOVE(operation.commands.removeAt(0));
+                      if (operation.commands.isNotEmpty) {
+                        collidedWithAsteroid = false;
+                        executeMOVE(operation.commands.removeAt(0));
+                      }
+                      break;
+                    case FighterJetAction.asteroidCollision:
+                      if (operation.commands.isNotEmpty) {
+                        collidedWithAsteroid = true;
+                        executeMOVE(operation.commands.removeAt(0));
+                      }
                       break;
                     default:
                       break;
@@ -216,24 +274,29 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
                         child: child,
                       );
                     },
-                    child: Builder(builder: (context) {
-                      if (currentItemSize == null || currentItemSize != null && currentItemSize != itemSize) {
-                        currentItemSize = itemSize;
-                        fighterJetCache = RepaintBoundary(
-                          child: Image.memory(
-                            widget.imageBytes,
-                            height: itemSize,
-                            width: itemSize,
-                            fit: BoxFit.fitHeight,
-                            gaplessPlayback: true,
-                            isAntiAlias: true,
-                          ),
-                        );
-                        return fighterJetCache!;
-                      }
+                    child: FadeTransition(
+                      opacity: _animationOPACITY,
+                      child: Builder(
+                        builder: (context) {
+                          if (currentItemSize == null || currentItemSize != null && currentItemSize != itemSize) {
+                            currentItemSize = itemSize;
+                            fighterJetCache = RepaintBoundary(
+                              child: Image.memory(
+                                widget.imageBytes,
+                                height: itemSize,
+                                width: itemSize,
+                                fit: BoxFit.fitHeight,
+                                gaplessPlayback: true,
+                                isAntiAlias: true,
+                              ),
+                            );
+                            return fighterJetCache!;
+                          }
 
-                      return fighterJetCache!;
-                    }),
+                          return fighterJetCache!;
+                        },
+                      ),
+                    ),
                   ),
                 );
               },
