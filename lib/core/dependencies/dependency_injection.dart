@@ -11,6 +11,7 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => GameStatsProvider());
     getIt.registerLazySingleton(() => FighterJetProvider());
+    getIt.registerLazySingleton(() => MissileProvider());
 
     // Service
     getIt.registerLazySingletonAsync<AssetByteService>(() {

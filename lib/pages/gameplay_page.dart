@@ -51,8 +51,6 @@ class _GameplayPageState extends State<GameplayPage> {
               ),
             ],
           ),
-          // TODO: create widget based on gameObjects
-          // TODO: the order in stack from top to bottom is : ROW, Missile, Asteroid, Fuel Pod, Fighter Jet
           Stack(
             children: [
               ...widget.data.galaxyData.items.map(
@@ -65,6 +63,13 @@ class _GameplayPageState extends State<GameplayPage> {
               ),
             ],
           ),
+          LayoutBuilder(builder: (context, constraints) {
+            return Missile(
+              initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
+              initialConstraints: constraints,
+              imageBytes: getIt<AssetByteService>().imageMISSILE!,
+            );
+          }),
           LayoutBuilder(builder: (context, constraints) {
             return FighterJet(
               initialIndex: widget.data.jetPositionIndex,

@@ -42,6 +42,7 @@ class KeyboardInput {
           break;
         case LogicalKeyboardKey.keyU:
           // Handle U key -- UPGRADE ship
+          // TODO: implement upgrade
           debugPrint('Upgrade');
           newAction = KeyboardAction.upgrade;
           break;
@@ -51,7 +52,6 @@ class KeyboardInput {
           break;
         case LogicalKeyboardKey.space:
           // Handle space -- SHOOT asteroid
-          debugPrint('Space');
           newAction = KeyboardAction.shoot;
           break;
         case LogicalKeyboardKey.enter:

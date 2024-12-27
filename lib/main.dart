@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<GameBoardProvider>(create: (_) => getIt<GameBoardProvider>()),
         ChangeNotifierProvider<GameStatsProvider>(create: (_) => getIt<GameStatsProvider>()),
         ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),
+        ChangeNotifierProvider<MissileProvider>(create: (_) => getIt<MissileProvider>()),
       ],
       child: MaterialApp.router(
         title: 'Asteroid Q',

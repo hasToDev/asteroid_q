@@ -135,12 +135,10 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
           } else {
             if (collidedWithAsteroid) {
               // TODO: trigger the asteroid to have fade animation and explosion sounds, then continue to blinkingJET
-              getIt<AsteroidProvider>().asteroidExplosion(_currentIndex);
+              getIt<AsteroidProvider>().asteroidExplosion(_currentIndex, AsteroidDestructionType.fighterJet);
               return;
             }
             getIt<FighterJetProvider>().jetFinishMoving();
-            // TODO: delete later
-            debugPrint('STATS Move($statsMOVE) Rotate($statsROTATE)');
           }
         }
       });

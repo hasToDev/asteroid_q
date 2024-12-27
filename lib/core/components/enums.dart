@@ -85,3 +85,13 @@ enum GalaxySize {
 
   const GalaxySize(this.gridSpan);
 }
+
+enum MissileAction {
+  destroyAsteroid,
+  move,
+}
+
+enum AsteroidDestructionType {
+  fighterJet,
+  missile,
+}
