@@ -56,6 +56,7 @@ class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
                 updateMarks = operation.updateMarks;
                 getIt<AudioProvider>().sound(GameSound.refuel);
                 getIt<FighterJetProvider>().refuelingSTART();
+                getIt<GameStatsProvider>().updateFuel();
                 _controlFUELPOD.forward().then((_) async {
                   harvested = true;
                   await getIt<GameStatsProvider>().fuelPodHarvested(widget.gridIndex);

@@ -43,7 +43,7 @@ class MissileProvider extends ChangeNotifier {
           jetIndex, asteroidIndex, gridBoxNumber, jetDirection, screenSize, innerShortestSide);
     }
 
-    getIt<GameStatsProvider>().missileFired();
+    getIt<GameStatsProvider>().useFuelForMissile();
     currentIndex = missileCommand.index;
     commands.add(missileCommand);
     action = MissileAction.move;

@@ -65,6 +65,7 @@ class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin
                 if (!destroyed && widget.gridIndex == operation.asteroidIndex && updateMarks != operation.updateMarks) {
                   updateMarks = operation.updateMarks;
                   getIt<AudioProvider>().sound(GameSound.explosion);
+                  getIt<GameStatsProvider>().updateScore();
                   _controlASTEROID.forward().then((_) async {
                     destroyed = true;
                     await getIt<GameStatsProvider>().asteroidDestroyed(widget.gridIndex);

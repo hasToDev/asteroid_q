@@ -41,10 +41,18 @@ class FighterJetProvider extends ChangeNotifier {
 
     bool collisionWithAsteroid = false;
     int gridBoxNumber = getIt<GameBoardProvider>().gridSize;
+    int fuelCount = getIt<GameStatsProvider>().fuel;
 
-    // create first Command
+    if (fuelCount == 0) {
+      isJetMoving = false;
+      return;
+    }
+
+    // * create first Command
+    // * --------------------------------------------------------------------------
     FighterJetCommand commandA = FighterJetUtils.findShortestPath(
-        currentIndex, targetIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+        currentIndex, targetIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide,
+        availableFuel: fuelCount);
 
     // find Asteroid in the path
     // if any, recalculate commandA to stop at Asteroid index
@@ -53,16 +61,29 @@ class FighterJetProvider extends ChangeNotifier {
     if (asteroidIndex != null) {
       collisionWithAsteroid = true;
       commandA = FighterJetUtils.findShortestPath(
-          currentIndex, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+          currentIndex, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide,
+          availableFuel: fuelCount);
     }
+
+    // calculate remaining fuel based on commandA action
+    int totalStepCommandA = commandA.step;
+    int fuelCostCommandA = totalStepCommandA * fuelCostMOVE;
+    if (currentDirection != commandA.direction) {
+      fuelCostCommandA += fuelCostROTATE;
+    }
+    fuelCount = fuelCount - fuelCostCommandA;
+
+    // update data based on commandA
     currentIndex = commandA.index;
     commands.add(commandA);
     currentDirection = commandA.direction;
 
-    // create second Command if necessary
+    // * create second Command if any
+    // * --------------------------------------------------------------------------
     if (commandA.pathType == FighterJetPath.transit) {
       FighterJetCommand commandB = FighterJetUtils.findShortestPath(
-          commandA.index, targetIndex, gridBoxNumber, commandA.direction, screenSize, innerShortestSide);
+          commandA.index, targetIndex, gridBoxNumber, commandA.direction, screenSize, innerShortestSide,
+          availableFuel: fuelCount);
 
       // find Asteroid in the path
       // if any, recalculate commandB to stop at Asteroid index
@@ -71,8 +92,11 @@ class FighterJetProvider extends ChangeNotifier {
       if (asteroidIndex != null) {
         collisionWithAsteroid = true;
         commandB = FighterJetUtils.findShortestPath(
-            commandA.index, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide);
+            commandA.index, asteroidIndex, gridBoxNumber, currentDirection, screenSize, innerShortestSide,
+            availableFuel: fuelCount);
       }
+
+      // update data based on commandB
       currentIndex = commandB.index;
       commands.add(commandB);
       currentDirection = commandB.direction;

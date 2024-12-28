@@ -16,8 +16,9 @@ class FighterJetUtils {
     int gridSize,
     FighterJetDirection currentDirection,
     Size screenSize,
-    double innerShortestSide,
-  ) {
+    double innerShortestSide, {
+    int? availableFuel,
+  }) {
     // Grid dimensions
     int totalCells = gridSize * gridSize;
 
@@ -36,39 +37,60 @@ class FighterJetUtils {
     bool hasLineOfSight = _hasLineOfSight(startRow, startCol, targetRow, targetCol);
 
     if (hasLineOfSight) {
-      // Calculate direct distance for line of sight path
-      int steps = _calculateDirectDistance(startRow, startCol, targetRow, targetCol);
-
       // calculate new direction
       FighterJetDirection direction = findNewDirection(startRow, startCol, targetRow, targetCol, currentDirection);
 
+      // Calculate direct distance for line of sight path
+      var (int steps, int calculatedTargetRow, int calculatedTargetCol) = _calculatePossibleSteps(
+          startRow, startCol, targetRow, targetCol, availableFuel, direction != currentDirection);
+
+      // Calculate new index from the adjusted position
+      int calculatedTargetIndex = calculatedTargetRow * gridSize + calculatedTargetCol;
+
       // calculate new offset
-      Offset targetOffset = GameBoardUtils.findIndexOffset(targetIndex, gridSize, innerShortestSide, screenSize);
+      Offset targetOffset =
+          GameBoardUtils.findIndexOffset(calculatedTargetIndex, gridSize, innerShortestSide, screenSize);
 
       return FighterJetCommand(
-          step: steps, index: targetIndex, offset: targetOffset, direction: direction, pathType: FighterJetPath.direct);
+        step: steps,
+        index: calculatedTargetIndex,
+        offset: targetOffset,
+        direction: direction,
+        pathType: FighterJetPath.direct,
+      );
     }
 
     // If no line of sight, find intermediate point
     var (intermediateRow, intermediateCol) = _findIntermediatePoint(startRow, startCol, targetRow, targetCol, gridSize);
     int intermediateIndex = intermediateRow * gridSize + intermediateCol;
 
-    // Calculate steps to intermediate point
-    int stepsToIntermediate = _calculateDirectDistance(startRow, startCol, intermediateRow, intermediateCol);
-
     // calculate new direction
     FighterJetDirection direction =
         findNewDirection(startRow, startCol, intermediateRow, intermediateCol, currentDirection);
 
+    // Calculate steps to intermediate point
+    var (int stepsToIntermediate, int calculatedTargetRow, int calculatedTargetCol) = _calculatePossibleSteps(
+        startRow, startCol, intermediateRow, intermediateCol, availableFuel, direction != currentDirection);
+
+    // Calculate new index from the adjusted position
+    int calculatedTargetIndex = calculatedTargetRow * gridSize + calculatedTargetCol;
+
+    // path type based on intermediateIndex and calculatedTargetIndex
+    // if intermediateIndex is different than calculatedTargetIndex, then there's not enough fuel to continue
+    // therefore we need to stop at calculatedTargetIndex and using FighterJetPath.transit
+    FighterJetPath pathType =
+        intermediateIndex == calculatedTargetIndex ? FighterJetPath.transit : FighterJetPath.direct;
+
     // calculate new offset
-    Offset targetOffset = GameBoardUtils.findIndexOffset(intermediateIndex, gridSize, innerShortestSide, screenSize);
+    Offset targetOffset =
+        GameBoardUtils.findIndexOffset(calculatedTargetIndex, gridSize, innerShortestSide, screenSize);
 
     return FighterJetCommand(
       step: stepsToIntermediate,
-      index: intermediateIndex,
+      index: calculatedTargetIndex,
       offset: targetOffset,
       direction: direction,
-      pathType: FighterJetPath.transit,
+      pathType: pathType,
     );
   }
 
@@ -86,14 +108,58 @@ class FighterJetUtils {
     return rowDiff == colDiff;
   }
 
-  /// Calculates the number of steps needed for direct movement
-  static int _calculateDirectDistance(int startRow, int startCol, int targetRow, int targetCol) {
+  /// Calculates the maximum possible steps based on fuel availability and direction change
+  static (int steps, int targetRow, int targetCol) _calculatePossibleSteps(
+    int startRow,
+    int startCol,
+    int targetRow,
+    int targetCol,
+    int? fuelAvailable,
+    bool needsDirectionChange,
+  ) {
     int rowDiff = (targetRow - startRow).abs();
     int colDiff = (targetCol - startCol).abs();
+    int directDistance = rowDiff > colDiff ? rowDiff : colDiff;
 
-    // For diagonal movement, we only need the maximum of row or column difference
-    // since we can move diagonally
-    return rowDiff > colDiff ? rowDiff : colDiff;
+    // return if no need to count fuel availability
+    if (fuelAvailable == null) return (directDistance, targetRow, targetCol);
+
+    // Calculate available fuel for movement after direction change
+    int remainingFuel = needsDirectionChange ? fuelAvailable - 1 : fuelAvailable;
+
+    // Calculate maximum possible steps with remaining fuel
+    int maxPossibleSteps = remainingFuel ~/ fuelCostMOVE;
+
+    // If we can't reach the target, calculate the farthest possible position
+    if (maxPossibleSteps < directDistance) {
+      // Calculate the ratio to scale down the movement
+      double ratio = maxPossibleSteps / directDistance;
+
+      // Calculate new target position
+      int newRowDiff = (rowDiff * ratio).floor();
+      int newColDiff = (colDiff * ratio).floor();
+
+      // Determine new target coordinates while maintaining direction
+      int newTargetRow = startRow;
+      int newTargetCol = startCol;
+
+      if (targetRow > startRow) {
+        newTargetRow += newRowDiff;
+      } else if (targetRow < startRow) {
+        newTargetRow -= newRowDiff;
+      }
+
+      if (targetCol > startCol) {
+        newTargetCol += newColDiff;
+      } else if (targetCol < startCol) {
+        newTargetCol -= newColDiff;
+      }
+
+      return (maxPossibleSteps, newTargetRow, newTargetCol);
+    }
+
+    // If we have enough fuel to reach the target
+    return (directDistance, targetRow, targetCol);
   }
 
   /// Finds an intermediate point that can be reached with line of sight
@@ -166,11 +232,11 @@ class FighterJetUtils {
   /// Checks if there are any Asteroid blocking the line of sight between start and end positions
   /// Returns the index of the first blocking Asteroid found, or null if no objects block the line of sight
   static int? findBlockingAsteroid(
-      int startIndex,
-      int endIndex,
-      List<int> asteroidIndices,
-      int gridSize,
-      ) {
+    int startIndex,
+    int endIndex,
+    List<int> asteroidIndices,
+    int gridSize,
+  ) {
     // Convert 1D indices to 2D coordinates
     int startRow = startIndex ~/ gridSize;
     int startCol = startIndex % gridSize;

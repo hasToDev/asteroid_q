@@ -2,7 +2,7 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 
 class GameStatsProvider extends ChangeNotifier {
-  int move = 0;
+  int spaceTravelled = 0;
   int rotate = 0;
   int fuel = 50;
   int score = 0;
@@ -27,7 +27,6 @@ class GameStatsProvider extends ChangeNotifier {
   }
 
   /// Update GalaxyData after Asteroid being destroyed
-  /// will add 1 Score
   Future<void> asteroidDestroyed(int index) async {
     asteroidIndices.remove(index);
     GalaxyData? updatedData = currentGalaxyData!.removeItemIfExists(index, GameObjectType.asteroid);
@@ -35,11 +34,9 @@ class GameStatsProvider extends ChangeNotifier {
       currentGalaxyData = updatedData;
       saveGalaxyData(currentCoordinate, updatedData);
     }
-    await updateScore();
   }
 
   /// Update GalaxyData after FuelPod being harvested
-  /// will add 100 Fuel
   Future<void> fuelPodHarvested(int index) async {
     fuelPodIndices.remove(index);
     GalaxyData? updatedData = currentGalaxyData!.removeItemIfExists(index, GameObjectType.fuelPod);
@@ -47,7 +44,6 @@ class GameStatsProvider extends ChangeNotifier {
       currentGalaxyData = updatedData;
       saveGalaxyData(currentCoordinate, updatedData);
     }
-    await updateFuel();
   }
 
   Future<void> updateScore() async {
@@ -65,14 +61,30 @@ class GameStatsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> missileFired() async {
+  Future<void> useFuelForMissile() async {
     fuel = fuel - fuelCostMISSILE;
     notifyListeners();
   }
 
-  void updateMove() => move++;
+  Future<void> useFuelForRotation() async {
+    fuel = fuel - fuelCostROTATE;
+    notifyListeners();
+  }
 
-  void updateRotate() => rotate++;
+  Future<void> useFuelForMove(int step) async {
+    fuel = fuel - (fuelCostMOVE * step);
+    notifyListeners();
+  }
+
+  void updateMove(int step) {
+    spaceTravelled = spaceTravelled + step;
+    useFuelForMove(step);
+  }
+
+  void updateRotate() {
+    rotate++;
+    useFuelForRotation();
+  }
 
   void saveCoordinate(GalaxyCoordinates coordinate) => currentCoordinate = coordinate;
 

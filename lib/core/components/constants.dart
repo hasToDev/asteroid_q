@@ -8,4 +8,6 @@ const Duration normalAnimationDuration = Duration(milliseconds: 500);
 const Duration blinkingAnimationDuration = Duration(milliseconds: 600);
 
 const int fuelAmountInFuelPod = 100;
+const int fuelCostMOVE = 2;
+const int fuelCostROTATE = 1;
 const int fuelCostMISSILE = 5;

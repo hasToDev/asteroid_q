@@ -70,7 +70,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
     _currentIndex = widget.initialIndex;
     getIt<FighterJetProvider>().setGridIndex(_currentIndex);
 
-    statsMOVE = getIt<GameStatsProvider>().move;
+    statsMOVE = getIt<GameStatsProvider>().spaceTravelled;
     statsROTATE = getIt<GameStatsProvider>().rotate;
   }
 
@@ -117,7 +117,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..duration = getAnimationDuration(command)
       ..forward(from: 0).then((_) {
         statsMOVE++;
-        getIt<GameStatsProvider>().updateMove();
+        getIt<GameStatsProvider>().updateMove(command.step);
         _currentOffset = _animationMOVE.value;
         if (nextCommandExists) {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
