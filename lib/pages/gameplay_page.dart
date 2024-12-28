@@ -80,34 +80,40 @@ class _GameplayPageState extends State<GameplayPage> {
               ),
             ],
           ),
-          Stack(
-            children: [
-              ...widget.data.galaxyData.items.map(
-                (position) {
-                  if (position.type == GameObjectType.fuelPod) {
-                    return Fuel(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageFUELPOD!);
-                  }
-                  return Asteroid(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageASTEROID!);
-                },
-              ),
-            ],
+          IgnorePointer(
+            child: Stack(
+              children: [
+                ...widget.data.galaxyData.items.map(
+                  (position) {
+                    if (position.type == GameObjectType.fuelPod) {
+                      return Fuel(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageFUELPOD!);
+                    }
+                    return Asteroid(gridIndex: position.index, imageBytes: getIt<AssetByteService>().imageASTEROID!);
+                  },
+                ),
+              ],
+            ),
           ),
-          LayoutBuilder(builder: (context, constraints) {
-            return Missile(
-              initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
-              initialConstraints: constraints,
-              imageBytes: getIt<AssetByteService>().imageMISSILE!,
-            );
-          }),
-          LayoutBuilder(builder: (context, constraints) {
-            return FighterJet(
-              initialIndex: widget.data.jetPositionIndex,
-              initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
-              initialConstraints: constraints,
-              initialDirection: widget.data.jetDirection,
-              imageBytes: getIt<AssetByteService>().imageFIGHTERJET!,
-            );
-          }),
+          IgnorePointer(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return Missile(
+                initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
+                initialConstraints: constraints,
+                imageBytes: getIt<AssetByteService>().imageMISSILE!,
+              );
+            }),
+          ),
+          IgnorePointer(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return FighterJet(
+                initialIndex: widget.data.jetPositionIndex,
+                initialOffset: getIt<GameBoardProvider>().getIndexOffset(widget.data.jetPositionIndex),
+                initialConstraints: constraints,
+                initialDirection: widget.data.jetDirection,
+                imageBytes: getIt<AssetByteService>().imageFIGHTERJET!,
+              );
+            }),
+          ),
         ],
       ),
     );
