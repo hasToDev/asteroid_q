@@ -9,9 +9,27 @@ class GameBoardUtils {
   /// The positions will not overlap with the fighter jet position or each other.
   static List<GameObjectPosition> generateGamePositions({
     required int fighterJetPosition,
-    int numFuelPods = 2,
-    int numAsteroids = 6,
+    required GalaxySize galaxySize,
+    required int gridSize,
   }) {
+    late int numFuelPods;
+    late int numAsteroids;
+
+    switch (galaxySize) {
+      case GalaxySize.small:
+        numFuelPods = GalaxySize.small.fuelPod;
+        numAsteroids = GalaxySize.small.asteroid;
+        break;
+      case GalaxySize.medium:
+        numFuelPods = GalaxySize.medium.fuelPod;
+        numAsteroids = GalaxySize.medium.asteroid;
+        break;
+      case GalaxySize.large:
+        numFuelPods = GalaxySize.large.fuelPod;
+        numAsteroids = GalaxySize.large.asteroid;
+        break;
+    }
+
     final random = Random();
     final usedPositions = <int>{fighterJetPosition};
     final List<GameObjectPosition> objectPositions = [];
@@ -20,7 +38,7 @@ class GameBoardUtils {
     for (var i = 0; i < numFuelPods; i++) {
       int position;
       do {
-        position = random.nextInt(289); // 17 x 17 = 289 total positions
+        position = random.nextInt(gridSize);
       } while (usedPositions.contains(position));
 
       usedPositions.add(position);
@@ -31,7 +49,7 @@ class GameBoardUtils {
     for (var i = 0; i < numAsteroids; i++) {
       int position;
       do {
-        position = random.nextInt(289);
+        position = random.nextInt(gridSize);
       } while (usedPositions.contains(position));
 
       usedPositions.add(position);
@@ -54,13 +72,14 @@ class GameBoardUtils {
       // * get the innerShortestSide by reducing outerShortestSide
       // * with SizedBox height and NextGalaxyTile height in COLUMN children of game_board.dart
       outerShortestSide =
-          outerShortestSide - (spaceFromScreenEdge * 2) - ((outerItemSize * 0.5) * 2) - (outerAxisSpacing * 2);
+          outerShortestSide - (spaceFromScreenEdge * 2) - ((outerItemSize * 0.5) * 2) - (outerAxisSpacing * 4);
     }
     // shortest side is WIDTH
     if (constraints.maxWidth < constraints.maxHeight) {
       // * get the innerShortestSide by reducing outerShortestSide
       // * with SizedBox width and NextGalaxyTile width in ROW children of game_board.dart
-      outerShortestSide = outerShortestSide - ((outerItemSize * 0.5) * 2) - ((outerAxisSpacing * 2) * 2);
+      outerShortestSide =
+          outerShortestSide - (spaceFromScreenEdge * 2) - ((outerItemSize * 0.5) * 2) - ((outerAxisSpacing * 2) * 2);
     }
 
     return outerShortestSide;
@@ -94,10 +113,10 @@ class GameBoardUtils {
     final int col = currentIndex % gridColumnSpan;
 
     // Calculate furthest points
-    final int topIndex = col;  // Same column, top row (row 0)
-    final int bottomIndex = (gridColumnSpan - 1) * gridColumnSpan + col;  // Same column, bottom row
-    final int leftIndex = row * gridColumnSpan;  // Same row, leftmost column
-    final int rightIndex = row * gridColumnSpan + (gridColumnSpan - 1);  // Same row, rightmost column
+    final int topIndex = col; // Same column, top row (row 0)
+    final int bottomIndex = (gridColumnSpan - 1) * gridColumnSpan + col; // Same column, bottom row
+    final int leftIndex = row * gridColumnSpan; // Same row, leftmost column
+    final int rightIndex = row * gridColumnSpan + (gridColumnSpan - 1); // Same row, rightmost column
 
     return FurthestIndex(top: topIndex, right: rightIndex, bottom: bottomIndex, left: leftIndex);
   }

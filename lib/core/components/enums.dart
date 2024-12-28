@@ -31,15 +31,11 @@ enum NextGalaxy {
 }
 
 enum SpaceTilePosition {
-  center(144),
-  top(8),
-  bottom(280),
-  left(136),
-  right(152);
-
-  final int id;
-
-  const SpaceTilePosition(this.id);
+  center,
+  top,
+  bottom,
+  left,
+  right,
 }
 
 enum FighterJetDirection {
@@ -77,14 +73,14 @@ enum GameObjectType {
   fuelPod,
 }
 
-enum GalaxySize {
-  normal(13),
-  small(9);
-
-  final int gridSpan;
-
-  const GalaxySize(this.gridSpan);
-}
+// enum GalaxySize {
+//   normal(13),
+//   small(9);
+//
+//   final int gridSpan;
+//
+//   const GalaxySize(this.gridSpan);
+// }
 
 enum MissileAction {
   destroyAsteroid,
@@ -102,4 +98,15 @@ enum GameSound {
   lifeReduced,
   refuel,
   move,
+}
+
+enum GalaxySize {
+  small(1, 3),
+  medium(1, 5),
+  large(2, 7);
+
+  final int fuelPod;
+  final int asteroid;
+
+  const GalaxySize(this.fuelPod, this.asteroid);
 }

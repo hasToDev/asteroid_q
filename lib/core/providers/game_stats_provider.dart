@@ -9,7 +9,7 @@ class GameStatsProvider extends ChangeNotifier {
   int remainingLife = 0;
 
   Map<String, GalaxyData> gameMap = {};
-  GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.normal);
+  GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.large);
 
   GalaxyData? currentGalaxyData;
   List<int> fuelPodIndices = [];

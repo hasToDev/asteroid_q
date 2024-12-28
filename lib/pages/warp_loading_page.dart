@@ -30,7 +30,11 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
     if (dataOnCoordinate == null) {
       dataOnCoordinate = GalaxyData(
         name: widget.data.galaxyCoordinates.coordinateToKey(),
-        items: GameBoardUtils.generateGamePositions(fighterJetPosition: jetPositionIndex),
+        items: GameBoardUtils.generateGamePositions(
+          fighterJetPosition: jetPositionIndex,
+          galaxySize: getIt<GameBoardProvider>().galaxySize,
+          gridSize: getIt<GameBoardProvider>().maxIndexForGRidSize,
+        ),
       );
       getIt<GameStatsProvider>().saveGalaxyData(widget.data.galaxyCoordinates, dataOnCoordinate);
     }

@@ -80,3 +80,21 @@ extension IntX on int {
     throw ArgumentError('NextGalaxy index not exist');
   }
 }
+
+extension SpaceTilePositionX on SpaceTilePosition {
+  int get id {
+    int n = getIt<GameBoardProvider>().gridSize;
+    switch (this) {
+      case SpaceTilePosition.center:
+        return ((n * n) ~/ 2);
+      case SpaceTilePosition.top:
+        return (n ~/ 2);
+      case SpaceTilePosition.right:
+        return ((n * n) ~/ 2) + (n ~/ 2);
+      case SpaceTilePosition.bottom:
+        return (n * (n - 1)) + (n ~/ 2);
+      case SpaceTilePosition.left:
+        return ((n * n) ~/ 2) - (n ~/ 2);
+    }
+  }
+}

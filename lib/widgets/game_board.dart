@@ -127,9 +127,18 @@ class _GameBoardState extends State<GameBoard> {
           double outerAxisSpacing = outerItemSize * 0.125;
           double outerSizedBoxSize = outerItemSize * boxNumber;
 
+          double horizontalSpace = constraints.maxWidth - constraints.maxHeight;
+          if (horizontalSpace <= 0) horizontalSpace = 0;
+          double verticalSpace = constraints.maxHeight - constraints.maxWidth;
+          if (verticalSpace <= 0) verticalSpace = 0;
+
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Builder(builder: (context) {
+                if (horizontalSpace != 0) return SizedBox(width: horizontalSpace / 2 + spaceFromScreenEdge);
+                return const SizedBox(width: spaceFromScreenEdge);
+              }),
               NextGalaxyTile(
                 position: NextGalaxy.left,
                 width: outerItemSize * 0.5,
@@ -142,80 +151,88 @@ class _GameBoardState extends State<GameBoard> {
                 },
               ),
               SizedBox(width: outerAxisSpacing * 2),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: spaceFromScreenEdge),
-                  NextGalaxyTile(
-                    position: NextGalaxy.top,
-                    width: outerSizedBoxSize,
-                    height: outerItemSize * 0.5,
-                    borderRadius: outerBorderRadius,
-                    focusedIndex: focusedIndex,
-                    constraints: constraints,
-                    onTap: () {
-                      //
-                    },
-                  ),
-                  SizedBox(height: outerAxisSpacing),
-                  Expanded(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      // ! NOTE
-                      // ! innerShortestSide is always smaller than outerShortestSide
-                      // ! because there are NextGalaxyTile wrapping GridView
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Builder(builder: (context) {
+                      if (verticalSpace != 0) return SizedBox(height: verticalSpace / 2 + spaceFromScreenEdge);
+                      return const SizedBox(height: spaceFromScreenEdge);
+                    }),
+                    NextGalaxyTile(
+                      position: NextGalaxy.top,
+                      width: outerSizedBoxSize,
+                      height: outerItemSize * 0.5,
+                      borderRadius: outerBorderRadius,
+                      focusedIndex: focusedIndex,
+                      constraints: constraints,
+                      onTap: () {
+                        //
+                      },
+                    ),
+                    SizedBox(height: outerAxisSpacing),
+                    Expanded(
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        // ! NOTE
+                        // ! innerShortestSide is always smaller than outerShortestSide
+                        // ! because there are NextGalaxyTile wrapping GridView
 
-                      // ! always use itemSize calculated with innerShortestSide
-                      // ! to get correct offset or recalculated offset for the game
-                      innerShortestSide =
-                          constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
+                        // ! always use itemSize calculated with innerShortestSide
+                        // ! to get correct offset or recalculated offset for the game
+                        innerShortestSide =
+                            constraints.maxWidth < constraints.maxHeight ? constraints.maxWidth : constraints.maxHeight;
 
-                      double itemSize = (innerShortestSide / boxNumber);
-                      double borderRadius = itemSize * 0.25;
-                      double axisSpacing = itemSize * axisSpacingMultiplier;
-                      double sizedBoxSize = itemSize * boxNumber;
+                        double itemSize = (innerShortestSide / boxNumber);
+                        double borderRadius = itemSize * 0.25;
+                        double axisSpacing = itemSize * axisSpacingMultiplier;
+                        double sizedBoxSize = itemSize * boxNumber;
 
-                      return Center(
-                        child: SizedBox(
-                          width: sizedBoxSize,
-                          height: sizedBoxSize,
-                          child: ScrollConfiguration(
-                            behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                            child: GridView.builder(
-                              padding: EdgeInsets.zero,
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: boxNumber,
+                        return Center(
+                          child: SizedBox(
+                            width: sizedBoxSize,
+                            height: sizedBoxSize,
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                              child: GridView.builder(
+                                padding: EdgeInsets.zero,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: boxNumber,
+                                ),
+                                itemCount: itemCount,
+                                itemBuilder: (context, index) {
+                                  return SpaceTile(
+                                    index: index,
+                                    spacing: axisSpacing,
+                                    borderRadius: borderRadius,
+                                    focusedIndex: focusedIndex,
+                                    constraints: constraints,
+                                    onTap: () => _updatePositionOffset(index),
+                                  );
+                                },
                               ),
-                              itemCount: itemCount,
-                              itemBuilder: (context, index) {
-                                return SpaceTile(
-                                  index: index,
-                                  spacing: axisSpacing,
-                                  borderRadius: borderRadius,
-                                  focusedIndex: focusedIndex,
-                                  constraints: constraints,
-                                  onTap: () => _updatePositionOffset(index),
-                                );
-                              },
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      }),
+                    ),
+                    SizedBox(height: outerAxisSpacing),
+                    NextGalaxyTile(
+                      position: NextGalaxy.bottom,
+                      width: outerSizedBoxSize,
+                      height: outerItemSize * 0.5,
+                      borderRadius: outerBorderRadius,
+                      focusedIndex: focusedIndex,
+                      constraints: constraints,
+                      onTap: () {
+                        //
+                      },
+                    ),
+                    Builder(builder: (context) {
+                      if (verticalSpace != 0) return SizedBox(height: verticalSpace / 2 + spaceFromScreenEdge);
+                      return const SizedBox(height: spaceFromScreenEdge);
                     }),
-                  ),
-                  SizedBox(height: outerAxisSpacing),
-                  NextGalaxyTile(
-                    position: NextGalaxy.bottom,
-                    width: outerSizedBoxSize,
-                    height: outerItemSize * 0.5,
-                    borderRadius: outerBorderRadius,
-                    focusedIndex: focusedIndex,
-                    constraints: constraints,
-                    onTap: () {
-                      //
-                    },
-                  ),
-                  const SizedBox(height: spaceFromScreenEdge),
-                ],
+                  ],
+                ),
               ),
               SizedBox(width: outerAxisSpacing * 2),
               NextGalaxyTile(
@@ -229,6 +246,10 @@ class _GameBoardState extends State<GameBoard> {
                   //
                 },
               ),
+              Builder(builder: (context) {
+                if (horizontalSpace != 0) return SizedBox(width: horizontalSpace / 2 + spaceFromScreenEdge);
+                return const SizedBox(width: spaceFromScreenEdge);
+              }),
             ],
           );
         },

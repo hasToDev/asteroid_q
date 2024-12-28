@@ -33,29 +33,6 @@ class _GameplayPageState extends State<GameplayPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     ExcludeFocus(
-          //       child: SizedBox(
-          //         width: 200,
-          //         child: ElevatedButton(
-          //           onPressed: () {
-          //             context.go(AppPaths.home);
-          //           },
-          //           child: const Text('Back to Home'),
-          //         ),
-          //       ),
-          //     ),
-          //     Expanded(
-          //       child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
-          //     ),
-          //     const SizedBox(
-          //       width: 200,
-          //       child: Text('Gameplay Page'),
-          //     ),
-          //   ],
-          // ),
           Stack(
             children: [
               Align(
