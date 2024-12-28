@@ -2,6 +2,7 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class GameplayPage extends StatefulWidget {
   final GamePlayPageExtra data;
@@ -71,20 +72,35 @@ class _GameplayPageState extends State<GameplayPage> {
                         spacing: 12,
                         children: [
                           SizedBox(width: horizontalSpace / 2),
-                          StatsWidget(
-                            imageBytes: getIt<AssetByteService>().imageSCORE!,
-                            score: 0,
-                            backgroundColor: scoreColor,
+                          Selector<GameStatsProvider, int>(
+                            selector: (context, stats) => stats.score,
+                            builder: (context, scoreCount, child) {
+                              return StatsWidget(
+                                imageBytes: getIt<AssetByteService>().imageSCORE!,
+                                score: scoreCount,
+                                backgroundColor: scoreColor,
+                              );
+                            },
                           ),
-                          StatsWidget(
-                            imageBytes: getIt<AssetByteService>().imageFUELPOD!,
-                            score: 50,
-                            backgroundColor: fuelColor,
+                          Selector<GameStatsProvider, int>(
+                            selector: (context, stats) => stats.fuel,
+                            builder: (context, fuelCount, child) {
+                              return StatsWidget(
+                                imageBytes: getIt<AssetByteService>().imageFUELPOD!,
+                                score: fuelCount,
+                                backgroundColor: fuelColor,
+                              );
+                            },
                           ),
-                          StatsWidget(
-                            imageBytes: getIt<AssetByteService>().imageLIFE!,
-                            score: 3,
-                            backgroundColor: lifeColor,
+                          Selector<GameStatsProvider, int>(
+                            selector: (context, stats) => stats.remainingLife,
+                            builder: (context, lifeCount, child) {
+                              return StatsWidget(
+                                imageBytes: getIt<AssetByteService>().imageLIFE!,
+                                score: lifeCount,
+                                backgroundColor: lifeColor,
+                              );
+                            },
                           ),
                         ],
                       );

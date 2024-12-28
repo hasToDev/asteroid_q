@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class GameStatsProvider extends ChangeNotifier {
   int move = 0;
   int rotate = 0;
-  int fuel = 0;
+  int fuel = 50;
   int score = 0;
-  int remainingLife = 0;
+  int remainingLife = 3;
 
   Map<String, GalaxyData> gameMap = {};
   GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.large);
@@ -52,12 +52,22 @@ class GameStatsProvider extends ChangeNotifier {
 
   Future<void> updateScore() async {
     score = score + 1;
-    // TODO: notify the stat listener
+    notifyListeners();
   }
 
   Future<void> updateFuel() async {
-    fuel = fuel + 100;
-    // TODO: notify the stat listener
+    fuel = fuel + fuelAmountInFuelPod;
+    notifyListeners();
+  }
+
+  Future<void> reduceLife() async {
+    remainingLife = remainingLife - 1;
+    notifyListeners();
+  }
+
+  Future<void> missileFired() async {
+    fuel = fuel - fuelCostMISSILE;
+    notifyListeners();
   }
 
   void updateMove() => move++;

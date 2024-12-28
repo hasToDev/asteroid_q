@@ -115,17 +115,18 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
               if (updateMarks != operation.updateMarks) {
                 updateMarks = operation.updateMarks;
                 _currentIndex = operation.currentIndex;
-                getIt<FighterJetProvider>().fireMissileSTART();
                 switch (operation.action) {
                   case MissileAction.destroyAsteroid:
                     if (operation.commands.isNotEmpty) {
                       destroyAsteroid = true;
+                      getIt<FighterJetProvider>().fireMissileSTART();
                       moveMISSILE(operation.commands.removeAt(0), constraints);
                     }
                     break;
                   case MissileAction.move:
                     if (operation.commands.isNotEmpty) {
                       destroyAsteroid = false;
+                      getIt<FighterJetProvider>().fireMissileSTART();
                       moveMISSILE(operation.commands.removeAt(0), constraints);
                     }
                     break;

@@ -36,8 +36,6 @@ class FighterJetProvider extends ChangeNotifier {
     FurthestIndex? furthestIndex,
     NextGalaxy? nextGalaxy,
   }) {
-    // TODO: check from game stats provider if the jet still have remaining fuel to move
-
     if (isJetMoving || isJetRefueling || isMissileFired) return;
     isJetMoving = true;
 
@@ -93,17 +91,28 @@ class FighterJetProvider extends ChangeNotifier {
       }
     }
 
+    // TODO: check from game stats provider if the jet still have remaining fuel to move
+    // TODO: verify that for each commandA and/or commandB, jet have enough fuel for all STEPs, including for 1 rotation if commandB exist
+    // TODO: if not enough fuel for all step, find the maximum step the jet can move, and move to that index
+    // TODO: if jet ran out of fuel, notify player that game is over, show dialog or something
+
     action = FighterJetAction.move;
     if (collisionWithAsteroid) action = FighterJetAction.asteroidCollision;
     updateMarks++;
     notifyListeners();
   }
 
-  void recoverFromCollision() {
-    // TODO: check from game stats provider if the jet still have remaining life to recover from asteroid collision
-    action = FighterJetAction.collisionRecover;
-    updateMarks++;
-    notifyListeners();
+  void recoverFromCollision() async {
+    int lifeCount = getIt<GameStatsProvider>().remainingLife;
+    if (lifeCount > 0) {
+      getIt<GameStatsProvider>().reduceLife();
+      await Future.delayed(const Duration(milliseconds: 75));
+      action = FighterJetAction.collisionRecover;
+      updateMarks++;
+      notifyListeners();
+    } else {
+      // TODO: notify player that game is over, no more life remaining, show dialog or something
+    }
   }
 
   void refuelingSTART() => isJetRefueling = true;

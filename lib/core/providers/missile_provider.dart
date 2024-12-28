@@ -12,9 +12,10 @@ class MissileProvider extends ChangeNotifier {
   bool isMissileFired = false;
 
   void fireMissile(Size screenSize, double innerShortestSide) {
-    // TODO: check from game stats provider if the jet still have remaining fuel to fire missile
+    int fuelCount = getIt<GameStatsProvider>().fuel;
+    bool isEnoughFuelForMissile = fuelCount >= fuelCostMISSILE;
 
-    if (isMissileFired) return;
+    if (isMissileFired || !isEnoughFuelForMissile) return;
     isMissileFired = true;
 
     int jetIndex = getIt<FighterJetProvider>().currentIndex;
@@ -42,6 +43,7 @@ class MissileProvider extends ChangeNotifier {
           jetIndex, asteroidIndex, gridBoxNumber, jetDirection, screenSize, innerShortestSide);
     }
 
+    getIt<GameStatsProvider>().missileFired();
     currentIndex = missileCommand.index;
     commands.add(missileCommand);
     action = MissileAction.move;
