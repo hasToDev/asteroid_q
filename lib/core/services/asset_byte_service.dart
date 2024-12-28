@@ -7,6 +7,8 @@ class AssetByteService {
   final Uint8List? imageASTEROID;
   final Uint8List? imageFUELPOD;
   final Uint8List? imageMISSILE;
+  final Uint8List? imageSCORE;
+  final Uint8List? imageLIFE;
   final Uint8List? animationBLAST;
   final Uint8List? animationWARP;
   final Uint8List? soundEXPLOSION;
@@ -20,6 +22,8 @@ class AssetByteService {
     this.imageASTEROID,
     this.imageFUELPOD,
     this.imageMISSILE,
+    this.imageSCORE,
+    this.imageLIFE,
     this.animationBLAST,
     this.animationWARP,
     this.soundEXPLOSION,
@@ -35,6 +39,8 @@ class AssetByteService {
       imageASTEROID: base64.decode(asteroidBASE64),
       imageFUELPOD: base64.decode(fuelBASE64),
       imageMISSILE: base64.decode(missileBASE64),
+      imageSCORE: base64.decode(scoreBASE64),
+      imageLIFE: base64.decode(lifeBASE64),
       animationBLAST: base64.decode(blastBASE64),
       animationWARP: base64.decode(warpBASE64),
       soundEXPLOSION: base64.decode(explosionBASE64),

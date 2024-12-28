@@ -1,6 +1,4 @@
 import 'package:asteroid_q/core/core.dart';
-import 'package:asteroid_q/widgets/asteroid.dart';
-import 'package:asteroid_q/widgets/fuel.dart';
 import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,19 +33,13 @@ class _GameplayPageState extends State<GameplayPage> {
         children: [
           Stack(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Builder(
-                  builder: (context) {
-                    if (horizontalSpace != 0) {
-                      return SizedBox(
-                        width: horizontalSpace / 2,
-                        child: const Text('Gameplay Page'),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
+                  ),
+                ],
               ),
               Align(
                 alignment: Alignment.topLeft,
@@ -70,13 +62,36 @@ class _GameplayPageState extends State<GameplayPage> {
                   },
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
-                  ),
-                ],
+              Align(
+                alignment: Alignment.topRight,
+                child: Builder(
+                  builder: (context) {
+                    if (horizontalSpace != 0) {
+                      return Column(
+                        spacing: 12,
+                        children: [
+                          SizedBox(width: horizontalSpace / 2),
+                          StatsWidget(
+                            imageBytes: getIt<AssetByteService>().imageSCORE!,
+                            score: 0,
+                            backgroundColor: scoreColor,
+                          ),
+                          StatsWidget(
+                            imageBytes: getIt<AssetByteService>().imageFUELPOD!,
+                            score: 50,
+                            backgroundColor: fuelColor,
+                          ),
+                          StatsWidget(
+                            imageBytes: getIt<AssetByteService>().imageLIFE!,
+                            score: 3,
+                            backgroundColor: lifeColor,
+                          ),
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
             ],
           ),
