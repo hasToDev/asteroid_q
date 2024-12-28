@@ -86,8 +86,10 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
       end: getIt<FighterJetProvider>().currentDirection.angle,
     ).animate(CurvedAnimation(parent: _controlMISSILE, curve: Curves.linear));
 
+    getIt<AudioProvider>().sound(GameSound.laser);
+
     _controlMISSILE
-      ..duration = normalAnimationDuration
+      ..duration = quickAnimationDuration
       ..forward(from: 0).then(
         (_) {
           _currentOffset = _animationMOVE.value;

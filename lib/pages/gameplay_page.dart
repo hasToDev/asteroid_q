@@ -25,29 +25,81 @@ class _GameplayPageState extends State<GameplayPage> {
         GameBoardUtils.calculateInnerShortestSide(BoxConstraints(maxWidth: size.width, maxHeight: size.height));
     getIt<GameBoardProvider>().setInnerShortestSide(innerShortestSide, size);
 
+    double horizontalSpace = size.width - size.height;
+    if (horizontalSpace <= 0) horizontalSpace = 0;
+    double verticalSpace = size.height - size.width;
+    if (verticalSpace <= 0) verticalSpace = 0;
+
     return Scaffold(
       body: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     ExcludeFocus(
+          //       child: SizedBox(
+          //         width: 200,
+          //         child: ElevatedButton(
+          //           onPressed: () {
+          //             context.go(AppPaths.home);
+          //           },
+          //           child: const Text('Back to Home'),
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
+          //     ),
+          //     const SizedBox(
+          //       width: 200,
+          //       child: Text('Gameplay Page'),
+          //     ),
+          //   ],
+          // ),
+          Stack(
             children: [
-              ExcludeFocus(
-                child: SizedBox(
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.go(AppPaths.home);
-                    },
-                    child: const Text('Back to Home'),
-                  ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Builder(
+                  builder: (context) {
+                    if (horizontalSpace != 0) {
+                      return SizedBox(
+                        width: horizontalSpace / 2,
+                        child: const Text('Gameplay Page'),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
               ),
-              Expanded(
-                child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Builder(
+                  builder: (context) {
+                    if (horizontalSpace != 0) {
+                      return ExcludeFocus(
+                        child: SizedBox(
+                          width: horizontalSpace / 2,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.go(AppPaths.home);
+                            },
+                            child: const Text('Back to Home'),
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
-              const SizedBox(
-                width: 200,
-                child: Text('Gameplay Page'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GameBoard(initialFocusIndex: widget.data.jetPositionIndex),
+                  ),
+                ],
               ),
             ],
           ),

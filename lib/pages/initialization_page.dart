@@ -18,6 +18,7 @@ class _InitializationPageState extends State<InitializationPage> {
 
   void initializationCheck() async {
     await Future.delayed(const Duration(milliseconds: 500));
+    await getIt<AudioProvider>().initializeAudio();
     if (!mounted) return;
     context.go(AppPaths.home);
   }

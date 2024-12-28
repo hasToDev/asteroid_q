@@ -11,7 +11,7 @@ class AssetByteService {
   final Uint8List? animationWARP;
   final Uint8List? soundEXPLOSION;
   final Uint8List? soundLASER;
-  final Uint8List? soundLOWFUEL;
+  final Uint8List? soundLIFEREDUCED;
   final Uint8List? soundREFUEL;
   final Uint8List? soundWHOOSH;
 
@@ -24,7 +24,7 @@ class AssetByteService {
     this.animationWARP,
     this.soundEXPLOSION,
     this.soundLASER,
-    this.soundLOWFUEL,
+    this.soundLIFEREDUCED,
     this.soundREFUEL,
     this.soundWHOOSH,
   });
@@ -39,7 +39,7 @@ class AssetByteService {
       animationWARP: base64.decode(warpBASE64),
       soundEXPLOSION: base64.decode(explosionBASE64),
       soundLASER: base64.decode(laserBASE64),
-      soundLOWFUEL: base64.decode(lowFuelBASE64),
+      soundLIFEREDUCED: base64.decode(lifeReducedBASE64),
       soundREFUEL: base64.decode(refuelBASE64),
       soundWHOOSH: base64.decode(whooshMoveBASE64),
     );

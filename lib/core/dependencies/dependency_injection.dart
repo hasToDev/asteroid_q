@@ -7,6 +7,7 @@ class DependencyInjection {
   static Future<void> init() async {
     // Provider
     getIt.registerLazySingleton(() => AsteroidProvider());
+    getIt.registerLazySingleton(() => AudioProvider());
     getIt.registerLazySingleton(() => FuelPodProvider());
     getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => GameStatsProvider());

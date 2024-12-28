@@ -95,3 +95,11 @@ enum AsteroidDestructionType {
   fighterJet,
   missile,
 }
+
+enum GameSound {
+  explosion,
+  laser,
+  lifeReduced,
+  refuel,
+  move,
+}

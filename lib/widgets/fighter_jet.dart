@@ -111,6 +111,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       );
     }
 
+    getIt<AudioProvider>().sound(GameSound.move);
+
     _controlMOVE
       ..duration = getAnimationDuration(command)
       ..forward(from: 0).then((_) {
@@ -134,7 +136,6 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
             getIt<FighterJetProvider>().jetMovingToNewGalaxy();
           } else {
             if (collidedWithAsteroid) {
-              // TODO: trigger the asteroid to have fade animation and explosion sounds, then continue to blinkingJET
               getIt<AsteroidProvider>().asteroidExplosion(_currentIndex, AsteroidDestructionType.fighterJet);
               return;
             }
@@ -189,6 +190,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       // Third and final blink, higher weight to ensure final opacity is 1.0
       TweenSequenceItem(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 33.32),
     ]).animate(CurvedAnimation(parent: _controlMOVE, curve: Curves.linear));
+
+    getIt<AudioProvider>().sound(GameSound.lifeReduced);
 
     _controlMOVE
       ..duration = blinkingAnimationDuration

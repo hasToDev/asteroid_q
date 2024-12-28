@@ -54,7 +54,7 @@ class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
             builder: (BuildContext context, operation, Widget? _) {
               if (!harvested && widget.gridIndex == operation.fuelPodIndex && updateMarks != operation.updateMarks) {
                 updateMarks = operation.updateMarks;
-                // TODO: play harvesting audio
+                getIt<AudioProvider>().sound(GameSound.refuel);
                 getIt<FighterJetProvider>().refuelingSTART();
                 _controlFUELPOD.forward().then((_) async {
                   harvested = true;
