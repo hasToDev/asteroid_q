@@ -76,12 +76,12 @@ class GameStatsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateMove(int step) {
+  void updateMoveStatsAndFuel(int step) {
     spaceTravelled = spaceTravelled + step;
     useFuelForMove(step);
   }
 
-  void updateRotate() {
+  void updateRotateStatsAndFuel() {
     rotate++;
     useFuelForRotation();
   }

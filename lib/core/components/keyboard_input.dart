@@ -1,5 +1,4 @@
 import 'package:asteroid_q/core/core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class KeyboardInput {
@@ -43,7 +42,6 @@ class KeyboardInput {
         case LogicalKeyboardKey.keyU:
           // Handle U key -- UPGRADE ship
           // TODO: implement upgrade
-          debugPrint('Upgrade');
           newAction = KeyboardAction.upgrade;
           break;
         case LogicalKeyboardKey.keyR:

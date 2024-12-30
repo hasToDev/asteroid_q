@@ -20,7 +20,17 @@ class FighterJetProvider extends ChangeNotifier {
     currentIndex = index;
   }
 
-  void jetFinishMoving() => isJetMoving = false;
+  void jetFinishMoving() {
+    // check for fuel pod on current index if remaining fuel is less than 2
+    if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
+      bool isFuelPodExistAtCurrentIndex = getIt<GameStatsProvider>().fuelPodIndices.contains(currentIndex);
+      if (!isFuelPodExistAtCurrentIndex) {
+        // TODO: notify player that game is over, no more fuel remaining, show dialog or something
+        return;
+      }
+    }
+    isJetMoving = false;
+  }
 
   void jetMovingToNewGalaxy() {
     furthestIndexData = null;
@@ -114,11 +124,6 @@ class FighterJetProvider extends ChangeNotifier {
         commands[0].setDirectionForNextGalaxy(nextGalaxy);
       }
     }
-
-    // TODO: check from game stats provider if the jet still have remaining fuel to move
-    // TODO: verify that for each commandA and/or commandB, jet have enough fuel for all STEPs, including for 1 rotation if commandB exist
-    // TODO: if not enough fuel for all step, find the maximum step the jet can move, and move to that index
-    // TODO: if jet ran out of fuel, notify player that game is over, show dialog or something
 
     action = FighterJetAction.move;
     if (collisionWithAsteroid) action = FighterJetAction.asteroidCollision;

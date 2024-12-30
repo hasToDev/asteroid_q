@@ -75,7 +75,6 @@ class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin
                         break;
                       case AsteroidDestructionType.missile:
                         getIt<MissileProvider>().fireMissileDONE();
-                        getIt<FighterJetProvider>().fireMissileEND();
                         break;
                     }
                   });

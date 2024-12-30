@@ -117,7 +117,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..duration = getAnimationDuration(command)
       ..forward(from: 0).then((_) {
         statsMOVE++;
-        getIt<GameStatsProvider>().updateMove(command.step);
+        getIt<GameStatsProvider>().updateMoveStatsAndFuel(command.step);
         _currentOffset = _animationMOVE.value;
         if (nextCommandExists) {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
@@ -165,7 +165,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..duration = const Duration(milliseconds: 500)
       ..forward(from: 0).then((_) async {
         statsROTATE++;
-        getIt<GameStatsProvider>().updateRotate();
+        getIt<GameStatsProvider>().updateRotateStatsAndFuel();
         _currentDirection = command.direction;
         moveJET(command);
       });

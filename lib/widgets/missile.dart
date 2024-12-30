@@ -98,7 +98,6 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
             return;
           }
           getIt<MissileProvider>().fireMissileDONE();
-          getIt<FighterJetProvider>().fireMissileEND();
         },
       );
   }

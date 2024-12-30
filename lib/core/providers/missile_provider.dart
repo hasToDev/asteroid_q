@@ -52,7 +52,19 @@ class MissileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void fireMissileDONE() => isMissileFired = false;
+  void fireMissileDONE() {
+    // check for fuel pod on current fighter jet index if remaining fuel is less than 2
+    if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
+      bool isFuelPodExistAtCurrentIndex =
+          getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
+      if (!isFuelPodExistAtCurrentIndex) {
+        // TODO: notify player that game is over, no more fuel remaining, show dialog or something
+        return;
+      }
+    }
+    isMissileFired = false;
+    getIt<FighterJetProvider>().fireMissileEND();
+  }
 
   /// Calculate the end index position based on fighter jet current index and direction.
   /// The end position will be up to 3 spaces away from start position in the same direction.
