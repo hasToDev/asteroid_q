@@ -48,73 +48,77 @@ class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double itemSize = getIt<GameBoardProvider>().gameItemSize;
-        Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
-        double itemSizeLOTTIE = itemSize * 5;
-        Offset adjustedOffsetLOTTIE =
-            getIt<GameBoardProvider>().getIndexAdjustedOffsetCUSTOMSIZE(widget.gridIndex, itemSizeLOTTIE);
+    return RepaintBoundary(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double itemSize = getIt<GameBoardProvider>().gameItemSize;
+          Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
+          double itemSizeLOTTIE = itemSize * 5;
+          Offset adjustedOffsetLOTTIE =
+              getIt<GameBoardProvider>().getIndexAdjustedOffsetCUSTOMSIZE(widget.gridIndex, itemSizeLOTTIE);
 
-        return Stack(
-          fit: StackFit.expand,
-          alignment: Alignment.center,
-          children: [
-            Consumer<AsteroidProvider>(
-              builder: (BuildContext context, operation, Widget? _) {
-                if (!destroyed && widget.gridIndex == operation.asteroidIndex && updateMarks != operation.updateMarks) {
-                  updateMarks = operation.updateMarks;
-                  getIt<AudioProvider>().sound(GameSound.explosion);
-                  getIt<GameStatsProvider>().updateScore();
-                  _controlASTEROID.forward().then((_) async {
-                    destroyed = true;
-                    await getIt<GameStatsProvider>().asteroidDestroyed(widget.gridIndex);
-                    switch (operation.explosionReason) {
-                      case AsteroidDestructionType.fighterJet:
-                        getIt<FighterJetProvider>().recoverFromCollision();
-                        break;
-                      case AsteroidDestructionType.missile:
-                        getIt<MissileProvider>().fireMissileDONE();
-                        break;
-                    }
-                  });
-                }
-                return const SizedBox();
-              },
-            ),
-            Positioned(
-              left: adjustedOffset.dx,
-              top: adjustedOffset.dy,
-              child: ScaleTransition(
-                scale: _animationASTEROID,
-                child: FadeTransition(
-                  opacity: _animationASTEROID,
-                  child: Image.memory(
-                    widget.imageBytes,
-                    height: itemSize,
-                    width: itemSize,
-                    fit: BoxFit.fitHeight,
-                    gaplessPlayback: true,
-                    isAntiAlias: true,
+          return Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              Consumer<AsteroidProvider>(
+                builder: (BuildContext context, operation, Widget? _) {
+                  if (!destroyed &&
+                      widget.gridIndex == operation.asteroidIndex &&
+                      updateMarks != operation.updateMarks) {
+                    updateMarks = operation.updateMarks;
+                    getIt<AudioProvider>().sound(GameSound.explosion);
+                    getIt<GameStatsProvider>().updateScore();
+                    _controlASTEROID.forward().then((_) async {
+                      destroyed = true;
+                      await getIt<GameStatsProvider>().asteroidDestroyed(widget.gridIndex);
+                      switch (operation.explosionReason) {
+                        case AsteroidDestructionType.fighterJet:
+                          getIt<FighterJetProvider>().recoverFromCollision();
+                          break;
+                        case AsteroidDestructionType.missile:
+                          getIt<MissileProvider>().fireMissileDONE();
+                          break;
+                      }
+                    });
+                  }
+                  return const SizedBox();
+                },
+              ),
+              Positioned(
+                left: adjustedOffset.dx,
+                top: adjustedOffset.dy,
+                child: ScaleTransition(
+                  scale: _animationASTEROID,
+                  child: FadeTransition(
+                    opacity: _animationASTEROID,
+                    child: Image.memory(
+                      widget.imageBytes,
+                      height: itemSize,
+                      width: itemSize,
+                      fit: BoxFit.fitHeight,
+                      gaplessPlayback: true,
+                      isAntiAlias: true,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              left: adjustedOffsetLOTTIE.dx,
-              top: adjustedOffsetLOTTIE.dy,
-              child: Lottie.memory(
-                getIt<AssetByteService>().animationBLAST!,
-                controller: _animationBLAST,
-                fit: BoxFit.contain,
-                height: itemSizeLOTTIE,
-                width: itemSizeLOTTIE,
-                filterQuality: FilterQuality.medium,
+              Positioned(
+                left: adjustedOffsetLOTTIE.dx,
+                top: adjustedOffsetLOTTIE.dy,
+                child: Lottie.memory(
+                  getIt<AssetByteService>().animationBLAST!,
+                  controller: _animationBLAST,
+                  fit: BoxFit.contain,
+                  height: itemSizeLOTTIE,
+                  width: itemSizeLOTTIE,
+                  filterQuality: FilterQuality.medium,
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }

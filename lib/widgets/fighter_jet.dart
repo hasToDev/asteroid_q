@@ -207,105 +207,108 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          fit: StackFit.expand,
-          alignment: Alignment.center,
-          children: [
-            Consumer<FighterJetProvider>(
-              builder: (BuildContext context, operation, Widget? _) {
-                if (operation.action != FighterJetAction.none && updateMarks != operation.updateMarks) {
-                  updateMarks = operation.updateMarks;
-                  _currentIndex = operation.currentIndex;
-                  switch (operation.action) {
-                    case FighterJetAction.move:
-                      if (operation.commands.isNotEmpty) {
-                        collidedWithAsteroid = false;
-                        executeMOVE(operation.commands.removeAt(0));
-                      }
-                      break;
-                    case FighterJetAction.asteroidCollision:
-                      if (operation.commands.isNotEmpty) {
-                        collidedWithAsteroid = true;
-                        executeMOVE(operation.commands.removeAt(0));
-                      }
-                      break;
-                    case FighterJetAction.collisionRecover:
-                      blinkingJET();
-                      break;
-                    default:
-                      break;
+    return RepaintBoundary(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              Consumer<FighterJetProvider>(
+                builder: (BuildContext context, operation, Widget? _) {
+                  if (operation.action != FighterJetAction.none && updateMarks != operation.updateMarks) {
+                    updateMarks = operation.updateMarks;
+                    _currentIndex = operation.currentIndex;
+                    switch (operation.action) {
+                      case FighterJetAction.move:
+                        if (operation.commands.isNotEmpty) {
+                          collidedWithAsteroid = false;
+                          executeMOVE(operation.commands.removeAt(0));
+                        }
+                        break;
+                      case FighterJetAction.asteroidCollision:
+                        if (operation.commands.isNotEmpty) {
+                          collidedWithAsteroid = true;
+                          executeMOVE(operation.commands.removeAt(0));
+                        }
+                        break;
+                      case FighterJetAction.collisionRecover:
+                        blinkingJET();
+                        break;
+                      default:
+                        break;
+                    }
                   }
-                }
-                return const SizedBox();
-              },
-            ),
-            AnimatedBuilder(
-              animation: _animationMOVE,
-              builder: (context, child) {
-                Offset offsetUsed = _currentOffset;
+                  return const SizedBox();
+                },
+              ),
+              AnimatedBuilder(
+                animation: _animationMOVE,
+                builder: (context, child) {
+                  Offset offsetUsed = _currentOffset;
 
-                if (_controlMOVE.isAnimating) {
-                  offsetUsed = _animationMOVE.value;
-                  _currentOffset = _animationMOVE.value;
-                }
+                  if (_controlMOVE.isAnimating) {
+                    offsetUsed = _animationMOVE.value;
+                    _currentOffset = _animationMOVE.value;
+                  }
 
-                // detect changes in layout
-                // either because browser being resized or rotated screen
-                if (!constraints.isEqual(_currentConstraints) && !_controlMOVE.isAnimating) {
-                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, getIt<GameBoardProvider>().gridSize,
-                      getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
-                  _currentConstraints = constraints;
-                  offsetUsed = _currentOffset;
-                }
+                  // detect changes in layout
+                  // either because browser being resized or rotated screen
+                  if (!constraints.isEqual(_currentConstraints) && !_controlMOVE.isAnimating) {
+                    _currentOffset = GameBoardUtils.findIndexOffset(
+                        _currentIndex,
+                        getIt<GameBoardProvider>().gridSize,
+                        getIt<GameBoardProvider>().innerShortestSide,
+                        Size(constraints.maxWidth, constraints.maxHeight));
+                    _currentConstraints = constraints;
+                    offsetUsed = _currentOffset;
+                  }
 
-                double itemSize = getIt<GameBoardProvider>().gameItemSize;
-                Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
+                  double itemSize = getIt<GameBoardProvider>().gameItemSize;
+                  Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
 
-                return Positioned(
-                  left: adjustedOffset.dx,
-                  top: adjustedOffset.dy,
-                  child: AnimatedBuilder(
-                    animation: _animationROTATE,
-                    builder: (context, child) {
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationZ(_animationROTATE.value * piMultiplier),
-                        filterQuality: FilterQuality.medium,
-                        child: child,
-                      );
-                    },
-                    child: FadeTransition(
-                      opacity: _animationOPACITY,
-                      child: Builder(
-                        builder: (context) {
-                          if (currentItemSize == null || currentItemSize != null && currentItemSize != itemSize) {
-                            currentItemSize = itemSize;
-                            fighterJetCache = RepaintBoundary(
-                              child: Image.memory(
+                  return Positioned(
+                    left: adjustedOffset.dx,
+                    top: adjustedOffset.dy,
+                    child: AnimatedBuilder(
+                      animation: _animationROTATE,
+                      builder: (context, child) {
+                        return Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationZ(_animationROTATE.value * piMultiplier),
+                          filterQuality: FilterQuality.medium,
+                          child: child,
+                        );
+                      },
+                      child: FadeTransition(
+                        opacity: _animationOPACITY,
+                        child: Builder(
+                          builder: (context) {
+                            if (currentItemSize == null || currentItemSize != null && currentItemSize != itemSize) {
+                              currentItemSize = itemSize;
+                              fighterJetCache = Image.memory(
                                 widget.imageBytes,
                                 height: itemSize,
                                 width: itemSize,
                                 fit: BoxFit.fitHeight,
                                 gaplessPlayback: true,
                                 isAntiAlias: true,
-                              ),
-                            );
-                            return fighterJetCache!;
-                          }
+                              );
+                              return fighterJetCache!;
+                            }
 
-                          return fighterJetCache!;
-                        },
+                            return fighterJetCache!;
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
-        );
-      },
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

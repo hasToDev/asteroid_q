@@ -42,51 +42,53 @@ class _FuelState extends State<Fuel> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      double itemSize = getIt<GameBoardProvider>().gameItemSize;
-      Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
+    return RepaintBoundary(
+      child: LayoutBuilder(builder: (context, constraints) {
+        double itemSize = getIt<GameBoardProvider>().gameItemSize;
+        Offset adjustedOffset = getIt<GameBoardProvider>().getIndexAdjustedOffset(widget.gridIndex);
 
-      return Stack(
-        fit: StackFit.expand,
-        alignment: Alignment.center,
-        children: [
-          Consumer<FuelPodProvider>(
-            builder: (BuildContext context, operation, Widget? _) {
-              if (!harvested && widget.gridIndex == operation.fuelPodIndex && updateMarks != operation.updateMarks) {
-                updateMarks = operation.updateMarks;
-                getIt<AudioProvider>().sound(GameSound.refuel);
-                getIt<FighterJetProvider>().refuelingSTART();
-                getIt<GameStatsProvider>().updateFuel();
-                _controlFUELPOD.forward().then((_) async {
-                  harvested = true;
-                  await getIt<GameStatsProvider>().fuelPodHarvested(widget.gridIndex);
-                  getIt<FighterJetProvider>().refuelingEND();
-                  getIt<FuelPodProvider>().fuelPodHarvestingDONE();
-                });
-              }
-              return const SizedBox();
-            },
-          ),
-          Positioned(
-            left: adjustedOffset.dx,
-            top: adjustedOffset.dy,
-            child: ScaleTransition(
-              scale: _animationFUELPOD,
-              child: FadeTransition(
-                opacity: _animationFUELPOD,
-                child: Image.memory(
-                  widget.imageBytes,
-                  height: itemSize,
-                  width: itemSize,
-                  fit: BoxFit.fitHeight,
-                  gaplessPlayback: true,
-                  isAntiAlias: true,
+        return Stack(
+          fit: StackFit.expand,
+          alignment: Alignment.center,
+          children: [
+            Consumer<FuelPodProvider>(
+              builder: (BuildContext context, operation, Widget? _) {
+                if (!harvested && widget.gridIndex == operation.fuelPodIndex && updateMarks != operation.updateMarks) {
+                  updateMarks = operation.updateMarks;
+                  getIt<AudioProvider>().sound(GameSound.refuel);
+                  getIt<FighterJetProvider>().refuelingSTART();
+                  getIt<GameStatsProvider>().updateFuel();
+                  _controlFUELPOD.forward().then((_) async {
+                    harvested = true;
+                    await getIt<GameStatsProvider>().fuelPodHarvested(widget.gridIndex);
+                    getIt<FighterJetProvider>().refuelingEND();
+                    getIt<FuelPodProvider>().fuelPodHarvestingDONE();
+                  });
+                }
+                return const SizedBox();
+              },
+            ),
+            Positioned(
+              left: adjustedOffset.dx,
+              top: adjustedOffset.dy,
+              child: ScaleTransition(
+                scale: _animationFUELPOD,
+                child: FadeTransition(
+                  opacity: _animationFUELPOD,
+                  child: Image.memory(
+                    widget.imageBytes,
+                    height: itemSize,
+                    width: itemSize,
+                    fit: BoxFit.fitHeight,
+                    gaplessPlayback: true,
+                    isAntiAlias: true,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+          ],
+        );
+      }),
+    );
   }
 }

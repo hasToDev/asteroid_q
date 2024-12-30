@@ -104,83 +104,85 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(
-        fit: StackFit.expand,
-        alignment: Alignment.center,
-        children: [
-          Consumer<MissileProvider>(
-            builder: (BuildContext context, operation, Widget? _) {
-              if (updateMarks != operation.updateMarks) {
-                updateMarks = operation.updateMarks;
-                _currentIndex = operation.currentIndex;
-                switch (operation.action) {
-                  case MissileAction.destroyAsteroid:
-                    if (operation.commands.isNotEmpty) {
-                      destroyAsteroid = true;
-                      getIt<FighterJetProvider>().fireMissileSTART();
-                      moveMISSILE(operation.commands.removeAt(0), constraints);
-                    }
-                    break;
-                  case MissileAction.move:
-                    if (operation.commands.isNotEmpty) {
-                      destroyAsteroid = false;
-                      getIt<FighterJetProvider>().fireMissileSTART();
-                      moveMISSILE(operation.commands.removeAt(0), constraints);
-                    }
-                    break;
+    return RepaintBoundary(
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Stack(
+          fit: StackFit.expand,
+          alignment: Alignment.center,
+          children: [
+            Consumer<MissileProvider>(
+              builder: (BuildContext context, operation, Widget? _) {
+                if (updateMarks != operation.updateMarks) {
+                  updateMarks = operation.updateMarks;
+                  _currentIndex = operation.currentIndex;
+                  switch (operation.action) {
+                    case MissileAction.destroyAsteroid:
+                      if (operation.commands.isNotEmpty) {
+                        destroyAsteroid = true;
+                        getIt<FighterJetProvider>().fireMissileSTART();
+                        moveMISSILE(operation.commands.removeAt(0), constraints);
+                      }
+                      break;
+                    case MissileAction.move:
+                      if (operation.commands.isNotEmpty) {
+                        destroyAsteroid = false;
+                        getIt<FighterJetProvider>().fireMissileSTART();
+                        moveMISSILE(operation.commands.removeAt(0), constraints);
+                      }
+                      break;
+                  }
                 }
-              }
 
-              return const SizedBox();
-            },
-          ),
-          AnimatedBuilder(
-            animation: _animationMOVE,
-            builder: (context, child) {
-              Offset offsetUsed = _currentOffset;
+                return const SizedBox();
+              },
+            ),
+            AnimatedBuilder(
+              animation: _animationMOVE,
+              builder: (context, child) {
+                Offset offsetUsed = _currentOffset;
 
-              if (_controlMISSILE.isAnimating) {
-                offsetUsed = _animationMOVE.value;
-                _currentOffset = _animationMOVE.value;
-              }
+                if (_controlMISSILE.isAnimating) {
+                  offsetUsed = _animationMOVE.value;
+                  _currentOffset = _animationMOVE.value;
+                }
 
-              // detect changes in layout
-              // either because browser being resized or rotated screen
-              if (!constraints.isEqual(_currentConstraints) && !_controlMISSILE.isAnimating) {
-                _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, getIt<GameBoardProvider>().gridSize,
-                    getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
-                _currentConstraints = constraints;
-                offsetUsed = _currentOffset;
-              }
+                // detect changes in layout
+                // either because browser being resized or rotated screen
+                if (!constraints.isEqual(_currentConstraints) && !_controlMISSILE.isAnimating) {
+                  _currentOffset = GameBoardUtils.findIndexOffset(_currentIndex, getIt<GameBoardProvider>().gridSize,
+                      getIt<GameBoardProvider>().innerShortestSide, Size(constraints.maxWidth, constraints.maxHeight));
+                  _currentConstraints = constraints;
+                  offsetUsed = _currentOffset;
+                }
 
-              double itemSize = getIt<GameBoardProvider>().gameItemSize;
-              Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
+                double itemSize = getIt<GameBoardProvider>().gameItemSize;
+                Offset adjustedOffset = Offset(offsetUsed.dx - (itemSize / 2), offsetUsed.dy - (itemSize / 2));
 
-              return Positioned(
-                left: adjustedOffset.dx,
-                top: adjustedOffset.dy,
-                child: Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationZ(_animationROTATE.value * piMultiplier),
-                  filterQuality: FilterQuality.medium,
-                  child: FadeTransition(
-                    opacity: _animationOPACITY,
-                    child: Image.memory(
-                      widget.imageBytes,
-                      height: itemSize,
-                      width: itemSize,
-                      fit: BoxFit.fitHeight,
-                      gaplessPlayback: true,
-                      isAntiAlias: true,
+                return Positioned(
+                  left: adjustedOffset.dx,
+                  top: adjustedOffset.dy,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationZ(_animationROTATE.value * piMultiplier),
+                    filterQuality: FilterQuality.medium,
+                    child: FadeTransition(
+                      opacity: _animationOPACITY,
+                      child: Image.memory(
+                        widget.imageBytes,
+                        height: itemSize,
+                        width: itemSize,
+                        fit: BoxFit.fitHeight,
+                        gaplessPlayback: true,
+                        isAntiAlias: true,
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
-      );
-    });
+                );
+              },
+            ),
+          ],
+        );
+      }),
+    );
   }
 }

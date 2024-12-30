@@ -41,7 +41,7 @@ class KeyboardInput {
           break;
         case LogicalKeyboardKey.keyU:
           // Handle U key -- UPGRADE ship
-          // TODO: implement upgrade
+          // TODO: implement upgrade in the future
           newAction = KeyboardAction.upgrade;
           break;
         case LogicalKeyboardKey.keyR:

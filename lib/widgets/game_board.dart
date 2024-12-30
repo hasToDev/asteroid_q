@@ -88,7 +88,7 @@ class _GameBoardState extends State<GameBoard> {
         }
         break;
       case KeyboardAction.upgrade:
-        // TODO: Handle this case.
+      // TODO: implement upgrade in the future
         break;
       case KeyboardAction.refuel:
         if (getIt<FighterJetProvider>().isJetMoving) return;
