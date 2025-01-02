@@ -20,7 +20,6 @@ class _GameBoardState extends State<GameBoard> {
   int boxNumber = getIt<GameBoardProvider>().gridSize;
   double innerShortestSide = 0;
 
-  Offset selectedOffset = Offset.zero;
   ValueNotifier<int> focusedIndex = ValueNotifier<int>(SpaceTilePosition.center.id);
 
   late int itemCount;
@@ -38,7 +37,6 @@ class _GameBoardState extends State<GameBoard> {
 
     if (widget.initialFocusIndex != null) {
       focusedIndex = ValueNotifier<int>(widget.initialFocusIndex!);
-      selectedOffset = getIt<GameBoardProvider>().getIndexOffset(widget.initialFocusIndex!);
     }
   }
 
@@ -63,12 +61,6 @@ class _GameBoardState extends State<GameBoard> {
   Future<void> _updatePositionOffset(int index) async {
     // update focused index
     focusedIndex.value = index;
-
-    // only update selectedOffset for space tile
-    // next galaxy tile is excluded
-    if (index > getIt<GameBoardProvider>().maxIndexForGRidSize) return;
-
-    selectedOffset = GameBoardUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
   }
 
   void _move() {
@@ -99,7 +91,6 @@ class _GameBoardState extends State<GameBoard> {
         }
         break;
       case KeyboardAction.move:
-        if (selectedOffset == const Offset(0.0, 0.0)) return;
         _move();
         break;
       case KeyboardAction.upgrade:
