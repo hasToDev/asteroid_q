@@ -102,6 +102,37 @@ class _GameplayPageState extends State<GameplayPage> {
                               );
                             },
                           ),
+                          const SizedBox(),
+                          const SizedBox(),
+                          Consumer<GameStatsProvider>(
+                            builder: (BuildContext context, stats, Widget? _) {
+                              return Column(
+                                spacing: 12,
+                                children: [
+                                  StatsWidget(
+                                    imageBytes: getIt<AssetByteService>().countDistance!,
+                                    score: stats.spaceTravelled,
+                                    backgroundColor: gameStatsColor,
+                                  ),
+                                  StatsWidget(
+                                    imageBytes: getIt<AssetByteService>().countRotation!,
+                                    score: stats.rotate,
+                                    backgroundColor: gameStatsColor,
+                                  ),
+                                  StatsWidget(
+                                    imageBytes: getIt<AssetByteService>().countRefuel!,
+                                    score: stats.refuelCount,
+                                    backgroundColor: gameStatsColor,
+                                  ),
+                                  StatsWidget(
+                                    imageBytes: getIt<AssetByteService>().countGalaxy!,
+                                    score: stats.galaxyCount,
+                                    backgroundColor: gameStatsColor,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ],
                       );
                     }

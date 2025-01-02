@@ -16,6 +16,10 @@ class AssetByteService {
   final Uint8List? soundLIFEREDUCED;
   final Uint8List? soundREFUEL;
   final Uint8List? soundWHOOSH;
+  final Uint8List? countDistance;
+  final Uint8List? countGalaxy;
+  final Uint8List? countRefuel;
+  final Uint8List? countRotation;
 
   AssetByteService({
     this.imageFIGHTERJET,
@@ -31,6 +35,10 @@ class AssetByteService {
     this.soundLIFEREDUCED,
     this.soundREFUEL,
     this.soundWHOOSH,
+    this.countDistance,
+    this.countGalaxy,
+    this.countRefuel,
+    this.countRotation,
   });
 
   Future<AssetByteService> initialize() async {
@@ -48,6 +56,10 @@ class AssetByteService {
       soundLIFEREDUCED: base64.decode(lifeReducedBASE64),
       soundREFUEL: base64.decode(refuelBASE64),
       soundWHOOSH: base64.decode(whooshMoveBASE64),
+      countDistance: base64.decode(distanceCountBASE64),
+      countGalaxy: base64.decode(galaxyCountBASE64),
+      countRefuel: base64.decode(refuelCountBASE64),
+      countRotation: base64.decode(rotationCountBASE64),
     );
   }
 }

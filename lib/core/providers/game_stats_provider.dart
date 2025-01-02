@@ -8,6 +8,9 @@ class GameStatsProvider extends ChangeNotifier {
   int score = 0;
   int remainingLife = 3;
 
+  int galaxyCount = 0;
+  int refuelCount = 0;
+
   Map<String, GalaxyData> gameMap = {};
   GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.large);
 
@@ -53,6 +56,7 @@ class GameStatsProvider extends ChangeNotifier {
   }
 
   Future<void> updateFuel() async {
+    refuelCount++;
     fuel = fuel + fuelAmountInFuelPod;
     await Future.delayed(waitDuration);
     notifyListeners();
@@ -87,6 +91,10 @@ class GameStatsProvider extends ChangeNotifier {
   void updateRotateStatsAndFuel() {
     rotate++;
     useFuelForRotation();
+  }
+
+  void updateVisitedGalaxyCount() {
+    galaxyCount++;
   }
 
   void saveCoordinate(GalaxyCoordinates coordinate) => currentCoordinate = coordinate;

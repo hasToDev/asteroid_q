@@ -11,3 +11,6 @@ const Color fuelColor = Color.fromRGBO(174, 215, 83, 1);
 
 // #6acff6
 const Color lifeColor = Color.fromRGBO(106, 207, 246, 1);
+
+// #CF1259
+const Color gameStatsColor = Color.fromRGBO(207, 18, 89, 1);

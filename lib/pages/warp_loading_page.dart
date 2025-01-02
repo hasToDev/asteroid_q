@@ -36,6 +36,7 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
           gridSize: getIt<GameBoardProvider>().maxIndexForGRidSize,
         ),
       );
+      getIt<GameStatsProvider>().updateVisitedGalaxyCount();
       getIt<GameStatsProvider>().saveGalaxyData(widget.data.galaxyCoordinates, dataOnCoordinate);
     }
 
