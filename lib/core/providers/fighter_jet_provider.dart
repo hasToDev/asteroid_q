@@ -112,8 +112,8 @@ class FighterJetProvider extends ChangeNotifier {
       currentDirection = commandB.direction;
     }
 
-    // set data for next galaxy destination
-    if (furthestIndex != null) {
+    // set data for next galaxy destination if jet not collided with any asteroid
+    if (furthestIndex != null && !collisionWithAsteroid) {
       furthestIndexData = furthestIndex;
       nextGalaxyDestination = nextGalaxy;
       nextGalaxyStartingIndex = furthestIndex.startingIndexOnNextGalaxy(nextGalaxy!);
