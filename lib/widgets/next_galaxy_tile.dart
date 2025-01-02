@@ -10,6 +10,7 @@ class NextGalaxyTile extends StatefulWidget {
     required this.borderRadius,
     required this.focusedIndex,
     required this.constraints,
+    required this.textOrientation,
     required this.onTapLeftClick,
   });
 
@@ -19,6 +20,7 @@ class NextGalaxyTile extends StatefulWidget {
   final double borderRadius;
   final ValueNotifier<int> focusedIndex;
   final BoxConstraints constraints;
+  final TextOrientation textOrientation;
   final VoidCallback onTapLeftClick;
 
   @override
@@ -40,6 +42,19 @@ class _NextGalaxyTileState extends State<NextGalaxyTile> {
   void waitBeforeMouseDown() async {
     await Future.delayed(waitDuration);
     widget.onTapLeftClick.call();
+  }
+
+  int _getQuarterTurns() {
+    switch (widget.textOrientation) {
+      case TextOrientation.bottom:
+        return 2;
+      case TextOrientation.left:
+        return 3;
+      case TextOrientation.right:
+        return 1;
+      case TextOrientation.top:
+        return 0;
+    }
   }
 
   @override
@@ -78,21 +93,32 @@ class _NextGalaxyTileState extends State<NextGalaxyTile> {
                 width: widget.width,
                 height: widget.height,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: selectedIndex == widget.position.id ? nextGalaxyOrange : nextGalaxyBlue,
                   boxShadow: [
                     if (selectedIndex == widget.position.id)
-                      const BoxShadow(
-                        color: Colors.orange,
-                        blurRadius: 5,
-                        spreadRadius: 2,
+                      BoxShadow(
+                        color: Colors.grey[400]!,
+                        blurRadius: 4,
+                        spreadRadius: 1.5,
                       ),
                   ],
-                  border: selectedIndex == widget.position.id ? Border.all(color: Colors.blue, width: 2) : null,
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                 ),
-                // child: Center(
-                //   child: Text('${widget.index}'),
-                // ),
+                child: RotatedBox(
+                  quarterTurns: _getQuarterTurns(),
+                  child: Center(
+                    child: Text(
+                      'WARP',
+                      textAlign: TextAlign.center,
+                      style: context.style.titleMedium?.copyWith(
+                        fontSize: 16,
+                        color: selectedIndex == widget.position.id ? nextGalaxyBlue : nextGalaxyOrange,
+                        letterSpacing: 1.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               );
 
               return cache!;

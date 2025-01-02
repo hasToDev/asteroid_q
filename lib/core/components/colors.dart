@@ -14,3 +14,9 @@ const Color lifeColor = Color.fromRGBO(106, 207, 246, 1);
 
 // #CF1259
 const Color gameStatsColor = Color.fromRGBO(207, 18, 89, 1);
+
+// #2A2D43
+const Color nextGalaxyBlue = Color.fromRGBO(42, 45, 67, 1);
+
+// #F75C03
+const Color nextGalaxyOrange = Color.fromRGBO(247, 92, 3, 1);

@@ -101,3 +101,10 @@ enum GalaxySize {
 
   const GalaxySize(this.fuelPod, this.asteroid);
 }
+
+enum TextOrientation {
+  top,
+  bottom,
+  left,
+  right,
+}

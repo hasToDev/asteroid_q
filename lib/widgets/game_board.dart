@@ -170,6 +170,7 @@ class _GameBoardState extends State<GameBoard> {
                 borderRadius: outerBorderRadius,
                 focusedIndex: focusedIndex,
                 constraints: constraints,
+                textOrientation: TextOrientation.left,
                 onTapLeftClick: () => _move(),
               ),
               SizedBox(width: outerAxisSpacing * 2),
@@ -188,6 +189,7 @@ class _GameBoardState extends State<GameBoard> {
                       borderRadius: outerBorderRadius,
                       focusedIndex: focusedIndex,
                       constraints: constraints,
+                      textOrientation: TextOrientation.top,
                       onTapLeftClick: () => _move(),
                     ),
                     SizedBox(height: outerAxisSpacing),
@@ -245,6 +247,7 @@ class _GameBoardState extends State<GameBoard> {
                       borderRadius: outerBorderRadius,
                       focusedIndex: focusedIndex,
                       constraints: constraints,
+                      textOrientation: TextOrientation.bottom,
                       onTapLeftClick: () => _move(),
                     ),
                     Builder(builder: (context) {
@@ -262,6 +265,7 @@ class _GameBoardState extends State<GameBoard> {
                 borderRadius: outerBorderRadius,
                 focusedIndex: focusedIndex,
                 constraints: constraints,
+                textOrientation: TextOrientation.right,
                 onTapLeftClick: () => _move(),
               ),
               Builder(builder: (context) {
