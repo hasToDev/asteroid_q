@@ -18,5 +18,6 @@ class DependencyInjection {
     getIt.registerLazySingletonAsync<AssetByteService>(() {
       return AssetByteService().initialize();
     });
+    getIt.registerLazySingleton(() => DialogService());
   }
 }

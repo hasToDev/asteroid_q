@@ -110,11 +110,8 @@ class _NextGalaxyTileState extends State<NextGalaxyTile> {
                     child: Text(
                       'WARP',
                       textAlign: TextAlign.center,
-                      style: context.style.titleMedium?.copyWith(
-                        fontSize: 16,
+                      style: getWarpStyle(context)?.copyWith(
                         color: selectedIndex == widget.position.id ? nextGalaxyBlue : nextGalaxyOrange,
-                        letterSpacing: 1.5,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

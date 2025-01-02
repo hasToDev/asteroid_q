@@ -49,10 +49,8 @@ class _AppElevatedButtonState extends State<AppElevatedButton> {
               ),
               child: Text(
                 widget.title,
-                style: TextStyle(
+                style: getAppElevatedStyle(context)?.copyWith(
                   color: Theme.of(context).primaryColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

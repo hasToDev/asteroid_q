@@ -74,10 +74,12 @@ class _AsteroidState extends State<Asteroid> with SingleTickerProviderStateMixin
                       await getIt<GameStatsProvider>().asteroidDestroyed(widget.gridIndex);
                       switch (operation.explosionReason) {
                         case AsteroidDestructionType.fighterJet:
-                          getIt<FighterJetProvider>().recoverFromCollision();
+                          if (!context.mounted) return;
+                          getIt<FighterJetProvider>().recoverFromCollision(context);
                           break;
                         case AsteroidDestructionType.missile:
-                          getIt<MissileProvider>().fireMissileDONE();
+                          if (!context.mounted) return;
+                          getIt<MissileProvider>().fireMissileDONE(context);
                           break;
                       }
                     });

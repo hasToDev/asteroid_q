@@ -97,7 +97,8 @@ class _MissileState extends State<Missile> with SingleTickerProviderStateMixin {
             getIt<AsteroidProvider>().asteroidExplosion(_currentIndex, AsteroidDestructionType.missile);
             return;
           }
-          getIt<MissileProvider>().fireMissileDONE();
+          if (!mounted) return;
+          getIt<MissileProvider>().fireMissileDONE(context);
         },
       );
   }

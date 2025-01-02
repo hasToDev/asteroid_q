@@ -14,3 +14,6 @@ const int fuelCostROTATE = 1;
 const int fuelCostMISSILE = 5;
 
 const int minimumFuelLimit = 2;
+
+const String gameOverFuel = 'Out of gas!';
+const String gameOverLife = 'You\'ve been asteroidized!';

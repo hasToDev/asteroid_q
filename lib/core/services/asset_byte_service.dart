@@ -9,8 +9,10 @@ class AssetByteService {
   final Uint8List? imageMISSILE;
   final Uint8List? imageSCORE;
   final Uint8List? imageLIFE;
+  final Uint8List? imageGAMEOVER;
   final Uint8List? animationBLAST;
   final Uint8List? animationWARP;
+  final Uint8List? animationWINNER;
   final Uint8List? soundEXPLOSION;
   final Uint8List? soundLASER;
   final Uint8List? soundLIFEREDUCED;
@@ -28,8 +30,10 @@ class AssetByteService {
     this.imageMISSILE,
     this.imageSCORE,
     this.imageLIFE,
+    this.imageGAMEOVER,
     this.animationBLAST,
     this.animationWARP,
+    this.animationWINNER,
     this.soundEXPLOSION,
     this.soundLASER,
     this.soundLIFEREDUCED,
@@ -49,8 +53,10 @@ class AssetByteService {
       imageMISSILE: base64.decode(missileBASE64),
       imageSCORE: base64.decode(scoreBASE64),
       imageLIFE: base64.decode(lifeBASE64),
+      imageGAMEOVER: base64.decode(gameOverBASE64),
       animationBLAST: base64.decode(blastBASE64),
       animationWARP: base64.decode(warpBASE64),
+      animationWINNER: base64.decode(winnerBASE64),
       soundEXPLOSION: base64.decode(explosionBASE64),
       soundLASER: base64.decode(laserBASE64),
       soundLIFEREDUCED: base64.decode(lifeReducedBASE64),

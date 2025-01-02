@@ -1,5 +1,6 @@
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FighterJetProvider extends ChangeNotifier {
   FighterJetAction action = FighterJetAction.none;
@@ -20,12 +21,12 @@ class FighterJetProvider extends ChangeNotifier {
     currentIndex = index;
   }
 
-  void jetFinishMoving() {
+  void jetFinishMoving(BuildContext context) async {
     // check for fuel pod on current index if remaining fuel is less than 2
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
       bool isFuelPodExistAtCurrentIndex = getIt<GameStatsProvider>().fuelPodIndices.contains(currentIndex);
       if (!isFuelPodExistAtCurrentIndex) {
-        // TODO: notify player that game is over, no more fuel remaining, show dialog or something
+        gameOver(context, gameOverFuel);
         return;
       }
     }
@@ -132,7 +133,7 @@ class FighterJetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void recoverFromCollision() async {
+  void recoverFromCollision(BuildContext context) async {
     int lifeCount = getIt<GameStatsProvider>().remainingLife;
     if (lifeCount > 0) {
       getIt<GameStatsProvider>().reduceLife();
@@ -141,7 +142,7 @@ class FighterJetProvider extends ChangeNotifier {
       updateMarks++;
       notifyListeners();
     } else {
-      // TODO: notify player that game is over, no more life remaining, show dialog or something
+      gameOver(context, gameOverLife);
     }
   }
 
@@ -152,4 +153,23 @@ class FighterJetProvider extends ChangeNotifier {
   void fireMissileSTART() => isMissileFired = true;
 
   void fireMissileEND() => isMissileFired = false;
+
+  void gameOver(BuildContext context, String message) async {
+    bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);
+    if (!context.mounted) return;
+    if (retry == null) {
+      context.go(AppPaths.home);
+    } else {
+      await getIt<GameBoardProvider>().setGridSize(MediaQuery.sizeOf(context));
+      if (!context.mounted) return;
+      context.goWarp(
+        WarpLoadingPageExtra(
+          currentJetPositionIndex: SpaceTilePosition.center.id,
+          jetDirection: FighterJetDirection.up,
+          transitionDirection: TransitionDirection.bottomToTop,
+          galaxyCoordinates: GalaxyCoordinates(x: 0, y: 0, size: getIt<GameBoardProvider>().galaxySize),
+        ),
+      );
+    }
+  }
 }

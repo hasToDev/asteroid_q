@@ -162,7 +162,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
               getIt<AsteroidProvider>().asteroidExplosion(_currentIndex, AsteroidDestructionType.fighterJet);
               return;
             }
-            getIt<FighterJetProvider>().jetFinishMoving();
+            if (!mounted) return;
+            getIt<FighterJetProvider>().jetFinishMoving(context);
           }
         }
       });
@@ -220,7 +221,8 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       ..duration = blinkingAnimationDuration
       ..forward(from: 0).then((_) {
         collidedWithAsteroid = false;
-        getIt<FighterJetProvider>().jetFinishMoving();
+        if (!mounted) return;
+        getIt<FighterJetProvider>().jetFinishMoving(context);
         // reset _animationOPACITY
         _animationOPACITY = Tween<double>(begin: 1.0, end: 1.0).animate(
           CurvedAnimation(parent: _controlMOVE, curve: Curves.easeInOut),

@@ -52,13 +52,13 @@ class MissileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void fireMissileDONE() {
+  void fireMissileDONE(BuildContext context) {
     // check for fuel pod on current fighter jet index if remaining fuel is less than 2
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
       bool isFuelPodExistAtCurrentIndex =
           getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
       if (!isFuelPodExistAtCurrentIndex) {
-        // TODO: notify player that game is over, no more fuel remaining, show dialog or something
+        getIt<FighterJetProvider>().gameOver(context, gameOverFuel);
         return;
       }
     }
