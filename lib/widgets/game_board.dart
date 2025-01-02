@@ -60,7 +60,7 @@ class _GameBoardState extends State<GameBoard> {
         furthestIndex: furthestIndex, nextGalaxy: nextGalaxy);
   }
 
-  void _updatePositionOffset(int index) {
+  Future<void> _updatePositionOffset(int index) async {
     // update focused index
     focusedIndex.value = index;
 
@@ -69,6 +69,25 @@ class _GameBoardState extends State<GameBoard> {
     if (index > getIt<GameBoardProvider>().maxIndexForGRidSize) return;
 
     selectedOffset = GameBoardUtils.findIndexOffset(index, columns, innerShortestSide, MediaQuery.sizeOf(context));
+  }
+
+  void _move() {
+    if (focusedIndex.value > getIt<GameBoardProvider>().maxIndexForGRidSize) {
+      moveToNextGalaxy(focusedIndex.value);
+    } else {
+      getIt<FighterJetProvider>().moveJet(focusedIndex.value, MediaQuery.sizeOf(context), innerShortestSide);
+    }
+  }
+
+  void _refuel() {
+    if (getIt<FighterJetProvider>().isJetMoving) return;
+    bool fuelExist = getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
+    if (fuelExist) getIt<FuelPodProvider>().fuelPodHarvesting(getIt<FighterJetProvider>().currentIndex);
+  }
+
+  void _shoot() {
+    if (getIt<FighterJetProvider>().isJetMoving) return;
+    getIt<MissileProvider>().fireMissile(MediaQuery.sizeOf(context), innerShortestSide);
   }
 
   void _handleKeyEvent(KeyEvent event) {
@@ -81,25 +100,39 @@ class _GameBoardState extends State<GameBoard> {
         break;
       case KeyboardAction.move:
         if (selectedOffset == const Offset(0.0, 0.0)) return;
-        if (focusedIndex.value > getIt<GameBoardProvider>().maxIndexForGRidSize) {
-          moveToNextGalaxy(focusedIndex.value);
-        } else {
-          getIt<FighterJetProvider>().moveJet(focusedIndex.value, MediaQuery.sizeOf(context), innerShortestSide);
-        }
+        _move();
         break;
       case KeyboardAction.upgrade:
-      // TODO: implement upgrade in the future
+        // TODO: implement upgrade in the future
         break;
       case KeyboardAction.refuel:
-        if (getIt<FighterJetProvider>().isJetMoving) return;
-        bool fuelExist = getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
-        if (fuelExist) getIt<FuelPodProvider>().fuelPodHarvesting(getIt<FighterJetProvider>().currentIndex);
+        _refuel();
         break;
       case KeyboardAction.shoot:
-        if (getIt<FighterJetProvider>().isJetMoving) return;
-        getIt<MissileProvider>().fireMissile(MediaQuery.sizeOf(context), innerShortestSide);
+        _shoot();
         break;
       case KeyboardAction.none:
+        break;
+    }
+  }
+
+  void _handleMouseEvent(PointerDownEvent event, int index) async {
+    // event.buttons contains a bit field of pressed buttons
+    // Primary (left) = 1
+    // Secondary (right) = 2
+    // Middle = 4
+    switch (event.buttons) {
+      case 1:
+        if (index != focusedIndex.value) await _updatePositionOffset(index);
+        _move(); // Left Click or onTap
+        break;
+      case 2:
+        _shoot(); // Right Click
+        break;
+      case 4:
+        _refuel(); // Middle Click
+        break;
+      default:
         break;
     }
   }
@@ -146,9 +179,7 @@ class _GameBoardState extends State<GameBoard> {
                 borderRadius: outerBorderRadius,
                 focusedIndex: focusedIndex,
                 constraints: constraints,
-                onTap: () {
-                  //
-                },
+                onTapLeftClick: () => _move(),
               ),
               SizedBox(width: outerAxisSpacing * 2),
               Flexible(
@@ -166,9 +197,7 @@ class _GameBoardState extends State<GameBoard> {
                       borderRadius: outerBorderRadius,
                       focusedIndex: focusedIndex,
                       constraints: constraints,
-                      onTap: () {
-                        //
-                      },
+                      onTapLeftClick: () => _move(),
                     ),
                     SizedBox(height: outerAxisSpacing),
                     Expanded(
@@ -206,7 +235,9 @@ class _GameBoardState extends State<GameBoard> {
                                     borderRadius: borderRadius,
                                     focusedIndex: focusedIndex,
                                     constraints: constraints,
-                                    onTap: () => _updatePositionOffset(index),
+                                    onMouseDown: (PointerDownEvent event) {
+                                      _handleMouseEvent(event, index);
+                                    },
                                   );
                                 },
                               ),
@@ -223,9 +254,7 @@ class _GameBoardState extends State<GameBoard> {
                       borderRadius: outerBorderRadius,
                       focusedIndex: focusedIndex,
                       constraints: constraints,
-                      onTap: () {
-                        //
-                      },
+                      onTapLeftClick: () => _move(),
                     ),
                     Builder(builder: (context) {
                       if (verticalSpace != 0) return SizedBox(height: verticalSpace / 2 + spaceFromScreenEdge);
@@ -242,9 +271,7 @@ class _GameBoardState extends State<GameBoard> {
                 borderRadius: outerBorderRadius,
                 focusedIndex: focusedIndex,
                 constraints: constraints,
-                onTap: () {
-                  //
-                },
+                onTapLeftClick: () => _move(),
               ),
               Builder(builder: (context) {
                 if (horizontalSpace != 0) return SizedBox(width: horizontalSpace / 2 + spaceFromScreenEdge);

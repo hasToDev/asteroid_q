@@ -9,7 +9,7 @@ class SpaceTile extends StatefulWidget {
     required this.borderRadius,
     required this.focusedIndex,
     required this.constraints,
-    required this.onTap,
+    required this.onMouseDown,
   });
 
   final int index;
@@ -17,7 +17,7 @@ class SpaceTile extends StatefulWidget {
   final double borderRadius;
   final ValueNotifier<int> focusedIndex;
   final BoxConstraints constraints;
-  final VoidCallback onTap;
+  final Function(PointerDownEvent) onMouseDown;
 
   @override
   State<SpaceTile> createState() => _SpaceTileState();
@@ -41,8 +41,8 @@ class _SpaceTileState extends State<SpaceTile> {
       onEnter: (_) {
         widget.focusedIndex.value = widget.index;
       },
-      child: GestureDetector(
-        onTap: widget.onTap,
+      child: Listener(
+        onPointerDown: widget.onMouseDown,
         child: ValueListenableBuilder(
           valueListenable: widget.focusedIndex,
           builder: (context, selectedIndex, _) {

@@ -10,7 +10,7 @@ class NextGalaxyTile extends StatefulWidget {
     required this.borderRadius,
     required this.focusedIndex,
     required this.constraints,
-    required this.onTap,
+    required this.onTapLeftClick,
   });
 
   final NextGalaxy position;
@@ -19,7 +19,7 @@ class NextGalaxyTile extends StatefulWidget {
   final double borderRadius;
   final ValueNotifier<int> focusedIndex;
   final BoxConstraints constraints;
-  final VoidCallback onTap;
+  final VoidCallback onTapLeftClick;
 
   @override
   State<NextGalaxyTile> createState() => _NextGalaxyTileState();
@@ -37,14 +37,32 @@ class _NextGalaxyTileState extends State<NextGalaxyTile> {
     super.initState();
   }
 
+  void waitBeforeMouseDown() async {
+    await Future.delayed(waitDuration);
+    widget.onTapLeftClick.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) {
         widget.focusedIndex.value = widget.position.id;
       },
-      child: GestureDetector(
-        onTap: widget.onTap,
+      onExit: (_) {
+        widget.focusedIndex.value = -1;
+      },
+      child: Listener(
+        onPointerDown: (PointerDownEvent event) {
+          if (event.buttons != 1) return;
+
+          if (widget.focusedIndex.value != widget.position.id) {
+            widget.focusedIndex.value = widget.position.id;
+            waitBeforeMouseDown();
+            return;
+          }
+
+          widget.onTapLeftClick.call();
+        },
         child: ValueListenableBuilder(
           valueListenable: widget.focusedIndex,
           builder: (context, selectedIndex, _) {
