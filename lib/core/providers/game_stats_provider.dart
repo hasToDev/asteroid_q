@@ -48,16 +48,19 @@ class GameStatsProvider extends ChangeNotifier {
 
   Future<void> updateScore() async {
     score = score + 1;
+    await Future.delayed(waitDuration);
     notifyListeners();
   }
 
   Future<void> updateFuel() async {
     fuel = fuel + fuelAmountInFuelPod;
+    await Future.delayed(waitDuration);
     notifyListeners();
   }
 
   Future<void> reduceLife() async {
     remainingLife = remainingLife - 1;
+    await Future.delayed(waitDuration);
     notifyListeners();
   }
 

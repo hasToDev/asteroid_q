@@ -122,6 +122,7 @@ class FighterJetProvider extends ChangeNotifier {
       // FighterJetUtils.findShortestPath will not give the right direction under that circumstances
       if (commands.length == 1 && commands[0].step == 0) {
         commands[0].setDirectionForNextGalaxy(nextGalaxy);
+        currentDirection = commands[0].direction;
       }
     }
 

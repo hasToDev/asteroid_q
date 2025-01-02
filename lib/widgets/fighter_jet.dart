@@ -48,6 +48,7 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
   int statsROTATE = 0;
 
   bool collidedWithAsteroid = false;
+  bool asteroidCheckedOnInit = false;
 
   @override
   void initState() {
@@ -72,6 +73,28 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
 
     statsMOVE = getIt<GameStatsProvider>().spaceTravelled;
     statsROTATE = getIt<GameStatsProvider>().rotate;
+  }
+
+  void checkAsteroidOnInitialPosition() async {
+    asteroidCheckedOnInit = true;
+    if (getIt<GameStatsProvider>().asteroidIndices.contains(widget.initialIndex)) {
+      await Future.delayed(waitDuration);
+      if (!mounted) return;
+      getIt<FighterJetProvider>().moveJet(
+        widget.initialIndex,
+        MediaQuery.sizeOf(context),
+        getIt<GameBoardProvider>().innerShortestSide,
+      );
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!asteroidCheckedOnInit) {
+      asteroidCheckedOnInit = true;
+      checkAsteroidOnInitialPosition();
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -111,13 +134,13 @@ class _FighterJetState extends State<FighterJet> with TickerProviderStateMixin {
       );
     }
 
-    getIt<AudioProvider>().sound(GameSound.move);
+    if (command.step != 0) getIt<AudioProvider>().sound(GameSound.move);
 
     _controlMOVE
       ..duration = getAnimationDuration(command)
       ..forward(from: 0).then((_) {
-        statsMOVE++;
         getIt<GameStatsProvider>().updateMoveStatsAndFuel(command.step);
+        statsMOVE = getIt<GameStatsProvider>().spaceTravelled;
         _currentOffset = _animationMOVE.value;
         if (nextCommandExists) {
           executeMOVE(getIt<FighterJetProvider>().commands.removeAt(0));
