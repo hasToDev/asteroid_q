@@ -131,6 +131,23 @@ class _GameplayPageState extends State<GameplayPage> {
                             },
                           ),
                           const Expanded(child: SizedBox()),
+                          VirtualActionButton(
+                            title: 'Shoot',
+                            backgroundColor: scoreColor,
+                            onTap: () => getIt<VirtualActionService>().sendAction(VirtualAction.shoot),
+                          ),
+                          VirtualActionButton(
+                            title: 'Refuel',
+                            backgroundColor: fuelColor,
+                            onTap: () => getIt<VirtualActionService>().sendAction(VirtualAction.refuel),
+                          ),
+                          VirtualActionButton(
+                            title: 'Move',
+                            backgroundColor: gameStatsColor,
+                            onTap: () => getIt<VirtualActionService>().sendAction(VirtualAction.move),
+                          ),
+                          const SizedBox(),
+                          const SizedBox(),
                           const VirtualArrowButton(),
                           SizedBox(height: 4, width: horizontalSpace / 2),
                         ],
