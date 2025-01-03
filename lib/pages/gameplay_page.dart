@@ -49,8 +49,10 @@ class _GameplayPageState extends State<GameplayPage> {
                     if (horizontalSpace != 0) {
                       return GameLeftPanel(
                         horizontalSpace: horizontalSpace,
-                        onTap: () {
-                          // TODO: call confirmation dialog
+                        onTap: () async {
+                          bool? exit = await getIt<DialogService>().exitConfirmation(context: context);
+                          if (!context.mounted) return;
+                          if (exit != null) context.go(AppPaths.home);
                         },
                       );
                     }
