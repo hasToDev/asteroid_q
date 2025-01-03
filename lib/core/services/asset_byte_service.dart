@@ -10,6 +10,7 @@ class AssetByteService {
   final Uint8List? imageSCORE;
   final Uint8List? imageLIFE;
   final Uint8List? imageGAMEOVER;
+  final Uint8List? imageEXIT;
   final Uint8List? animationBLAST;
   final Uint8List? animationWARP;
   final Uint8List? animationWINNER;
@@ -22,6 +23,20 @@ class AssetByteService {
   final Uint8List? countGalaxy;
   final Uint8List? countRefuel;
   final Uint8List? countRotation;
+  final Uint8List? legendEnter;
+  final Uint8List? legendR;
+  final Uint8List? legendSpace;
+  final Uint8List? legendArrowDown;
+  final Uint8List? legendArrowUp;
+  final Uint8List? legendArrowLeft;
+  final Uint8List? legendArrowRight;
+  final Uint8List? legendMouseLeft;
+  final Uint8List? legendMouseRight;
+  final Uint8List? legendMouseMiddle;
+  final Uint8List? controlDown;
+  final Uint8List? controlUp;
+  final Uint8List? controlLeft;
+  final Uint8List? controlRight;
 
   AssetByteService({
     this.imageFIGHTERJET,
@@ -31,6 +46,7 @@ class AssetByteService {
     this.imageSCORE,
     this.imageLIFE,
     this.imageGAMEOVER,
+    this.imageEXIT,
     this.animationBLAST,
     this.animationWARP,
     this.animationWINNER,
@@ -43,6 +59,20 @@ class AssetByteService {
     this.countGalaxy,
     this.countRefuel,
     this.countRotation,
+    this.legendEnter,
+    this.legendR,
+    this.legendSpace,
+    this.legendArrowDown,
+    this.legendArrowUp,
+    this.legendArrowLeft,
+    this.legendArrowRight,
+    this.legendMouseLeft,
+    this.legendMouseRight,
+    this.legendMouseMiddle,
+    this.controlDown,
+    this.controlUp,
+    this.controlLeft,
+    this.controlRight,
   });
 
   Future<AssetByteService> initialize() async {
@@ -54,6 +84,7 @@ class AssetByteService {
       imageSCORE: base64.decode(scoreBASE64),
       imageLIFE: base64.decode(lifeBASE64),
       imageGAMEOVER: base64.decode(gameOverBASE64),
+      imageEXIT: base64.decode(exitBASE64),
       animationBLAST: base64.decode(blastBASE64),
       animationWARP: base64.decode(warpBASE64),
       animationWINNER: base64.decode(winnerBASE64),
@@ -66,6 +97,20 @@ class AssetByteService {
       countGalaxy: base64.decode(galaxyCountBASE64),
       countRefuel: base64.decode(refuelCountBASE64),
       countRotation: base64.decode(rotationCountBASE64),
+      legendEnter: base64.decode(enterKeyBASE64),
+      legendR: base64.decode(rKeyBASE64),
+      legendSpace: base64.decode(spaceKeyBASE64),
+      legendArrowDown: base64.decode(arrowDownBASE64),
+      legendArrowUp: base64.decode(arrowUpBASE64),
+      legendArrowLeft: base64.decode(arrowLeftBASE64),
+      legendArrowRight: base64.decode(arrowRightBASE64),
+      legendMouseLeft: base64.decode(mouseLeftBASE64),
+      legendMouseRight: base64.decode(mouseRightBASE64),
+      legendMouseMiddle: base64.decode(mouseMiddleBASE64),
+      controlDown: base64.decode(moveDownBASE64),
+      controlUp: base64.decode(moveUpBASE64),
+      controlLeft: base64.decode(moveLeftBASE64),
+      controlRight: base64.decode(moveRightBASE64),
     );
   }
 }

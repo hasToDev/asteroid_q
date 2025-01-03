@@ -32,3 +32,14 @@ TextStyle? getGameOverStyle(BuildContext context) {
     fontWeight: FontWeight.w500,
   );
 }
+
+/// [stats_widget.dart]
+TextStyle? getStatsStyle(BuildContext context) {
+  double maxHeight = MediaQuery.sizeOf(context).height;
+
+  return context.style.titleMedium?.copyWith(
+    fontSize: 16,
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  );
+}

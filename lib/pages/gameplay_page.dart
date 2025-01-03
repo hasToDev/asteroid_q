@@ -43,20 +43,15 @@ class _GameplayPageState extends State<GameplayPage> {
                 ],
               ),
               Align(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.bottomLeft,
                 child: Builder(
                   builder: (context) {
                     if (horizontalSpace != 0) {
-                      return ExcludeFocus(
-                        child: SizedBox(
-                          width: horizontalSpace / 2,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context.go(AppPaths.home);
-                            },
-                            child: const Text('Back to Home'),
-                          ),
-                        ),
+                      return GameLeftPanel(
+                        horizontalSpace: horizontalSpace,
+                        onTap: () {
+                          // TODO: call confirmation dialog
+                        },
                       );
                     }
                     return const SizedBox();

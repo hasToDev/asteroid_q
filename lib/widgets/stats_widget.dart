@@ -41,8 +41,8 @@ class StatsWidget extends StatelessWidget {
               decoration: const BoxDecoration(color: Colors.white),
               child: Image.memory(
                 imageBytes,
-                height: 32,
-                width: 32,
+                height: getStatsImageSize(context),
+                width: getStatsImageSize(context),
                 fit: BoxFit.fitHeight,
                 gaplessPlayback: true,
                 isAntiAlias: true,
@@ -52,11 +52,7 @@ class StatsWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 score.toString(),
-                style: context.style.titleMedium?.copyWith(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: getStatsStyle(context),
               ),
             ),
           ],
