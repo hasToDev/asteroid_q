@@ -57,20 +57,8 @@ class _SpaceTileState extends State<SpaceTile> {
               cache = Container(
                 margin: EdgeInsets.all(widget.spacing),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  boxShadow: [
-                    if (selectedIndex == widget.index)
-                      const BoxShadow(
-                        color: Colors.orange,
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                      ),
-                  ],
-                  border: selectedIndex == widget.index ? Border.all(color: Colors.blue, width: 2) : null,
+                  color: selectedIndex == widget.index ? spaceTileOrange : spaceTileBlue,
                   borderRadius: BorderRadius.circular(widget.borderRadius),
-                ),
-                child: Center(
-                  child: Text('${widget.index}'),
                 ),
               );
 

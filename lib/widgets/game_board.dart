@@ -72,6 +72,9 @@ class _GameBoardState extends State<GameBoard> {
   }
 
   void _move() {
+    // prevent move if focusedIndex.value -1
+    if (focusedIndex.value < 0) return;
+
     if (focusedIndex.value > getIt<GameBoardProvider>().maxIndexForGRidSize) {
       moveToNextGalaxy(focusedIndex.value);
     } else {
