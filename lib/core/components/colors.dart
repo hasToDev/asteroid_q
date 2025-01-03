@@ -22,3 +22,5 @@ const Color nextGalaxyBlue = Color.fromRGBO(42, 45, 67, 1);
 const Color nextGalaxyOrange = Color.fromRGBO(247, 92, 3, 1);
 
 const Color transparentColor = Color.fromRGBO(255, 255, 255, 0.001);
+
+const Color semiTransparentColor = Color.fromRGBO(255, 255, 255, 0.2);

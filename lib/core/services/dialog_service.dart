@@ -12,7 +12,7 @@ class DialogService {
   }) {
     return showDialog<bool>(
       context: context,
-      barrierColor: Colors.grey[400],
+      barrierColor: semiTransparentColor,
       barrierDismissible: false,
       useSafeArea: false,
       builder: (BuildContext context) => Builder(
@@ -28,7 +28,7 @@ class DialogService {
                   backgroundColor: Colors.white,
                   insetPadding: const EdgeInsets.all(16.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(32),
                   ),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 430, minWidth: 330),
@@ -81,7 +81,7 @@ class DialogService {
   }) {
     return showDialog<bool>(
       context: context,
-      barrierColor: Colors.grey[400],
+      barrierColor: semiTransparentColor,
       barrierDismissible: false,
       useSafeArea: false,
       builder: (BuildContext context) => Builder(

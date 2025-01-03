@@ -133,10 +133,12 @@ class FighterJetProvider extends ChangeNotifier {
   }
 
   void recoverFromCollision(BuildContext context) async {
+    getIt<GameStatsProvider>().reduceLife();
+    await Future.delayed(const Duration(milliseconds: 75));
+    if (!context.mounted) return;
+
     int lifeCount = getIt<GameStatsProvider>().remainingLife;
-    if (lifeCount > 0) {
-      getIt<GameStatsProvider>().reduceLife();
-      await Future.delayed(const Duration(milliseconds: 75));
+    if (lifeCount >= 1) {
       action = FighterJetAction.collisionRecover;
       updateMarks++;
       notifyListeners();
