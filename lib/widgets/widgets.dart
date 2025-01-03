@@ -4,6 +4,7 @@ export 'fighter_jet.dart';
 export 'fuel.dart';
 export 'game_board.dart';
 export 'game_left_panel.dart';
+export 'game_right_panel.dart';
 export 'legends.dart';
 export 'missile.dart';
 export 'next_galaxy_tile.dart';
