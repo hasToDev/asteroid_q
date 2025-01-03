@@ -8,3 +8,4 @@ export 'legends.dart';
 export 'missile.dart';
 export 'next_galaxy_tile.dart';
 export 'stats_widget.dart';
+export 'virtual_arrow_button.dart';

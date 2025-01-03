@@ -108,3 +108,13 @@ enum TextOrientation {
   left,
   right,
 }
+
+enum VirtualAction {
+  up,
+  down,
+  left,
+  right,
+  refuel,
+  shoot,
+  move,
+}

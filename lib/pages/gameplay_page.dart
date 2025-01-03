@@ -130,6 +130,9 @@ class _GameplayPageState extends State<GameplayPage> {
                               );
                             },
                           ),
+                          const Expanded(child: SizedBox()),
+                          const VirtualArrowButton(),
+                          SizedBox(height: 4, width: horizontalSpace / 2),
                         ],
                       );
                     }

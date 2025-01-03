@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +28,7 @@ class _GameBoardState extends State<GameBoard> {
   late int rows;
   late int columns;
   late FocusNode _focusNode;
+  late StreamSubscription<VirtualAction> _subscription;
 
   @override
   void initState() {
@@ -38,12 +41,17 @@ class _GameBoardState extends State<GameBoard> {
     if (widget.initialFocusIndex != null) {
       focusedIndex = ValueNotifier<int>(widget.initialFocusIndex!);
     }
+
+    _subscription = getIt<VirtualActionService>().messageStream.listen((VirtualAction action) {
+      _handleVirtualAction(action);
+    });
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
     focusedIndex.dispose();
+    _subscription.cancel();
     super.dispose();
   }
 
@@ -124,6 +132,32 @@ class _GameBoardState extends State<GameBoard> {
         _refuel(); // Middle Click
         break;
       default:
+        break;
+    }
+  }
+
+  void _handleVirtualAction(VirtualAction virtualAction) {
+    var (KeyboardAction action, int nextFocusIndex) =
+        KeyboardInput.forVirtualAction(virtualAction, focusedIndex.value, boxNumber);
+    switch (action) {
+      case KeyboardAction.select:
+        if (nextFocusIndex != focusedIndex.value) {
+          _updatePositionOffset(nextFocusIndex);
+        }
+        break;
+      case KeyboardAction.move:
+        _move();
+        break;
+      case KeyboardAction.upgrade:
+        // TODO: implement upgrade in the future
+        break;
+      case KeyboardAction.refuel:
+        _refuel();
+        break;
+      case KeyboardAction.shoot:
+        _shoot();
+        break;
+      case KeyboardAction.none:
         break;
     }
   }

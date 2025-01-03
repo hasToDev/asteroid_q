@@ -7,3 +7,9 @@ double getStatsImageSize(BuildContext context) {
 
   return 32.0;
 }
+
+double getControlImageSize(BuildContext context) {
+  double maxHeight = MediaQuery.sizeOf(context).height;
+
+  return 40.0;
+}
