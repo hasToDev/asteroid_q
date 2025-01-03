@@ -5,12 +5,14 @@ class VirtualActionButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
   final Color backgroundColor;
+  final EdgeInsetsGeometry? padding;
 
   const VirtualActionButton({
     super.key,
     required this.title,
     required this.onTap,
     required this.backgroundColor,
+    this.padding,
   });
 
   @override
@@ -34,7 +36,7 @@ class VirtualActionButton extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               title,
               style: getStatsStyle(context),

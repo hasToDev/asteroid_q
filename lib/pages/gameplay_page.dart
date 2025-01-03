@@ -2,7 +2,6 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class GameplayPage extends StatefulWidget {
   final GamePlayPageExtra data;
@@ -66,6 +65,34 @@ class _GameplayPageState extends State<GameplayPage> {
                   builder: (context) {
                     if (horizontalSpace != 0) {
                       return GameRightPanel(horizontalSpace: horizontalSpace);
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Builder(
+                  builder: (context) {
+                    if (verticalSpace != 0) {
+                      return GameTopPanel(
+                        onTap: () async {
+                          bool? exit = await getIt<DialogService>().exitConfirmation(context: context);
+                          if (!context.mounted) return;
+                          if (exit != null) context.go(AppPaths.home);
+                        },
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Builder(
+                  builder: (context) {
+                    if (verticalSpace != 0) {
+                      return const GameBottomPanel();
                     }
                     return const SizedBox();
                   },

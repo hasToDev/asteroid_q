@@ -37,7 +37,7 @@ class StatsWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(4),
+              padding: EdgeInsets.all(getStatsContainerPaddingSize(context)),
               decoration: const BoxDecoration(color: Colors.white),
               child: Image.memory(
                 imageBytes,
@@ -49,7 +49,7 @@ class StatsWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: getStatsHorizontalPaddingSize(context)),
               child: Text(
                 score.toString(),
                 style: getStatsStyle(context),
