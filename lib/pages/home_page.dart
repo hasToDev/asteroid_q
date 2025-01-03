@@ -30,16 +30,7 @@ class _HomePageState extends State<HomePage> {
                   // TODO: create a check if there's a previous game that can be continue
                   // TODO: use previous game GalaxyCoordinates as input parameter if any
                   getIt<AudioProvider>().playerTapScreen();
-                  await getIt<GameBoardProvider>().setGridSize(MediaQuery.sizeOf(context));
-                  if (!context.mounted) return;
-                  context.goWarp(
-                    WarpLoadingPageExtra(
-                      currentJetPositionIndex: SpaceTilePosition.center.id,
-                      jetDirection: FighterJetDirection.up,
-                      transitionDirection: TransitionDirection.bottomToTop,
-                      galaxyCoordinates: GalaxyCoordinates(x: 0, y: 0, size: getIt<GameBoardProvider>().galaxySize),
-                    ),
-                  );
+                  getIt<GameFlowProvider>().startNewGame(context);
                 },
               ),
               AppElevatedButton(

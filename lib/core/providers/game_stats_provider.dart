@@ -110,4 +110,19 @@ class GameStatsProvider extends ChangeNotifier {
     String key = coordinate.coordinateToKey();
     return gameMap[key];
   }
+
+  void reset() {
+    spaceTravelled = 0;
+    rotate = 0;
+    fuel = 50;
+    score = 0;
+    remainingLife = 3;
+    galaxyCount = 0;
+    refuelCount = 0;
+    gameMap = {};
+    currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.large);
+    currentGalaxyData = null;
+    fuelPodIndices = [];
+    asteroidIndices = [];
+  }
 }

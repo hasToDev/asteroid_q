@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AudioProvider>(create: (_) => getIt<AudioProvider>()),
         ChangeNotifierProvider<FuelPodProvider>(create: (_) => getIt<FuelPodProvider>()),
         ChangeNotifierProvider<GameBoardProvider>(create: (_) => getIt<GameBoardProvider>()),
+        ChangeNotifierProvider<GameFlowProvider>(create: (_) => getIt<GameFlowProvider>()),
         ChangeNotifierProvider<GameStatsProvider>(create: (_) => getIt<GameStatsProvider>()),
         ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),
         ChangeNotifierProvider<MissileProvider>(create: (_) => getIt<MissileProvider>()),

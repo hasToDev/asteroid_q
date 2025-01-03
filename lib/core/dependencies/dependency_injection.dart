@@ -10,6 +10,7 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => AudioProvider());
     getIt.registerLazySingleton(() => FuelPodProvider());
     getIt.registerLazySingleton(() => GameBoardProvider());
+    getIt.registerLazySingleton(() => GameFlowProvider());
     getIt.registerLazySingleton(() => GameStatsProvider());
     getIt.registerLazySingleton(() => FighterJetProvider());
     getIt.registerLazySingleton(() => MissileProvider());

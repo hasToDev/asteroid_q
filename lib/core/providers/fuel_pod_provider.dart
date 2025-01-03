@@ -15,4 +15,10 @@ class FuelPodProvider extends ChangeNotifier {
   }
 
   void fuelPodHarvestingDONE() => isHarvesting = false;
+
+  void reset() {
+    updateMarks = 0;
+    fuelPodIndex = -1;
+    isHarvesting = false;
+  }
 }

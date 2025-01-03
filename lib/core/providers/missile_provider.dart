@@ -58,7 +58,7 @@ class MissileProvider extends ChangeNotifier {
       bool isFuelPodExistAtCurrentIndex =
           getIt<GameStatsProvider>().fuelPodIndices.contains(getIt<FighterJetProvider>().currentIndex);
       if (!isFuelPodExistAtCurrentIndex) {
-        getIt<FighterJetProvider>().gameOver(context, gameOverFuel);
+        getIt<GameFlowProvider>().gameOver(context, gameOverFuel);
         return;
       }
     }
@@ -133,5 +133,13 @@ class MissileProvider extends ChangeNotifier {
         final int spaces = min(spacesAvailable, maxMissileRange);
         return startIndex + (spaces * gridSize) + spaces;
     }
+  }
+
+  void reset() {
+    action = MissileAction.move;
+    commands = [];
+    updateMarks = 0;
+    currentIndex = 0;
+    isMissileFired = false;
   }
 }

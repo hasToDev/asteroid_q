@@ -1,6 +1,5 @@
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class FighterJetProvider extends ChangeNotifier {
   FighterJetAction action = FighterJetAction.none;
@@ -26,7 +25,7 @@ class FighterJetProvider extends ChangeNotifier {
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
       bool isFuelPodExistAtCurrentIndex = getIt<GameStatsProvider>().fuelPodIndices.contains(currentIndex);
       if (!isFuelPodExistAtCurrentIndex) {
-        gameOver(context, gameOverFuel);
+        getIt<GameFlowProvider>().gameOver(context, gameOverFuel);
         return;
       }
     }
@@ -142,7 +141,7 @@ class FighterJetProvider extends ChangeNotifier {
       updateMarks++;
       notifyListeners();
     } else {
-      gameOver(context, gameOverLife);
+      getIt<GameFlowProvider>().gameOver(context, gameOverLife);
     }
   }
 
@@ -154,22 +153,17 @@ class FighterJetProvider extends ChangeNotifier {
 
   void fireMissileEND() => isMissileFired = false;
 
-  void gameOver(BuildContext context, String message) async {
-    bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);
-    if (!context.mounted) return;
-    if (retry == null) {
-      context.go(AppPaths.home);
-    } else {
-      await getIt<GameBoardProvider>().setGridSize(MediaQuery.sizeOf(context));
-      if (!context.mounted) return;
-      context.goWarp(
-        WarpLoadingPageExtra(
-          currentJetPositionIndex: SpaceTilePosition.center.id,
-          jetDirection: FighterJetDirection.up,
-          transitionDirection: TransitionDirection.bottomToTop,
-          galaxyCoordinates: GalaxyCoordinates(x: 0, y: 0, size: getIt<GameBoardProvider>().galaxySize),
-        ),
-      );
-    }
+  void reset() {
+    action = FighterJetAction.none;
+    commands = [];
+    currentDirection = FighterJetDirection.up;
+    updateMarks = 0;
+    currentIndex = 0;
+    isJetMoving = false;
+    isJetRefueling = false;
+    isMissileFired = false;
+    furthestIndexData = null;
+    nextGalaxyDestination = null;
+    nextGalaxyStartingIndex = null;
   }
 }
