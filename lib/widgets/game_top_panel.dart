@@ -61,77 +61,96 @@ class _GameTopPanelState extends State<GameTopPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Row(
-          spacing: getTopPanelSpacing(context),
+        Column(
           children: [
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: widget.onTap,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16, top: 8),
-                  child: Image.memory(
-                    getIt<AssetByteService>().imageEXIT!,
-                    height: getStatsImageSize(context) * 2,
-                    width: getStatsImageSize(context) * 2,
-                    fit: BoxFit.fitHeight,
-                    gaplessPlayback: true,
-                    isAntiAlias: true,
+            Row(
+              spacing: getTopPanelSpacing(context),
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: getTopPanelImagePadding(context),
+                    child: SizedBox(height: getStatsImageSize(context) * 2),
                   ),
                 ),
-              ),
+                Builder(builder: (context) {
+                  double width = MediaQuery.sizeOf(context).width;
+                  if (width < 700) return const SizedBox();
+                  return jetFighterStats;
+                }),
+                Consumer<GameStatsProvider>(
+                  builder: (BuildContext context, stats, Widget? _) {
+                    return Row(
+                      spacing: getTopPanelSpacing(context),
+                      children: [
+                        StatsWidget(
+                          imageBytes: getIt<AssetByteService>().countDistance!,
+                          score: stats.spaceTravelled,
+                          backgroundColor: gameStatsColor,
+                        ),
+                        StatsWidget(
+                          imageBytes: getIt<AssetByteService>().countRotation!,
+                          score: stats.rotate,
+                          backgroundColor: gameStatsColor,
+                        ),
+                        StatsWidget(
+                          imageBytes: getIt<AssetByteService>().countRefuel!,
+                          score: stats.refuelCount,
+                          backgroundColor: gameStatsColor,
+                        ),
+                        StatsWidget(
+                          imageBytes: getIt<AssetByteService>().countGalaxy!,
+                          score: stats.galaxyCount,
+                          backgroundColor: gameStatsColor,
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
-            const Expanded(child: SizedBox()),
             Builder(builder: (context) {
               double width = MediaQuery.sizeOf(context).width;
-              if (width < 700) return const SizedBox();
-              return jetFighterStats;
+              if (width >= 700) return const SizedBox();
+              return Row(
+                children: [
+                  const Expanded(child: SizedBox()),
+                  jetFighterStats,
+                  const SizedBox(width: 16),
+                ],
+              );
             }),
-            Consumer<GameStatsProvider>(
-              builder: (BuildContext context, stats, Widget? _) {
-                return Row(
-                  spacing: getTopPanelSpacing(context),
-                  children: [
-                    StatsWidget(
-                      imageBytes: getIt<AssetByteService>().countDistance!,
-                      score: stats.spaceTravelled,
-                      backgroundColor: gameStatsColor,
+          ],
+        ),
+        Column(
+          children: [
+            Row(
+              spacing: getTopPanelSpacing(context),
+              children: [
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: widget.onTap,
+                    child: Padding(
+                      padding: getTopPanelImagePadding(context),
+                      child: Image.memory(
+                        getIt<AssetByteService>().imageEXIT!,
+                        height: getStatsImageSize(context) * 2,
+                        width: getStatsImageSize(context) * 2,
+                        fit: BoxFit.fitHeight,
+                        gaplessPlayback: true,
+                        isAntiAlias: true,
+                      ),
                     ),
-                    StatsWidget(
-                      imageBytes: getIt<AssetByteService>().countRotation!,
-                      score: stats.rotate,
-                      backgroundColor: gameStatsColor,
-                    ),
-                    StatsWidget(
-                      imageBytes: getIt<AssetByteService>().countRefuel!,
-                      score: stats.refuelCount,
-                      backgroundColor: gameStatsColor,
-                    ),
-                    StatsWidget(
-                      imageBytes: getIt<AssetByteService>().countGalaxy!,
-                      score: stats.galaxyCount,
-                      backgroundColor: gameStatsColor,
-                    ),
-                    const SizedBox(width: 8),
-                  ],
-                );
-              },
+                  ),
+                ),
+                const Expanded(child: SizedBox()),
+              ],
             ),
           ],
         ),
-        Builder(builder: (context) {
-          double width = MediaQuery.sizeOf(context).width;
-          if (width >= 700) return const SizedBox();
-          return Row(
-            children: [
-              const Expanded(child: SizedBox()),
-              jetFighterStats,
-              const SizedBox(width: 16),
-            ],
-          );
-        }),
       ],
     );
   }

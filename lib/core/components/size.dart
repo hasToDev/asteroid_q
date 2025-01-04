@@ -99,3 +99,13 @@ double getDialogInsetPaddingSize(BuildContext context) {
 
   return 16;
 }
+
+EdgeInsetsGeometry getTopPanelImagePadding(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 390) {
+    return const EdgeInsets.only(left: 12, top: 4);
+  }
+
+  return const EdgeInsets.only(left: 16, top: 8);
+}
