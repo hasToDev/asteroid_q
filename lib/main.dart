@@ -2,10 +2,23 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-//TODO: change Outlined & Elevated Button to Container due to extra padding bug in mobile web
-
 void main() async {
-  await DependencyInjection.init();
+  String region = const String.fromEnvironment('region');
+  String accessKey = const String.fromEnvironment('accessKey');
+  String secretKey = const String.fromEnvironment('secretKey');
+  String sessionToken = const String.fromEnvironment('sessionToken');
+
+  if (region.isEmpty || accessKey.isEmpty || secretKey.isEmpty || sessionToken.isEmpty) {
+    debugPrint('ENV not initialized!');
+    throw Exception();
+  }
+
+  await DependencyInjection.init(
+    region: region,
+    accessKey: accessKey,
+    secretKey: secretKey,
+    sessionToken: sessionToken,
+  );
   await getIt.isReady<AssetByteService>();
 
   runApp(const MyApp());
