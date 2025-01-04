@@ -26,14 +26,14 @@ class DialogService {
                 ),
                 child: Dialog(
                   backgroundColor: Colors.white,
-                  insetPadding: const EdgeInsets.all(16.0),
+                  insetPadding: EdgeInsets.all(getDialogInsetPaddingSize(context)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32),
                   ),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 430, minWidth: 330),
+                    constraints: getGameOverDialogConstraints(context),
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: EdgeInsets.all(getDialogPaddingSize(context)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -48,7 +48,7 @@ class DialogService {
                             textAlign: TextAlign.center,
                             style: getGameOverStyle(context),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: getDialogPaddingSize(context)),
                           Row(
                             spacing: 16,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -99,17 +99,14 @@ class DialogService {
                 ),
                 child: Dialog(
                   backgroundColor: Colors.white,
-                  insetPadding: const EdgeInsets.all(16.0),
+                  insetPadding: EdgeInsets.all(getDialogInsetPaddingSize(context)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 430,
-                      minWidth: 330,
-                    ),
+                    constraints: getGameOverDialogConstraints(context),
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: EdgeInsets.all(getDialogPaddingSize(context)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -125,7 +122,7 @@ class DialogService {
                             textAlign: TextAlign.center,
                             style: getGameOverStyle(context),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: getDialogPaddingSize(context)),
                           Row(
                             spacing: 16,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -172,14 +169,14 @@ class DialogService {
                 ),
                 child: Dialog(
                   backgroundColor: Colors.white,
-                  insetPadding: const EdgeInsets.all(16.0),
+                  insetPadding: EdgeInsets.all(getDialogInsetPaddingSize(context)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32),
                   ),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 430, minWidth: 330),
+                    constraints: getGameOverDialogConstraints(context),
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: EdgeInsets.all(getDialogPaddingSize(context)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -194,7 +191,7 @@ class DialogService {
                             textAlign: TextAlign.center,
                             style: getGameOverStyle(context),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: getDialogPaddingSize(context)),
                           Row(
                             spacing: 16,
                             mainAxisAlignment: MainAxisAlignment.center,

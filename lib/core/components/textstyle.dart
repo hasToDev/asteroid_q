@@ -46,6 +46,16 @@ TextStyle? getWarpStyle(BuildContext context) {
 
 /// [app_elevated_button.dart]
 TextStyle? getAppElevatedStyle(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 450) {
+    return context.style.titleSmall?.copyWith(
+      fontSize: 12,
+      letterSpacing: 0.25,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
   return context.style.titleSmall?.copyWith(
     fontSize: 14,
     letterSpacing: 0.25,
@@ -55,6 +65,15 @@ TextStyle? getAppElevatedStyle(BuildContext context) {
 
 /// [dialog_service.dart]
 TextStyle? getGameOverStyle(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 450) {
+    return context.style.bodyLarge?.copyWith(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
   return context.style.bodyLarge?.copyWith(
     fontSize: 16,
     fontWeight: FontWeight.w500,

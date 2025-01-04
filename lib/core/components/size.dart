@@ -74,3 +74,28 @@ EdgeInsetsGeometry getBottomPanelVirtualActionPadding(BuildContext context) {
 
   return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
 }
+
+BoxConstraints getGameOverDialogConstraints(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 390) return const BoxConstraints(maxWidth: 250, minWidth: 250);
+  if (shortestSide < 450) return const BoxConstraints(maxWidth: 330, minWidth: 330);
+
+  return const BoxConstraints(maxWidth: 430, minWidth: 330);
+}
+
+double getDialogPaddingSize(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 390) return 16;
+
+  return 24;
+}
+
+double getDialogInsetPaddingSize(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 390) return 12;
+
+  return 16;
+}
