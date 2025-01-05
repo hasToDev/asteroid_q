@@ -125,6 +125,8 @@ class GameStatsProvider extends ChangeNotifier {
 
   Future<void> loadMapFromStorage() async {
     String mapJson = getIt<SharedPreferences>().getString(storedGameGalaxyData) ?? '';
+    if (mapJson.isEmpty) return;
+
     final Map<String, dynamic> jsonMap = jsonDecode(mapJson) as Map<String, dynamic>;
     gameMap = jsonMap.map((key, value) => MapEntry(key, GalaxyData.fromJson(value as Map<String, dynamic>)));
   }
