@@ -1,8 +1,11 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class GameFlowProvider extends ChangeNotifier {
+  String userName = '';
+
   void gameOver(BuildContext context, String message) async {
     bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);
     if (!context.mounted) return;
@@ -33,4 +36,25 @@ class GameFlowProvider extends ChangeNotifier {
       ),
     );
   }
+
+  Future<bool> isUserSignedIn() async {
+    try {
+      await Amplify.Auth.fetchAuthSession();
+      return true;
+    } on AuthException catch (_) {
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> loadUsername() async {
+    if (userName.isNotEmpty) return true;
+    bool isSignedIn = await isUserSignedIn();
+    if (!isSignedIn) return false;
+    userName = await getIt<AuthService>().getUserName();
+    return true;
+  }
+
+  void clearUsername() => userName = '';
 }

@@ -1,5 +1,6 @@
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class WarpLoadingPage extends StatefulWidget {
@@ -24,6 +25,15 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
   }
 
   loadingLogic() async {
+    // game should not continue if unable to load username
+    bool userNameLoaded = await getIt<GameFlowProvider>().loadUsername();
+    if (!userNameLoaded) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      context.go(AppPaths.home);
+      return;
+    }
+
     int jetPositionIndex = widget.data.currentJetPositionIndex;
 
     GalaxyData? dataOnCoordinate = getIt<GameStatsProvider>().getGalaxyData(widget.data.galaxyCoordinates);

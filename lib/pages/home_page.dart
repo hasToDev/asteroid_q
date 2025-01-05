@@ -11,6 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isSigningOut = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -57,13 +59,23 @@ class _HomePageState extends State<HomePage> {
               AppElevatedButton(
                 title: 'Sign Out',
                 onPressed: () async {
+                  if (isSigningOut) return;
+                  isSigningOut = true;
+
                   bool? signOut =
                       await getIt<DialogService>().exitConfirmation(context: context, type: ConfirmationDialog.signOut);
-                  if (!context.mounted || signOut == null) return;
+                  if (!context.mounted || signOut == null) {
+                    isSigningOut = false;
+                    return;
+                  }
+
                   await getIt<LeaderboardSmallProvider>().removeFromStorage();
                   await getIt<LeaderboardMediumProvider>().removeFromStorage();
                   await getIt<LeaderboardLargeProvider>().removeFromStorage();
                   await getIt<AuthService>().signOut();
+                  getIt<GameFlowProvider>().clearUsername();
+
+                  isSigningOut = false;
                 },
               ),
             ],
