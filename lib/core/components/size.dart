@@ -109,3 +109,19 @@ EdgeInsetsGeometry getTopPanelImagePadding(BuildContext context) {
 
   return const EdgeInsets.only(left: 16, top: 8);
 }
+
+double getLegendItemSize(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 450) return 70;
+
+  return 80;
+}
+
+double getLegendItemSeparatorSize(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 450) return 12;
+
+  return 16;
+}

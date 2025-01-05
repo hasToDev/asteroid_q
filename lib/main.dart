@@ -23,7 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // TODO: implement custom authenticator UI
 
   double authenticatorSignInFormHeight = 372;
@@ -73,6 +72,9 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider<GameStatsProvider>(create: (_) => getIt<GameStatsProvider>()),
           ChangeNotifierProvider<FighterJetProvider>(create: (_) => getIt<FighterJetProvider>()),
           ChangeNotifierProvider<MissileProvider>(create: (_) => getIt<MissileProvider>()),
+          ChangeNotifierProvider<LeaderboardSmallProvider>(create: (_) => getIt<LeaderboardSmallProvider>()),
+          ChangeNotifierProvider<LeaderboardLargeProvider>(create: (_) => getIt<LeaderboardLargeProvider>()),
+          ChangeNotifierProvider<LeaderboardMediumProvider>(create: (_) => getIt<LeaderboardMediumProvider>()),
         ],
         child: MaterialApp.router(
           title: 'Asteroid Q',

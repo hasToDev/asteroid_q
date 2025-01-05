@@ -7,6 +7,7 @@ export 'game_bottom_panel.dart';
 export 'game_left_panel.dart';
 export 'game_right_panel.dart';
 export 'game_top_panel.dart';
+export 'legend_bottom_sheet.dart';
 export 'legends.dart';
 export 'missile.dart';
 export 'next_galaxy_tile.dart';

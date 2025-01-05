@@ -98,9 +98,9 @@ enum GalaxySize {
 
   final int fuelPod;
   final int asteroid;
-  final String apiName;
+  final String apiPathName;
 
-  const GalaxySize(this.fuelPod, this.asteroid, this.apiName);
+  const GalaxySize(this.fuelPod, this.asteroid, this.apiPathName);
 }
 
 enum TextOrientation {

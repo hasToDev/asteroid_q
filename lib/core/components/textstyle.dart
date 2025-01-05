@@ -114,3 +114,65 @@ TextStyle? getStatsStyle(BuildContext context) {
     fontWeight: FontWeight.bold,
   );
 }
+
+TextStyle? getLeaderboardTitleStyle(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 400) {
+    return context.style.titleLarge?.copyWith(
+      fontSize: 16,
+      color: nextGalaxyBlue,
+      letterSpacing: 0.75,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  if (shortestSide < 450) {
+    return context.style.titleLarge?.copyWith(
+      fontSize: 18,
+      color: nextGalaxyBlue,
+      letterSpacing: 0.75,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  if (shortestSide < 550) {
+    return context.style.titleLarge?.copyWith(
+      fontSize: 20,
+      color: nextGalaxyBlue,
+      letterSpacing: 0.75,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  return context.style.titleLarge?.copyWith(
+    fontSize: 22,
+    color: nextGalaxyBlue,
+    letterSpacing: 0.75,
+    fontWeight: FontWeight.w600,
+  );
+}
+
+TextStyle? getLeaderboardRowStyle(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 390) {
+    return context.style.labelLarge?.copyWith(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  if (shortestSide < 450) {
+    return context.style.labelLarge?.copyWith(
+      fontSize: 12,
+      fontWeight: FontWeight.normal,
+    );
+  }
+
+  return context.style.labelLarge?.copyWith(
+    fontSize: 14,
+    letterSpacing: 0.25,
+    fontWeight: FontWeight.normal,
+  );
+}

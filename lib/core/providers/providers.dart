@@ -5,4 +5,7 @@ export 'fuel_pod_provider.dart';
 export 'game_board_provider.dart';
 export 'game_flow_provider.dart';
 export 'game_stats_provider.dart';
+export 'leaderboard_large_provider.dart';
+export 'leaderboard_medium_provider.dart';
+export 'leaderboard_small_provider.dart';
 export 'missile_provider.dart';

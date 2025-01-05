@@ -14,6 +14,9 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => GameStatsProvider());
     getIt.registerLazySingleton(() => FighterJetProvider());
+    getIt.registerLazySingleton(() => LeaderboardSmallProvider());
+    getIt.registerLazySingleton(() => LeaderboardLargeProvider());
+    getIt.registerLazySingleton(() => LeaderboardMediumProvider());
 
     // Service
     getIt.registerLazySingleton(() => AuthService());

@@ -17,3 +17,5 @@ const int minimumFuelLimit = 2;
 
 const String gameOverFuel = 'Out of gas!';
 const String gameOverLife = 'You\'ve been asteroidized!';
+
+const int leaderboardUpdateWaitingTime = 30;

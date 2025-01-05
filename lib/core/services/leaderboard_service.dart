@@ -7,7 +7,7 @@ class LeaderboardService {
   Future<void> postLeaderboard(GalaxySize map, LeaderboardEntry entry) async {
     try {
       RestOperation restOperation = Amplify.API.post(
-        map.apiName,
+        map.apiPathName,
         body: HttpPayload.json(entry.toJson()),
       );
       await restOperation.response;
@@ -18,7 +18,7 @@ class LeaderboardService {
 
   Future<List<LeaderboardEntry>> getLeaderboard(GalaxySize map) async {
     try {
-      RestOperation restOperation = Amplify.API.get(map.apiName);
+      RestOperation restOperation = Amplify.API.get(map.apiPathName);
       final response = await restOperation.response;
       return (jsonDecode(response.decodeBody()) as List)
           .cast<Map<String, dynamic>>()

@@ -12,6 +12,7 @@ class AssetByteService {
   final Uint8List? imageGAMEOVER;
   final Uint8List? imageEXIT;
   final Uint8List? imageSIGNOUT;
+  final Uint8List? imageRANK;
   final Uint8List? animationBLAST;
   final Uint8List? animationWARP;
   final Uint8List? animationWINNER;
@@ -49,6 +50,7 @@ class AssetByteService {
     this.imageGAMEOVER,
     this.imageEXIT,
     this.imageSIGNOUT,
+    this.imageRANK,
     this.animationBLAST,
     this.animationWARP,
     this.animationWINNER,
@@ -88,6 +90,7 @@ class AssetByteService {
       imageGAMEOVER: base64.decode(gameOverBASE64),
       imageEXIT: base64.decode(exitBASE64),
       imageSIGNOUT: base64.decode(signOutBASE64),
+      imageRANK: base64.decode(rankBASE64),
       animationBLAST: base64.decode(blastBASE64),
       animationWARP: base64.decode(warpBASE64),
       animationWINNER: base64.decode(winnerBASE64),

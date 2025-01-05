@@ -98,3 +98,54 @@ extension SpaceTilePositionX on SpaceTilePosition {
     }
   }
 }
+
+extension LeaderboardSorting on List<LeaderboardEntry> {
+  // Sort by distance count (lowest first)
+  void sortByDistance() {
+    sort((a, b) => a.distance.compareTo(b.distance));
+  }
+
+  // Sort by rotate count (lowest first)
+  void sortByRotate() {
+    sort((a, b) => a.rotate.compareTo(b.rotate));
+  }
+
+  // Sort by refuel count (lowest first)
+  void sortByRefuel() {
+    sort((a, b) => a.refuel.compareTo(b.refuel));
+  }
+
+  // Sort by galaxy count (lowest first)
+  void sortByGalaxy() {
+    sort((a, b) => a.galaxy.compareTo(b.galaxy));
+  }
+
+  // Sort by timestamp (most recent first)
+  void sortByTimestamp() {
+    sort((a, b) => b.galaxy.compareTo(a.galaxy));
+  }
+
+  // Sort by multiple criteria
+  void sortByAll() {
+    sort((a, b) {
+      // First compare by distance
+      int distanceCompare = a.distance.compareTo(b.distance);
+      if (distanceCompare != 0) return distanceCompare;
+
+      // If distance is equal, compare by rotate
+      int rotateCompare = a.rotate.compareTo(b.rotate);
+      if (rotateCompare != 0) return rotateCompare;
+
+      // If rotate is equal, compare by refuel
+      int refuelCompare = a.refuel.compareTo(b.refuel);
+      if (refuelCompare != 0) return refuelCompare;
+
+      // If refuel is equal, compare by galaxy
+      int galaxyCompare = a.galaxy.compareTo(b.galaxy);
+      if (galaxyCompare != 0) return galaxyCompare;
+
+      // If galaxy is equal, compare by timestamp (descending - most recent first)
+      return b.timestamp.compareTo(a.timestamp);
+    });
+  }
+}
