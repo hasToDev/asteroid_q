@@ -54,6 +54,15 @@ class _HomePageState extends State<HomePage> {
                   context.go(AppPaths.audio);
                 },
               ),
+              AppElevatedButton(
+                title: 'Sign Out',
+                onPressed: () async {
+                  bool? signOut =
+                      await getIt<DialogService>().exitConfirmation(context: context, type: ConfirmationDialog.signOut);
+                  if (!context.mounted || signOut == null) return;
+                  await getIt<AuthService>().signOut();
+                },
+              ),
             ],
           ),
         ),

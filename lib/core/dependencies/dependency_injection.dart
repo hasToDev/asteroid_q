@@ -4,29 +4,24 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 class DependencyInjection {
-  static Future<void> init({
-    required String region,
-    required String accessKey,
-    required String secretKey,
-    required String sessionToken,
-  }) async {
+  static Future<void> init() async {
     // Provider
-    getIt.registerLazySingleton(() => AsteroidProvider());
     getIt.registerLazySingleton(() => AudioProvider());
+    getIt.registerLazySingleton(() => MissileProvider());
     getIt.registerLazySingleton(() => FuelPodProvider());
-    getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => GameFlowProvider());
+    getIt.registerLazySingleton(() => AsteroidProvider());
+    getIt.registerLazySingleton(() => GameBoardProvider());
     getIt.registerLazySingleton(() => GameStatsProvider());
     getIt.registerLazySingleton(() => FighterJetProvider());
-    getIt.registerLazySingleton(() => MissileProvider());
 
     // Service
+    getIt.registerLazySingleton(() => AuthService());
+    getIt.registerLazySingleton(() => DialogService());
+    getIt.registerLazySingleton(() => LeaderboardService());
+    getIt.registerLazySingleton(() => VirtualActionService());
     getIt.registerLazySingletonAsync<AssetByteService>(() {
       return AssetByteService().initialize();
     });
-    getIt.registerLazySingleton(() => DialogService());
-    getIt.registerLazySingleton(() => VirtualActionService());
-    getIt.registerLazySingleton(
-        () => DynamoDBService(region: region, accessKey: accessKey, secretKey: secretKey, sessionToken: sessionToken));
   }
 }

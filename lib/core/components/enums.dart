@@ -92,14 +92,15 @@ enum GameSound {
 }
 
 enum GalaxySize {
-  small(1, 3),
-  medium(1, 5),
-  large(2, 7);
+  small(1, 3, 'itokawa'),
+  medium(1, 5, 'hygiea'),
+  large(2, 7, 'chiron');
 
   final int fuelPod;
   final int asteroid;
+  final String apiName;
 
-  const GalaxySize(this.fuelPod, this.asteroid);
+  const GalaxySize(this.fuelPod, this.asteroid, this.apiName);
 }
 
 enum TextOrientation {
@@ -117,4 +118,9 @@ enum VirtualAction {
   refuel,
   shoot,
   move,
+}
+
+enum ConfirmationDialog {
+  exitGame,
+  signOut,
 }

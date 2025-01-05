@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:asteroid_q/core/core.dart';
 import 'package:asteroid_q/pages/pages.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class AppRoutes {
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: const HomePage(),
+          child: const AuthenticatedView(child: HomePage()),
         ),
       ),
       GoRoute(
@@ -40,7 +41,7 @@ class AppRoutes {
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: GameplayPage(data: state.gamePlayExtra!),
+          child: AuthenticatedView(child: GameplayPage(data: state.gamePlayExtra!)),
         ),
       ),
       GoRoute(
@@ -56,7 +57,7 @@ class AppRoutes {
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: const UsernamePage(),
+          child: const AuthenticatedView(child: UsernamePage()),
         ),
       ),
       GoRoute(
@@ -64,7 +65,7 @@ class AppRoutes {
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
           state: state,
-          child: WarpLoadingPage(data: state.warpExtra!),
+          child: AuthenticatedView(child: WarpLoadingPage(data: state.warpExtra!)),
         ),
       ),
     ],

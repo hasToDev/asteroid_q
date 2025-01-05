@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:asteroid_q/core/core.dart';
@@ -152,6 +153,7 @@ class DialogService {
 
   Future<bool?> exitConfirmation({
     required BuildContext context,
+    required ConfirmationDialog type,
   }) {
     return showDialog<bool>(
       context: context,
@@ -160,6 +162,15 @@ class DialogService {
       useSafeArea: false,
       builder: (BuildContext context) => Builder(
         builder: (context) {
+          double sizeBoxHeight = 0;
+          String rightButtonTitle = 'Exit';
+          Uint8List imageByte = getIt<AssetByteService>().imageEXIT!;
+          if (type == ConfirmationDialog.signOut) {
+            sizeBoxHeight = 16;
+            rightButtonTitle = 'Sign Out';
+            imageByte = getIt<AssetByteService>().imageSIGNOUT!;
+          }
+
           return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               return BackdropFilter(
@@ -181,11 +192,12 @@ class DialogService {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.memory(
-                            getIt<AssetByteService>().imageEXIT!,
+                            imageByte,
                             fit: BoxFit.contain,
                             gaplessPlayback: true,
                             isAntiAlias: true,
                           ),
+                          SizedBox(height: sizeBoxHeight),
                           Text(
                             'Are you sure ?',
                             textAlign: TextAlign.center,
@@ -201,7 +213,7 @@ class DialogService {
                                 onPressed: () => Navigator.pop(context),
                               ),
                               AppElevatedButton(
-                                title: 'Exit',
+                                title: rightButtonTitle,
                                 onPressed: () => Navigator.pop(context, true),
                               ),
                             ],

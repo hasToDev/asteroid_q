@@ -4,6 +4,7 @@ class LeaderboardEntry {
   final int rotate;
   final int refuel;
   final int galaxy;
+  final DateTime timestamp;
 
   LeaderboardEntry({
     required this.playerName,
@@ -11,25 +12,33 @@ class LeaderboardEntry {
     required this.rotate,
     required this.refuel,
     required this.galaxy,
+    required this.timestamp,
   });
 
-  factory LeaderboardEntry.fromMap(Map<String, dynamic> map) {
+  Map<String, dynamic> toJson() {
+    return {
+      'player': playerName,
+      'distance': distance.toString(),
+      'rotate': rotate.toString(),
+      'refuel': refuel.toString(),
+      'galaxy': galaxy.toString(),
+      'timestamp': timestamp.microsecondsSinceEpoch.toString(),
+    };
+  }
+
+  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
-      playerName: map['playerName'] as String,
-      distance: map['distance'] as int,
-      rotate: map['rotate'] as int,
-      refuel: map['refuel'] as int,
-      galaxy: map['galaxy'] as int,
+      playerName: json['player'] as String,
+      distance: int.tryParse(json['distance']) ?? 0,
+      rotate: int.tryParse(json['rotate']) ?? 0,
+      refuel: int.tryParse(json['refuel']) ?? 0,
+      galaxy: int.tryParse(json['galaxy']) ?? 0,
+      timestamp: DateTime.fromMicrosecondsSinceEpoch(int.tryParse(json['timestamp']) ?? 0),
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'playerName': playerName,
-      'distance': distance,
-      'rotate': rotate,
-      'refuel': refuel,
-      'galaxy': galaxy,
-    };
+  @override
+  String toString() {
+    return 'LeaderboardEntry {playerName: $playerName, distance: $distance, rotate: $rotate, refuel: $refuel, galaxy: $galaxy, timestamp: $timestamp}';
   }
 }
