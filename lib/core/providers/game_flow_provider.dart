@@ -7,6 +7,7 @@ class GameFlowProvider extends ChangeNotifier {
   String userName = '';
 
   void gameOver(BuildContext context, String message) async {
+    getIt<GameStatsProvider>().removeFromStorage();
     bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);
     if (!context.mounted) return;
     if (retry == null) {

@@ -25,3 +25,5 @@ const String storedLeaderboardItokawa = 'itokawaLeaderboard';
 const String storedLeaderboardHygiea = 'hygieaLeaderboard';
 const String storedLeaderboardChiron = 'chironLeaderboard';
 const String storedGameGalaxyData = 'gamePlayGalaxy';
+const String storedGameStatsData = 'gamePlayStats';
+const String storedGameCoordinateData = 'gamePlayCoordinate';

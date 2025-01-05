@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameStatsProvider extends ChangeNotifier {
-  int spaceTravelled = 0;
-  int rotate = 0;
-  int fuel = 50;
   int score = 0;
+  int fuel = 50;
   int remainingLife = 3;
 
-  int galaxyCount = 0;
+  int spaceTravelled = 0;
+  int rotate = 0;
   int refuelCount = 0;
+  int galaxyCount = 0;
 
   Map<String, GalaxyData> gameMap = {};
   GalaxyCoordinates currentCoordinate = GalaxyCoordinates(x: 0, y: 0, size: GalaxySize.large);
@@ -21,6 +21,8 @@ class GameStatsProvider extends ChangeNotifier {
   List<int> fuelPodIndices = [];
   List<int> asteroidIndices = [];
   bool savingData = false;
+  bool savingGameStats = false;
+  bool savingCoordinate = false;
 
   /// Process current Galaxy Data, separate the FuelPod and Asteroid indices
   Future<void> processGalaxyData(GalaxyData galaxyData) async {
@@ -101,7 +103,10 @@ class GameStatsProvider extends ChangeNotifier {
     galaxyCount++;
   }
 
-  void saveCoordinate(GalaxyCoordinates coordinate) => currentCoordinate = coordinate;
+  void saveCoordinate(GalaxyCoordinates coordinate) {
+    currentCoordinate = coordinate;
+    saveCoordinateToStorage();
+  }
 
   /// Saves data for a specific grid coordinate
   void saveGalaxyData(GalaxyCoordinates coordinate, GalaxyData data) {
@@ -131,9 +136,56 @@ class GameStatsProvider extends ChangeNotifier {
     gameMap = jsonMap.map((key, value) => MapEntry(key, GalaxyData.fromJson(value as Map<String, dynamic>)));
   }
 
+  Future<void> saveCurrentGameStatsToStorage() async {
+    if (savingGameStats) return;
+    savingGameStats = true;
+    Map<String, dynamic> gameStatsMap = {
+      'score': score,
+      'fuel': fuel,
+      'remainingLife': remainingLife,
+      'spaceTravelled': spaceTravelled,
+      'rotate': rotate,
+      'refuelCount': refuelCount,
+      'galaxyCount': galaxyCount,
+    };
+    await getIt<SharedPreferences>().setString(storedGameStatsData, jsonEncode(gameStatsMap));
+    savingGameStats = false;
+  }
+
+  Future<void> loadGameStatsFromStorage() async {
+    String gameStatsMapJson = getIt<SharedPreferences>().getString(storedGameStatsData) ?? '';
+    if (gameStatsMapJson.isEmpty) return;
+
+    Map<String, dynamic> gameStatsMap = jsonDecode(gameStatsMapJson) as Map<String, dynamic>;
+    score = gameStatsMap['score'] as int;
+    fuel = gameStatsMap['fuel'] as int;
+    remainingLife = gameStatsMap['remainingLife'] as int;
+    spaceTravelled = gameStatsMap['spaceTravelled'] as int;
+    rotate = gameStatsMap['rotate'] as int;
+    refuelCount = gameStatsMap['refuelCount'] as int;
+    galaxyCount = gameStatsMap['galaxyCount'] as int;
+  }
+
+  Future<void> saveCoordinateToStorage() async {
+    if (savingCoordinate) return;
+    savingCoordinate = true;
+    await getIt<SharedPreferences>().setString(storedGameCoordinateData, jsonEncode(currentCoordinate));
+    savingCoordinate = false;
+  }
+
+  Future<void> loadCoordinateFromStorage() async {
+    String coordinateJson = getIt<SharedPreferences>().getString(storedGameCoordinateData) ?? '';
+    if (coordinateJson.isEmpty) return;
+
+    final Map<String, dynamic> coordinateMap = jsonDecode(coordinateJson) as Map<String, dynamic>;
+    currentCoordinate = GalaxyCoordinates.fromJson(coordinateMap);
+  }
+
   Future<void> removeFromStorage() async {
     gameMap.clear();
     await getIt<SharedPreferences>().remove(storedGameGalaxyData);
+    await getIt<SharedPreferences>().remove(storedGameStatsData);
+    await getIt<SharedPreferences>().remove(storedGameCoordinateData);
   }
 
   void reset() {

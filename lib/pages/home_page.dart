@@ -74,6 +74,11 @@ class _HomePageState extends State<HomePage> {
                   await getIt<LeaderboardLargeProvider>().removeFromStorage();
                   await getIt<GameStatsProvider>().removeFromStorage();
                   await getIt<AuthService>().signOut();
+                  getIt<AsteroidProvider>().reset();
+                  getIt<FighterJetProvider>().reset();
+                  getIt<FuelPodProvider>().reset();
+                  getIt<GameStatsProvider>().reset();
+                  getIt<MissileProvider>().reset();
                   getIt<GameFlowProvider>().clearUsername();
 
                   isSigningOut = false;

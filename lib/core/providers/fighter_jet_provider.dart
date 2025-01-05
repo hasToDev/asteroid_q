@@ -30,6 +30,7 @@ class FighterJetProvider extends ChangeNotifier {
       }
     }
     isJetMoving = false;
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
   }
 
   void jetMovingToNewGalaxy() {
@@ -37,6 +38,7 @@ class FighterJetProvider extends ChangeNotifier {
     nextGalaxyDestination = null;
     nextGalaxyStartingIndex = null;
     isJetMoving = false;
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
   }
 
   void moveJet(
@@ -139,6 +141,7 @@ class FighterJetProvider extends ChangeNotifier {
 
     int lifeCount = getIt<GameStatsProvider>().remainingLife;
     if (lifeCount >= 1) {
+      getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
       action = FighterJetAction.collisionRecover;
       updateMarks++;
       notifyListeners();
@@ -149,11 +152,17 @@ class FighterJetProvider extends ChangeNotifier {
 
   void refuelingSTART() => isJetRefueling = true;
 
-  void refuelingEND() => isJetRefueling = false;
+  void refuelingEND() {
+    isJetRefueling = false;
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+  }
 
   void fireMissileSTART() => isMissileFired = true;
 
-  void fireMissileEND() => isMissileFired = false;
+  void fireMissileEND() {
+    isMissileFired = false;
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+  }
 
   void reset() {
     action = FighterJetAction.none;
