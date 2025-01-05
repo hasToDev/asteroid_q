@@ -60,6 +60,9 @@ class _HomePageState extends State<HomePage> {
                   bool? signOut =
                       await getIt<DialogService>().exitConfirmation(context: context, type: ConfirmationDialog.signOut);
                   if (!context.mounted || signOut == null) return;
+                  await getIt<LeaderboardSmallProvider>().removeFromStorage();
+                  await getIt<LeaderboardMediumProvider>().removeFromStorage();
+                  await getIt<LeaderboardLargeProvider>().removeFromStorage();
                   await getIt<AuthService>().signOut();
                 },
               ),

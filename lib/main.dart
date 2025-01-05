@@ -5,12 +5,14 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'amplifyconfiguration.dart';
 
 void main() async {
   await DependencyInjection.init();
   await getIt.isReady<AssetByteService>();
+  await getIt.isReady<SharedPreferences>();
 
   runApp(const MyApp());
 }

@@ -1,5 +1,6 @@
 import 'package:asteroid_q/core/core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,6 +26,11 @@ class DependencyInjection {
     getIt.registerLazySingleton(() => VirtualActionService());
     getIt.registerLazySingletonAsync<AssetByteService>(() {
       return AssetByteService().initialize();
+    });
+
+    // Storage
+    getIt.registerLazySingletonAsync<SharedPreferences>(() {
+      return SharedPreferences.getInstance();
     });
   }
 }

@@ -1,3 +1,5 @@
+import 'constants.dart';
+
 enum TransitionDirection {
   leftToRight('leftToRight'),
   rightToLeft('rightToLeft'),
@@ -92,15 +94,16 @@ enum GameSound {
 }
 
 enum GalaxySize {
-  small(1, 3, 'itokawa'),
-  medium(1, 5, 'hygiea'),
-  large(2, 7, 'chiron');
+  small(1, 3, 'itokawa', storedLeaderboardItokawa),
+  medium(1, 5, 'hygiea', storedLeaderboardHygiea),
+  large(2, 7, 'chiron', storedLeaderboardChiron);
 
   final int fuelPod;
   final int asteroid;
   final String apiPathName;
+  final String sharedPreferenceKey;
 
-  const GalaxySize(this.fuelPod, this.asteroid, this.apiPathName);
+  const GalaxySize(this.fuelPod, this.asteroid, this.apiPathName, this.sharedPreferenceKey);
 }
 
 enum TextOrientation {
