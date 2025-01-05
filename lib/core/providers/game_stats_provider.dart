@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GameStatsProvider extends ChangeNotifier {
   int spaceTravelled = 0;
@@ -17,6 +20,7 @@ class GameStatsProvider extends ChangeNotifier {
   GalaxyData? currentGalaxyData;
   List<int> fuelPodIndices = [];
   List<int> asteroidIndices = [];
+  bool savingData = false;
 
   /// Process current Galaxy Data, separate the FuelPod and Asteroid indices
   Future<void> processGalaxyData(GalaxyData galaxyData) async {
@@ -103,12 +107,31 @@ class GameStatsProvider extends ChangeNotifier {
   void saveGalaxyData(GalaxyCoordinates coordinate, GalaxyData data) {
     String key = coordinate.coordinateToKey();
     gameMap[key] = data;
+    saveCurrentMapToStorage();
   }
 
   /// Retrieves data for a specific grid coordinate
   GalaxyData? getGalaxyData(GalaxyCoordinates coordinate) {
     String key = coordinate.coordinateToKey();
     return gameMap[key];
+  }
+
+  Future<void> saveCurrentMapToStorage() async {
+    if (savingData) return;
+    savingData = true;
+    await getIt<SharedPreferences>().setString(storedGameGalaxyData, jsonEncode(gameMap));
+    savingData = false;
+  }
+
+  Future<void> loadMapFromStorage() async {
+    String mapJson = getIt<SharedPreferences>().getString(storedGameGalaxyData) ?? '';
+    final Map<String, dynamic> jsonMap = jsonDecode(mapJson) as Map<String, dynamic>;
+    gameMap = jsonMap.map((key, value) => MapEntry(key, GalaxyData.fromJson(value as Map<String, dynamic>)));
+  }
+
+  Future<void> removeFromStorage() async {
+    gameMap.clear();
+    await getIt<SharedPreferences>().remove(storedGameGalaxyData);
   }
 
   void reset() {

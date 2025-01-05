@@ -35,6 +35,7 @@ class LeaderboardSmallProvider extends ChangeNotifier {
   }
 
   Future<void> removeFromStorage() async {
+    entries.clear();
     await getIt<SharedPreferences>().remove(GalaxySize.small.sharedPreferenceKey);
   }
 }

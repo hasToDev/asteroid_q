@@ -24,3 +24,4 @@ const String appVersion = '0.1.0';
 const String storedLeaderboardItokawa = 'itokawaLeaderboard';
 const String storedLeaderboardHygiea = 'hygieaLeaderboard';
 const String storedLeaderboardChiron = 'chironLeaderboard';
+const String storedGameGalaxyData = 'gamePlayGalaxy';

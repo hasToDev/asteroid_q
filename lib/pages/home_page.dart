@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage> {
                   await getIt<LeaderboardSmallProvider>().removeFromStorage();
                   await getIt<LeaderboardMediumProvider>().removeFromStorage();
                   await getIt<LeaderboardLargeProvider>().removeFromStorage();
+                  await getIt<GameStatsProvider>().removeFromStorage();
                   await getIt<AuthService>().signOut();
                   getIt<GameFlowProvider>().clearUsername();
 
