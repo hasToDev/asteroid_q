@@ -22,6 +22,7 @@ class DependencyInjection {
     // Service
     getIt.registerLazySingleton(() => AuthService());
     getIt.registerLazySingleton(() => DialogService());
+    getIt.registerLazySingleton(() => EncryptionService());
     getIt.registerLazySingleton(() => LeaderboardService());
     getIt.registerLazySingleton(() => VirtualActionService());
     getIt.registerLazySingletonAsync<AssetByteService>(() {

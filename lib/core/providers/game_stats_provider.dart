@@ -124,16 +124,16 @@ class GameStatsProvider extends ChangeNotifier {
   Future<void> saveCurrentMapToStorage() async {
     if (savingData) return;
     savingData = true;
-    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
-    await getIt<SharedPreferences>().setString(storedGameGalaxyData, jsonEncode(gameMap));
+    String encryptedMap = getIt<EncryptionService>().encryptData(jsonEncode(gameMap));
+    await getIt<SharedPreferences>().setString(storedGameGalaxyData, encryptedMap);
     savingData = false;
   }
 
   Future<void> loadMapFromStorage() async {
-    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
-    String mapJson = getIt<SharedPreferences>().getString(storedGameGalaxyData) ?? '';
-    if (mapJson.isEmpty) return;
+    String encryptedMap = getIt<SharedPreferences>().getString(storedGameGalaxyData) ?? '';
+    if (encryptedMap.isEmpty) return;
 
+    String mapJson = getIt<EncryptionService>().decryptData(encryptedMap);
     final Map<String, dynamic> jsonMap = jsonDecode(mapJson) as Map<String, dynamic>;
     gameMap = jsonMap.map((key, value) => MapEntry(key, GalaxyData.fromJson(value as Map<String, dynamic>)));
   }
@@ -152,16 +152,16 @@ class GameStatsProvider extends ChangeNotifier {
       'jetIndex': jetIndex,
       'jetDirection': jetDirection.name,
     };
-    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
-    await getIt<SharedPreferences>().setString(storedGameStatsData, jsonEncode(gameStatsMap));
+    String encryptedGameStatsMap = getIt<EncryptionService>().encryptData(jsonEncode(gameStatsMap));
+    await getIt<SharedPreferences>().setString(storedGameStatsData, encryptedGameStatsMap);
     savingGameStats = false;
   }
 
   Future<void> loadGameStatsFromStorage() async {
-    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
-    String gameStatsMapJson = getIt<SharedPreferences>().getString(storedGameStatsData) ?? '';
-    if (gameStatsMapJson.isEmpty) return;
+    String encryptedGameStatsMap = getIt<SharedPreferences>().getString(storedGameStatsData) ?? '';
+    if (encryptedGameStatsMap.isEmpty) return;
 
+    String gameStatsMapJson = getIt<EncryptionService>().decryptData(encryptedGameStatsMap);
     Map<String, dynamic> gameStatsMap = jsonDecode(gameStatsMapJson) as Map<String, dynamic>;
     score = gameStatsMap['score'] as int;
     fuel = gameStatsMap['fuel'] as int;
@@ -180,16 +180,16 @@ class GameStatsProvider extends ChangeNotifier {
   Future<void> saveCoordinateToStorage() async {
     if (savingCoordinate) return;
     savingCoordinate = true;
-    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
-    await getIt<SharedPreferences>().setString(storedGameCoordinateData, jsonEncode(currentCoordinate));
+    String encryptedCoordinate = getIt<EncryptionService>().encryptData(jsonEncode(currentCoordinate));
+    await getIt<SharedPreferences>().setString(storedGameCoordinateData, encryptedCoordinate);
     savingCoordinate = false;
   }
 
   Future<void> loadCoordinateFromStorage() async {
-    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
-    String coordinateJson = getIt<SharedPreferences>().getString(storedGameCoordinateData) ?? '';
-    if (coordinateJson.isEmpty) return;
+    String encryptedCoordinate = getIt<SharedPreferences>().getString(storedGameCoordinateData) ?? '';
+    if (encryptedCoordinate.isEmpty) return;
 
+    String coordinateJson = getIt<EncryptionService>().decryptData(encryptedCoordinate);
     final Map<String, dynamic> coordinateMap = jsonDecode(coordinateJson) as Map<String, dynamic>;
     currentCoordinate = GalaxyCoordinates.fromJson(coordinateMap);
   }
