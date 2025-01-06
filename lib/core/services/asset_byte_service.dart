@@ -40,6 +40,7 @@ class AssetByteService {
   final Uint8List? controlUp;
   final Uint8List? controlLeft;
   final Uint8List? controlRight;
+  final Uint8List? appLogo;
 
   AssetByteService({
     this.imageFIGHTERJET,
@@ -79,6 +80,7 @@ class AssetByteService {
     this.controlUp,
     this.controlLeft,
     this.controlRight,
+    this.appLogo,
   });
 
   Future<AssetByteService> initialize() async {
@@ -120,6 +122,7 @@ class AssetByteService {
       controlUp: base64.decode(moveUpBASE64),
       controlLeft: base64.decode(moveLeftBASE64),
       controlRight: base64.decode(moveRightBASE64),
+      appLogo: base64.decode(logoBASE64),
     );
   }
 }

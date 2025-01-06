@@ -3,6 +3,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:asteroid_q/core/core.dart';
+import 'package:asteroid_q/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,14 +30,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // TODO: implement custom authenticator UI
-
-  double authenticatorSignInFormHeight = 372;
-  double authenticatorSignUpFormHeight = 472;
-
-  // break point at width 960
-  // break point at width 480
-
   @override
   void initState() {
     super.initState();
@@ -61,14 +54,68 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Authenticator(
-      signUpForm: SignUpForm.custom(
-        fields: [
-          SignUpFormField.nickname(required: true),
-          SignUpFormField.email(required: true),
-          SignUpFormField.password(),
-          SignUpFormField.passwordConfirmation(),
-        ],
-      ),
+      authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
+        switch (state.currentStep) {
+          case AuthenticatorStep.signIn:
+            return AmplifyAuth(
+              state: state,
+              body: SignInForm(),
+              footer: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Don\'t have an account?',
+                    style: getAppElevatedStyle(context)?.copyWith(fontWeight: FontWeight.w400),
+                  ),
+                  TextButton(
+                    onPressed: () => state.changeStep(AuthenticatorStep.signUp),
+                    style: TextButton.styleFrom(textStyle: getAppElevatedStyle(context)),
+                    child: const Text('Sign Up'),
+                  ),
+                ],
+              ),
+            );
+          case AuthenticatorStep.signUp:
+            return AmplifyAuth(
+              state: state,
+              isSignUp: true,
+              body: SignUpForm.custom(
+                fields: [
+                  SignUpFormField.nickname(required: true),
+                  SignUpFormField.email(required: true),
+                  SignUpFormField.password(),
+                  SignUpFormField.passwordConfirmation(),
+                ],
+              ),
+              footer: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already have an account?',
+                    style: getAppElevatedStyle(context)?.copyWith(fontWeight: FontWeight.w400),
+                  ),
+                  TextButton(
+                    onPressed: () => state.changeStep(AuthenticatorStep.signIn),
+                    style: TextButton.styleFrom(textStyle: getAppElevatedStyle(context)),
+                    child: const Text('Sign In'),
+                  ),
+                ],
+              ),
+            );
+          case AuthenticatorStep.confirmSignUp:
+            return AmplifyAuth(state: state, body: ConfirmSignUpForm());
+          case AuthenticatorStep.resetPassword:
+            return AmplifyAuth(state: state, body: ResetPasswordForm());
+          case AuthenticatorStep.confirmResetPassword:
+            return AmplifyAuth(state: state, body: const ConfirmResetPasswordForm());
+          case AuthenticatorStep.verifyUser:
+            return AmplifyAuth(state: state, body: VerifyUserForm());
+          case AuthenticatorStep.confirmVerifyUser:
+            return AmplifyAuth(state: state, body: ConfirmVerifyUserForm());
+          default:
+            return null;
+        }
+      },
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider<AsteroidProvider>(create: (_) => getIt<AsteroidProvider>()),

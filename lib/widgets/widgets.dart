@@ -1,3 +1,4 @@
+export 'amplify_auth.dart';
 export 'app_elevated_button.dart';
 export 'asteroid.dart';
 export 'fighter_jet.dart';
