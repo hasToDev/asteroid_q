@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp.router(
           title: 'Asteroid Q',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            colorScheme: ColorScheme.fromSeed(seedColor: asteroidQMainColor),
             useMaterial3: true,
           ),
           routerConfig: AppRoutes.router,

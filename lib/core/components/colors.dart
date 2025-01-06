@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// #F75C03
+const Color asteroidQMainColor = Color.fromRGBO(247, 92, 3, 1);
+
 // #1D1D1D
 const Color buttonBlackShadow = Color.fromRGBO(29, 29, 29, 0.1);
 
