@@ -5,6 +5,30 @@ import 'package:go_router/go_router.dart';
 class GameFlowProvider extends ChangeNotifier {
   String userName = '';
 
+  void gameWinner(BuildContext context) async {
+    // post leaderboard entry to DynamoDB
+    getIt<LeaderboardService>().postLeaderboard(
+      getIt<GameStatsProvider>().currentCoordinate.size,
+      LeaderboardEntry(
+        playerName: userName,
+        distance: getIt<GameStatsProvider>().spaceTravelled,
+        rotate: getIt<GameStatsProvider>().rotate,
+        refuel: getIt<GameStatsProvider>().refuelCount,
+        galaxy: getIt<GameStatsProvider>().galaxyCount,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    getIt<GameStatsProvider>().removeFromStorage();
+    bool? seeLeaderboard = await getIt<DialogService>().gameWinner(context: context);
+    if (!context.mounted) return;
+    if (seeLeaderboard == null) {
+      context.go(AppPaths.home);
+    } else {
+      context.go(AppPaths.leaderboard);
+    }
+  }
+
   void gameOver(BuildContext context, String message) async {
     getIt<GameStatsProvider>().removeFromStorage();
     bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);

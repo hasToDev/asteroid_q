@@ -119,7 +119,7 @@ class DialogService {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Congratulations!',
+                            'You won the game!',
                             textAlign: TextAlign.center,
                             style: getGameOverStyle(context),
                           ),

@@ -12,11 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'amplifyconfiguration.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await DependencyInjection.init();
   await getIt.isReady<AssetByteService>();
   await getIt.isReady<SharedPreferences>();
-
-  if (kIsWeb) BrowserContextMenu.disableContextMenu();
 
   runApp(const MyApp());
 }
@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _configureAmplify();
+    if (kIsWeb) BrowserContextMenu.disableContextMenu();
   }
 
   void _configureAmplify() async {

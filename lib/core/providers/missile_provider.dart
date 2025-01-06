@@ -53,6 +53,12 @@ class MissileProvider extends ChangeNotifier {
   }
 
   void fireMissileDONE(BuildContext context) {
+    // check game score, prevent further jet move if player already won
+    if (getIt<GameStatsProvider>().score >= 100) {
+      getIt<GameFlowProvider>().gameWinner(context);
+      return;
+    }
+
     // check for fuel pod on current fighter jet index if remaining fuel is less than 2
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
       bool isFuelPodExistAtCurrentIndex =
@@ -62,6 +68,7 @@ class MissileProvider extends ChangeNotifier {
         return;
       }
     }
+
     isMissileFired = false;
     getIt<FighterJetProvider>().fireMissileEND();
   }

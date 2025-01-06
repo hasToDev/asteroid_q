@@ -26,6 +26,12 @@ class FighterJetProvider extends ChangeNotifier {
   }
 
   void jetFinishMoving(BuildContext context) async {
+    // check game score, prevent further jet move if player already won
+    if (getIt<GameStatsProvider>().score >= 100) {
+      getIt<GameFlowProvider>().gameWinner(context);
+      return;
+    }
+
     // check for fuel pod on current index if remaining fuel is less than 2
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
       bool isFuelPodExistAtCurrentIndex = getIt<GameStatsProvider>().fuelPodIndices.contains(currentIndex);
