@@ -124,11 +124,13 @@ class GameStatsProvider extends ChangeNotifier {
   Future<void> saveCurrentMapToStorage() async {
     if (savingData) return;
     savingData = true;
+    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
     await getIt<SharedPreferences>().setString(storedGameGalaxyData, jsonEncode(gameMap));
     savingData = false;
   }
 
   Future<void> loadMapFromStorage() async {
+    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
     String mapJson = getIt<SharedPreferences>().getString(storedGameGalaxyData) ?? '';
     if (mapJson.isEmpty) return;
 
@@ -150,11 +152,13 @@ class GameStatsProvider extends ChangeNotifier {
       'jetIndex': jetIndex,
       'jetDirection': jetDirection.name,
     };
+    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
     await getIt<SharedPreferences>().setString(storedGameStatsData, jsonEncode(gameStatsMap));
     savingGameStats = false;
   }
 
   Future<void> loadGameStatsFromStorage() async {
+    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
     String gameStatsMapJson = getIt<SharedPreferences>().getString(storedGameStatsData) ?? '';
     if (gameStatsMapJson.isEmpty) return;
 
@@ -176,11 +180,13 @@ class GameStatsProvider extends ChangeNotifier {
   Future<void> saveCoordinateToStorage() async {
     if (savingCoordinate) return;
     savingCoordinate = true;
+    // TODO: test everything first, then encrypt string before saving to local browser, use Key and IV from ENV
     await getIt<SharedPreferences>().setString(storedGameCoordinateData, jsonEncode(currentCoordinate));
     savingCoordinate = false;
   }
 
   Future<void> loadCoordinateFromStorage() async {
+    // TODO: test everything first, then decrypt string before convert to object, use Key and IV from ENV
     String coordinateJson = getIt<SharedPreferences>().getString(storedGameCoordinateData) ?? '';
     if (coordinateJson.isEmpty) return;
 

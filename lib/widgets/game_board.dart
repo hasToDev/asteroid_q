@@ -123,6 +123,7 @@ class _GameBoardState extends State<GameBoard> {
     // Primary (left) = 1
     // Secondary (right) = 2
     // Middle = 4
+
     switch (event.buttons) {
       case 1:
         if (index != focusedIndex.value) await _updatePositionOffset(index);

@@ -1,4 +1,3 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,23 +61,26 @@ class GameFlowProvider extends ChangeNotifier {
     );
   }
 
-  Future<bool> isUserSignedIn() async {
-    try {
-      await Amplify.Auth.fetchAuthSession();
-      return true;
-    } on AuthException catch (_) {
-      return false;
-    } catch (_) {
-      return false;
-    }
-  }
-
   Future<bool> loadUsername() async {
     if (userName.isNotEmpty) return true;
-    bool isSignedIn = await isUserSignedIn();
+    bool isSignedIn = await getIt<AuthService>().isUserSignedIn();
     if (!isSignedIn) return false;
     userName = await getIt<AuthService>().getUserName();
     return true;
+  }
+
+  Future<void> signOut() async {
+    await getIt<LeaderboardSmallProvider>().removeFromStorage();
+    await getIt<LeaderboardMediumProvider>().removeFromStorage();
+    await getIt<LeaderboardLargeProvider>().removeFromStorage();
+    await getIt<GameStatsProvider>().removeFromStorage();
+    await getIt<AuthService>().signOut();
+    getIt<AsteroidProvider>().reset();
+    getIt<FighterJetProvider>().reset();
+    getIt<FuelPodProvider>().reset();
+    getIt<GameStatsProvider>().reset();
+    getIt<MissileProvider>().reset();
+    clearUsername();
   }
 
   void clearUsername() => userName = '';

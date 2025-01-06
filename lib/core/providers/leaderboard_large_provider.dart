@@ -27,11 +27,15 @@ class LeaderboardLargeProvider extends ChangeNotifier {
   }
 
   Future<void> loadLeaderboard() async {
-    String jsonList = getIt<SharedPreferences>().getString(GalaxySize.large.sharedPreferenceKey) ?? '';
-    if (jsonList.isEmpty) return;
+    try {
+      String jsonList = getIt<SharedPreferences>().getString(GalaxySize.large.sharedPreferenceKey) ?? '';
+      if (jsonList.isEmpty) return;
 
-    final list = jsonDecode(jsonList) as List;
-    entries = list.map((item) => LeaderboardEntry.fromJson(item as Map<String, dynamic>)).toList();
+      final list = jsonDecode(jsonList) as List;
+      entries = list.map((item) => LeaderboardEntry.fromJson(item as Map<String, dynamic>)).toList();
+    } catch (e, s) {
+      debugPrint('LeaderboardLargeProvider loadLeaderboard $e\n$s');
+    }
   }
 
   Future<void> removeFromStorage() async {

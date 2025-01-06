@@ -1,3 +1,4 @@
+
 import 'package:asteroid_q/core/core.dart';
 
 class GalaxyData {
@@ -49,9 +50,7 @@ class GameObjectPosition {
   factory GameObjectPosition.fromJson(Map<String, dynamic> json) {
     return GameObjectPosition(
       index: json['index'] as int,
-      type: GameObjectType.values.firstWhere(
-        (e) => e.toString() == 'ObjectType.${json['type']}',
-      ),
+      type: GameObjectType.values.firstWhere((e) => e.name == json['type']),
     );
   }
 

@@ -79,18 +79,7 @@ class _HomePageState extends State<HomePage> {
                     return;
                   }
 
-                  await getIt<LeaderboardSmallProvider>().removeFromStorage();
-                  await getIt<LeaderboardMediumProvider>().removeFromStorage();
-                  await getIt<LeaderboardLargeProvider>().removeFromStorage();
-                  await getIt<GameStatsProvider>().removeFromStorage();
-                  await getIt<AuthService>().signOut();
-                  getIt<AsteroidProvider>().reset();
-                  getIt<FighterJetProvider>().reset();
-                  getIt<FuelPodProvider>().reset();
-                  getIt<GameStatsProvider>().reset();
-                  getIt<MissileProvider>().reset();
-                  getIt<GameFlowProvider>().clearUsername();
-
+                  await getIt<GameFlowProvider>().signOut();
                   isSigningOut = false;
                 },
               ),

@@ -27,11 +27,15 @@ class LeaderboardMediumProvider extends ChangeNotifier {
   }
 
   Future<void> loadLeaderboard() async {
-    String jsonList = getIt<SharedPreferences>().getString(GalaxySize.medium.sharedPreferenceKey) ?? '';
-    if (jsonList.isEmpty) return;
+    try {
+      String jsonList = getIt<SharedPreferences>().getString(GalaxySize.medium.sharedPreferenceKey) ?? '';
+      if (jsonList.isEmpty) return;
 
-    final list = jsonDecode(jsonList) as List;
-    entries = list.map((item) => LeaderboardEntry.fromJson(item as Map<String, dynamic>)).toList();
+      final list = jsonDecode(jsonList) as List;
+      entries = list.map((item) => LeaderboardEntry.fromJson(item as Map<String, dynamic>)).toList();
+    } catch (e, s) {
+      debugPrint('LeaderboardMediumProvider loadLeaderboard $e\n$s');
+    }
   }
 
   Future<void> removeFromStorage() async {

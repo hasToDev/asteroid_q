@@ -38,4 +38,15 @@ class AuthService {
     if (!email.contains('@')) return 'Guest';
     return email.substring(0, email.indexOf('@'));
   }
+
+  Future<bool> isUserSignedIn() async {
+    try {
+      await Amplify.Auth.fetchAuthSession();
+      return true;
+    } on AuthException catch (_) {
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
 }
