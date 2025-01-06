@@ -29,14 +29,6 @@ class AppRoutes {
         ),
       ),
       GoRoute(
-        path: AppPaths.audio,
-        pageBuilder: (context, state) => _buildPageTransition(
-          context: context,
-          state: state,
-          child: const AudioPage(),
-        ),
-      ),
-      GoRoute(
         path: AppPaths.gameplay,
         pageBuilder: (context, state) => _buildPageTransition(
           context: context,
@@ -50,14 +42,6 @@ class AppRoutes {
           context: context,
           state: state,
           child: const LeaderboardPage(),
-        ),
-      ),
-      GoRoute(
-        path: AppPaths.username,
-        pageBuilder: (context, state) => _buildPageTransition(
-          context: context,
-          state: state,
-          child: const AuthenticatedView(child: UsernamePage()),
         ),
       ),
       GoRoute(

@@ -53,20 +53,6 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               AppElevatedButton(
-                title: 'Username',
-                onPressed: () {
-                  getIt<AudioProvider>().playerTapScreen();
-                  context.go(AppPaths.username);
-                },
-              ),
-              AppElevatedButton(
-                title: 'Audio',
-                onPressed: () {
-                  getIt<AudioProvider>().playerTapScreen();
-                  context.go(AppPaths.audio);
-                },
-              ),
-              AppElevatedButton(
                 title: 'Sign Out',
                 onPressed: () async {
                   if (isSigningOut) return;
