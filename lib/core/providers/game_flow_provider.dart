@@ -38,6 +38,30 @@ class GameFlowProvider extends ChangeNotifier {
     );
   }
 
+  void continueGame(BuildContext context) async {
+    await getIt<GameBoardProvider>().setGridSize(MediaQuery.sizeOf(context));
+    if (!context.mounted) return;
+
+    // to continue saved game, both of the following GalaxySize must be equal
+    // different galaxy size means different screen size on player device
+    GalaxySize gameBoardGalaxySize = getIt<GameBoardProvider>().galaxySize;
+    GalaxySize gameStatsGalaxySize = getIt<GameStatsProvider>().currentCoordinate.size;
+    if (gameBoardGalaxySize != gameStatsGalaxySize) {
+      // TODO: notify player cannot continue previous game, in the future
+      startNewGame(context);
+      return;
+    }
+
+    context.goWarp(
+      WarpLoadingPageExtra(
+        currentJetPositionIndex: getIt<FighterJetProvider>().currentIndex,
+        jetDirection: getIt<FighterJetProvider>().currentDirection,
+        transitionDirection: TransitionDirection.bottomToTop,
+        galaxyCoordinates: getIt<GameStatsProvider>().currentCoordinate,
+      ),
+    );
+  }
+
   Future<bool> isUserSignedIn() async {
     try {
       await Amplify.Auth.fetchAuthSession();

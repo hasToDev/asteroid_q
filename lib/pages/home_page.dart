@@ -29,10 +29,20 @@ class _HomePageState extends State<HomePage> {
               AppElevatedButton(
                 title: 'Start',
                 onPressed: () async {
-                  // TODO: create a check if there's a previous game that can be continue
-                  // TODO: use previous game GalaxyCoordinates as input parameter if any
                   getIt<AudioProvider>().playerTapScreen();
-                  getIt<GameFlowProvider>().startNewGame(context);
+                  bool isMapEmpty = getIt<GameStatsProvider>().gameMap.isEmpty;
+                  if (isMapEmpty) {
+                    getIt<GameFlowProvider>().startNewGame(context);
+                  } else {
+                    bool? continueGame = await getIt<DialogService>()
+                        .confirmation(context: context, type: ConfirmationDialog.continueGame);
+                    if (!context.mounted) return;
+                    if (continueGame != null) {
+                      getIt<GameFlowProvider>().continueGame(context);
+                    } else {
+                      getIt<GameFlowProvider>().startNewGame(context);
+                    }
+                  }
                 },
               ),
               AppElevatedButton(
@@ -63,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                   isSigningOut = true;
 
                   bool? signOut =
-                      await getIt<DialogService>().exitConfirmation(context: context, type: ConfirmationDialog.signOut);
+                      await getIt<DialogService>().confirmation(context: context, type: ConfirmationDialog.signOut);
                   if (!context.mounted || signOut == null) {
                     isSigningOut = false;
                     return;

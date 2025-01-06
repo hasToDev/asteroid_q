@@ -151,7 +151,7 @@ class DialogService {
     );
   }
 
-  Future<bool?> exitConfirmation({
+  Future<bool?> confirmation({
     required BuildContext context,
     required ConfirmationDialog type,
   }) {
@@ -163,12 +163,21 @@ class DialogService {
       builder: (BuildContext context) => Builder(
         builder: (context) {
           double sizeBoxHeight = 0;
+          String leftButtonTitle = 'Cancel';
           String rightButtonTitle = 'Exit';
+          String description = 'Are you sure ?';
           Uint8List imageByte = getIt<AssetByteService>().imageEXIT!;
           if (type == ConfirmationDialog.signOut) {
             sizeBoxHeight = 16;
             rightButtonTitle = 'Sign Out';
             imageByte = getIt<AssetByteService>().imageSIGNOUT!;
+          }
+          if (type == ConfirmationDialog.continueGame) {
+            sizeBoxHeight = 16;
+            description = 'Continue previous game ?';
+            leftButtonTitle = 'Start New';
+            rightButtonTitle = 'Yes';
+            imageByte = getIt<AssetByteService>().imageCONTINUE!;
           }
 
           return LayoutBuilder(
@@ -199,7 +208,7 @@ class DialogService {
                           ),
                           SizedBox(height: sizeBoxHeight),
                           Text(
-                            'Are you sure ?',
+                            description,
                             textAlign: TextAlign.center,
                             style: getGameOverStyle(context),
                           ),
@@ -209,7 +218,7 @@ class DialogService {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               AppElevatedButton(
-                                title: 'Cancel',
+                                title: leftButtonTitle,
                                 onPressed: () => Navigator.pop(context),
                               ),
                               AppElevatedButton(

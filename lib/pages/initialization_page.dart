@@ -23,6 +23,8 @@ class _InitializationPageState extends State<InitializationPage> {
     await getIt<LeaderboardMediumProvider>().loadLeaderboard();
     await getIt<LeaderboardLargeProvider>().loadLeaderboard();
     await getIt<GameStatsProvider>().loadMapFromStorage();
+    await getIt<GameStatsProvider>().loadGameStatsFromStorage();
+    await getIt<GameStatsProvider>().loadCoordinateFromStorage();
     if (!mounted) return;
     context.go(AppPaths.home);
   }

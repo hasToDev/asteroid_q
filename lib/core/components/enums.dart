@@ -126,4 +126,5 @@ enum VirtualAction {
 enum ConfirmationDialog {
   exitGame,
   signOut,
+  continueGame,
 }

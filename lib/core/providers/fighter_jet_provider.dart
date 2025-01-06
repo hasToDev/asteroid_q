@@ -20,6 +20,11 @@ class FighterJetProvider extends ChangeNotifier {
     currentIndex = index;
   }
 
+  void loadJetValueFromStorage(int jetIndex, FighterJetDirection jetDirection) {
+    currentIndex = jetIndex;
+    currentDirection = jetDirection;
+  }
+
   void jetFinishMoving(BuildContext context) async {
     // check for fuel pod on current index if remaining fuel is less than 2
     if (getIt<GameStatsProvider>().fuel < minimumFuelLimit) {
@@ -30,7 +35,7 @@ class FighterJetProvider extends ChangeNotifier {
       }
     }
     isJetMoving = false;
-    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage(currentIndex, currentDirection);
   }
 
   void jetMovingToNewGalaxy() {
@@ -38,7 +43,7 @@ class FighterJetProvider extends ChangeNotifier {
     nextGalaxyDestination = null;
     nextGalaxyStartingIndex = null;
     isJetMoving = false;
-    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage(currentIndex, currentDirection);
   }
 
   void moveJet(
@@ -141,7 +146,7 @@ class FighterJetProvider extends ChangeNotifier {
 
     int lifeCount = getIt<GameStatsProvider>().remainingLife;
     if (lifeCount >= 1) {
-      getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+      getIt<GameStatsProvider>().saveCurrentGameStatsToStorage(currentIndex, currentDirection);
       action = FighterJetAction.collisionRecover;
       updateMarks++;
       notifyListeners();
@@ -154,14 +159,14 @@ class FighterJetProvider extends ChangeNotifier {
 
   void refuelingEND() {
     isJetRefueling = false;
-    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage(currentIndex, currentDirection);
   }
 
   void fireMissileSTART() => isMissileFired = true;
 
   void fireMissileEND() {
     isMissileFired = false;
-    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage();
+    getIt<GameStatsProvider>().saveCurrentGameStatsToStorage(currentIndex, currentDirection);
   }
 
   void reset() {

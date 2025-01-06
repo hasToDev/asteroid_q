@@ -50,7 +50,7 @@ class _GameplayPageState extends State<GameplayPage> {
                         horizontalSpace: horizontalSpace,
                         onTap: () async {
                           bool? exit = await getIt<DialogService>()
-                              .exitConfirmation(context: context, type: ConfirmationDialog.exitGame);
+                              .confirmation(context: context, type: ConfirmationDialog.exitGame);
                           if (!context.mounted) return;
                           if (exit != null) context.go(AppPaths.home);
                         },
@@ -79,7 +79,7 @@ class _GameplayPageState extends State<GameplayPage> {
                       return GameTopPanel(
                         onTap: () async {
                           bool? exit = await getIt<DialogService>()
-                              .exitConfirmation(context: context, type: ConfirmationDialog.exitGame);
+                              .confirmation(context: context, type: ConfirmationDialog.exitGame);
                           if (!context.mounted) return;
                           if (exit != null) context.go(AppPaths.home);
                         },

@@ -136,7 +136,7 @@ class GameStatsProvider extends ChangeNotifier {
     gameMap = jsonMap.map((key, value) => MapEntry(key, GalaxyData.fromJson(value as Map<String, dynamic>)));
   }
 
-  Future<void> saveCurrentGameStatsToStorage() async {
+  Future<void> saveCurrentGameStatsToStorage(int jetIndex, FighterJetDirection jetDirection) async {
     if (savingGameStats) return;
     savingGameStats = true;
     Map<String, dynamic> gameStatsMap = {
@@ -147,6 +147,8 @@ class GameStatsProvider extends ChangeNotifier {
       'rotate': rotate,
       'refuelCount': refuelCount,
       'galaxyCount': galaxyCount,
+      'jetIndex': jetIndex,
+      'jetDirection': jetDirection.name,
     };
     await getIt<SharedPreferences>().setString(storedGameStatsData, jsonEncode(gameStatsMap));
     savingGameStats = false;
@@ -164,6 +166,11 @@ class GameStatsProvider extends ChangeNotifier {
     rotate = gameStatsMap['rotate'] as int;
     refuelCount = gameStatsMap['refuelCount'] as int;
     galaxyCount = gameStatsMap['galaxyCount'] as int;
+
+    int jetIndex = gameStatsMap['jetIndex'] as int;
+    String value = gameStatsMap['jetDirection'] as String;
+    FighterJetDirection jetDirection = FighterJetDirection.values.firstWhere((e) => e.name == value);
+    getIt<FighterJetProvider>().loadJetValueFromStorage(jetIndex, jetDirection);
   }
 
   Future<void> saveCoordinateToStorage() async {
