@@ -37,6 +37,20 @@ class LeaderboardEntry {
     );
   }
 
+  // Compare individual metrics
+  bool hasBetterDistance(LeaderboardEntry other) => distance < other.distance;
+
+  bool hasBetterRotate(LeaderboardEntry other) => rotate < other.rotate;
+
+  bool hasBetterRefuel(LeaderboardEntry other) => refuel < other.refuel;
+
+  bool hasBetterGalaxy(LeaderboardEntry other) => galaxy < other.galaxy;
+
+  // Check if any metric is lower
+  bool hasBetterPerformance(LeaderboardEntry other) {
+    return hasBetterDistance(other) || hasBetterRotate(other) || hasBetterRefuel(other) || hasBetterGalaxy(other);
+  }
+
   @override
   String toString() {
     return 'LeaderboardEntry {playerName: $playerName, distance: $distance, rotate: $rotate, refuel: $refuel, galaxy: $galaxy, timestamp: $timestamp}';

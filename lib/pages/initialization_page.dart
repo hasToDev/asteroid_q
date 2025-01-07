@@ -36,6 +36,7 @@ class _InitializationPageState extends State<InitializationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // TODO: add ASTEROID Q LOGO HERE
             SizedBox(),
           ],
         ),

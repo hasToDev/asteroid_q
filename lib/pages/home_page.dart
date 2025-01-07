@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // TODO: add ASTEROID Q LOGO HERE
               AppElevatedButton(
                 title: 'Start',
                 onPressed: () async {
