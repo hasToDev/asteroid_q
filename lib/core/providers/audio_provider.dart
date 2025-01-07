@@ -8,6 +8,8 @@ class AudioProvider extends ChangeNotifier {
   late AudioPlayer lifeReducedSound;
   late AudioPlayer refuelSound;
   late AudioPlayer whooshSound;
+  late AudioPlayer wonSound;
+  late AudioPlayer loseSound;
 
   double effectVolume = 0.35;
 
@@ -28,6 +30,8 @@ class AudioProvider extends ChangeNotifier {
     lifeReducedSound = AudioPlayer();
     refuelSound = AudioPlayer();
     whooshSound = AudioPlayer();
+    wonSound = AudioPlayer();
+    loseSound = AudioPlayer();
 
     await explosionSound.setAudioSource(ByteAudioSource(getIt<AssetByteService>().soundEXPLOSION!));
     await explosionSound.setVolume(effectVolume);
@@ -58,6 +62,18 @@ class AudioProvider extends ChangeNotifier {
     whooshSound.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) whooshSound.stop();
     });
+
+    await wonSound.setAudioSource(ByteAudioSource(getIt<AssetByteService>().soundWON!));
+    await wonSound.setVolume(effectVolume);
+    wonSound.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) wonSound.stop();
+    });
+
+    await loseSound.setAudioSource(ByteAudioSource(getIt<AssetByteService>().soundLOSE!));
+    await loseSound.setVolume(effectVolume);
+    loseSound.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) loseSound.stop();
+    });
   }
 
   Future<void> sound(GameSound type) async {
@@ -83,6 +99,14 @@ class AudioProvider extends ChangeNotifier {
       case GameSound.move:
         await whooshSound.seek(Duration.zero);
         whooshSound.play();
+        break;
+      case GameSound.won:
+        await wonSound.seek(Duration.zero);
+        wonSound.play();
+        break;
+      case GameSound.lose:
+        await loseSound.seek(Duration.zero);
+        loseSound.play();
         break;
     }
   }

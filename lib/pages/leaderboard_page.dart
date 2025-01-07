@@ -190,7 +190,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> with SingleTickerProv
     String rankAge = GetTimeAgo.parse(entry.timestamp);
     if (!rankAge.contains('ago')) {
       Duration now = DateTime.now().difference(entry.timestamp);
-      rankAge = '${now.inDays} days';
+      if (now.inDays > 0) rankAge = '${now.inDays} days';
     }
     rankAge = rankAge.replaceAll('ago', '').trim();
 

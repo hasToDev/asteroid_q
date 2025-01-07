@@ -22,6 +22,8 @@ class AssetByteService {
   final Uint8List? soundLIFEREDUCED;
   final Uint8List? soundREFUEL;
   final Uint8List? soundWHOOSH;
+  final Uint8List? soundWON;
+  final Uint8List? soundLOSE;
   final Uint8List? countDistance;
   final Uint8List? countGalaxy;
   final Uint8List? countRefuel;
@@ -62,6 +64,8 @@ class AssetByteService {
     this.soundLIFEREDUCED,
     this.soundREFUEL,
     this.soundWHOOSH,
+    this.soundWON,
+    this.soundLOSE,
     this.countDistance,
     this.countGalaxy,
     this.countRefuel,
@@ -104,6 +108,8 @@ class AssetByteService {
       soundLIFEREDUCED: base64.decode(lifeReducedBASE64),
       soundREFUEL: base64.decode(refuelBASE64),
       soundWHOOSH: base64.decode(whooshMoveBASE64),
+      soundWON: base64.decode(wonBASE64),
+      soundLOSE: base64.decode(loseBASE64),
       countDistance: base64.decode(distanceCountBASE64),
       countGalaxy: base64.decode(galaxyCountBASE64),
       countRefuel: base64.decode(refuelCountBASE64),

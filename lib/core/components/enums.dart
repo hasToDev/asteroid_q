@@ -91,6 +91,8 @@ enum GameSound {
   lifeReduced,
   refuel,
   move,
+  won,
+  lose,
 }
 
 enum GalaxySize {

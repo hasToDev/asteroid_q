@@ -20,6 +20,7 @@ class GameFlowProvider extends ChangeNotifier {
     );
 
     getIt<GameStatsProvider>().removeFromStorage();
+    getIt<AudioProvider>().sound(GameSound.won);
     bool? seeLeaderboard = await getIt<DialogService>().gameWinner(context: context);
     if (!context.mounted) return;
     if (seeLeaderboard == null) {
@@ -31,6 +32,7 @@ class GameFlowProvider extends ChangeNotifier {
 
   void gameOver(BuildContext context, String message) async {
     getIt<GameStatsProvider>().removeFromStorage();
+    getIt<AudioProvider>().sound(GameSound.lose);
     bool? retry = await getIt<DialogService>().gameOver(context: context, description: message);
     if (!context.mounted) return;
     if (retry == null) {
