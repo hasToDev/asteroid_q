@@ -54,7 +54,7 @@ class _AmplifyAuthState extends State<AmplifyAuth> {
               shrinkWrap: true,
               children: [
                 Builder(builder: (context) {
-                  if (!widget.isSignUp && availableHeight > 0) return SizedBox(height: availableHeight / 2);
+                  if (availableHeight > 0) return SizedBox(height: availableHeight / 2);
                   return const SizedBox();
                 }),
                 Builder(builder: (context) {
