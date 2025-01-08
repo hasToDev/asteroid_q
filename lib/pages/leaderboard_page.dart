@@ -27,9 +27,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> with SingleTickerProv
   }
 
   void _loadLeaderboards() async {
-    await getIt<LeaderboardLargeProvider>().fetch();
-    await getIt<LeaderboardSmallProvider>().fetch();
-    await getIt<LeaderboardMediumProvider>().fetch();
+    getIt<LeaderboardLargeProvider>().fetch();
+    getIt<LeaderboardSmallProvider>().fetch();
+    getIt<LeaderboardMediumProvider>().fetch();
   }
 
   @override

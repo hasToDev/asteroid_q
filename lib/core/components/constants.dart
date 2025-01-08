@@ -18,7 +18,7 @@ const int minimumFuelLimit = 2;
 const String gameOverFuel = 'Out of gas!';
 const String gameOverLife = 'You\'ve been asteroidized!';
 
-const int leaderboardUpdateWaitingTime = 30;
+const int leaderboardUpdateWaitingTime = 15;
 
 const String appVersion = '0.1.2';
 const String storedLeaderboardItokawa = 'itokawaLeaderboard';
