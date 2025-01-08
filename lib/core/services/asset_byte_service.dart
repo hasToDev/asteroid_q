@@ -14,6 +14,7 @@ class AssetByteService {
   final Uint8List? imageSIGNOUT;
   final Uint8List? imageRANK;
   final Uint8List? imageCONTINUE;
+  final Uint8List? imageUPDATE;
   final Uint8List? animationBLAST;
   final Uint8List? animationWARP;
   final Uint8List? animationWINNER;
@@ -43,6 +44,7 @@ class AssetByteService {
   final Uint8List? controlLeft;
   final Uint8List? controlRight;
   final Uint8List? appLogo;
+  final Uint8List? appTextLogo;
 
   AssetByteService({
     this.imageFIGHTERJET,
@@ -56,6 +58,7 @@ class AssetByteService {
     this.imageSIGNOUT,
     this.imageRANK,
     this.imageCONTINUE,
+    this.imageUPDATE,
     this.animationBLAST,
     this.animationWARP,
     this.animationWINNER,
@@ -85,6 +88,7 @@ class AssetByteService {
     this.controlLeft,
     this.controlRight,
     this.appLogo,
+    this.appTextLogo,
   });
 
   Future<AssetByteService> initialize() async {
@@ -100,6 +104,7 @@ class AssetByteService {
       imageSIGNOUT: base64.decode(signOutBASE64),
       imageRANK: base64.decode(rankBASE64),
       imageCONTINUE: base64.decode(continueBASE64),
+      imageUPDATE: base64.decode(updateBASE64),
       animationBLAST: base64.decode(blastBASE64),
       animationWARP: base64.decode(warpBASE64),
       animationWINNER: base64.decode(winnerBASE64),
@@ -129,6 +134,7 @@ class AssetByteService {
       controlLeft: base64.decode(moveLeftBASE64),
       controlRight: base64.decode(moveRightBASE64),
       appLogo: base64.decode(logoBASE64),
+      appTextLogo: base64.decode(textLogoBASE64),
     );
   }
 }

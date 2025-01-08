@@ -10,6 +10,8 @@ class InitializationPage extends StatefulWidget {
 }
 
 class _InitializationPageState extends State<InitializationPage> {
+  double edgePadding = 16;
+
   @override
   void initState() {
     initializationCheck();
@@ -31,14 +33,44 @@ class _InitializationPageState extends State<InitializationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // TODO: add ASTEROID Q LOGO HERE
-            SizedBox(),
-          ],
+    Size size = MediaQuery.sizeOf(context);
+    double logoWidth = size.width - edgePadding * 2;
+    if (logoWidth > 600) logoWidth = 600;
+    double asteroidLogoHeight = logoWidth * 0.65;
+    double logoHeight = asteroidLogoHeight * 0.25;
+
+    double availableHeight = size.height - logoHeight - edgePadding * 2 - asteroidLogoHeight;
+    if (availableHeight <= 0) {
+      availableHeight = size.height - edgePadding * 2;
+      asteroidLogoHeight = availableHeight * 0.8;
+      logoHeight = availableHeight * 0.2;
+    }
+
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(edgePadding),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.memory(
+                getIt<AssetByteService>().appLogo!,
+                fit: BoxFit.contain,
+                height: asteroidLogoHeight,
+                width: asteroidLogoHeight,
+                gaplessPlayback: true,
+                isAntiAlias: true,
+              ),
+              Image.memory(
+                getIt<AssetByteService>().appTextLogo!,
+                fit: BoxFit.contain,
+                height: logoHeight,
+                width: logoWidth,
+                gaplessPlayback: true,
+                isAntiAlias: true,
+              ),
+            ],
+          ),
         ),
       ),
     );

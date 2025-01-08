@@ -130,3 +130,8 @@ enum ConfirmationDialog {
   signOut,
   continueGame,
 }
+
+enum NotificationDialog {
+  newVersion,
+  maintenanceMode,
+}

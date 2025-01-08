@@ -137,6 +137,7 @@ class _MyAppState extends State<MyApp> {
             useMaterial3: true,
           ),
           routerConfig: AppRoutes.router,
+          debugShowCheckedModeBanner: false,
         ),
       ),
     );

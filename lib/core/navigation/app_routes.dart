@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 class AppRoutes {
   static final GoRouter router = GoRouter(
-    debugLogDiagnostics: true,
+    // debugLogDiagnostics: true,
     initialLocation: AppPaths.initialization,
     extraCodec: const _AppExtraCodec(),
     routes: [

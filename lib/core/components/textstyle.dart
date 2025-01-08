@@ -80,6 +80,22 @@ TextStyle? getGameOverStyle(BuildContext context) {
   );
 }
 
+TextStyle? getNotificationStyle(BuildContext context) {
+  double shortestSide = MediaQuery.sizeOf(context).shortestSide;
+
+  if (shortestSide < 450) {
+    return context.style.bodyLarge?.copyWith(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  return context.style.bodyLarge?.copyWith(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
+}
+
 /// [stats_widget.dart]
 TextStyle? getStatsStyle(BuildContext context) {
   double shortestSide = MediaQuery.sizeOf(context).shortestSide;

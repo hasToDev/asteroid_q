@@ -239,4 +239,78 @@ class DialogService {
       ),
     );
   }
+
+  Future<void> notification({
+    required BuildContext context,
+    required NotificationDialog type,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      barrierColor: semiTransparentColor,
+      barrierDismissible: false,
+      useSafeArea: false,
+      builder: (BuildContext context) => Builder(
+        builder: (context) {
+          double sizeBoxHeight = 0;
+          String title = 'Game Update';
+          String description = 'please Refresh page or Clear browser cache';
+          if (type == NotificationDialog.newVersion) {
+            sizeBoxHeight = 16;
+          }
+          if (type == NotificationDialog.maintenanceMode) {
+            sizeBoxHeight = 16;
+            title = 'Game Maintenance';
+            description = 'please come back later to play';
+          }
+
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: Shadow.convertRadiusToSigma(3),
+                  sigmaY: Shadow.convertRadiusToSigma(3),
+                ),
+                child: Dialog(
+                  backgroundColor: Colors.white,
+                  insetPadding: EdgeInsets.all(getDialogInsetPaddingSize(context)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child: ConstrainedBox(
+                    constraints: getGameOverDialogConstraints(context),
+                    child: Padding(
+                      padding: EdgeInsets.all(getDialogPaddingSize(context)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.memory(
+                            getIt<AssetByteService>().imageUPDATE!,
+                            fit: BoxFit.contain,
+                            gaplessPlayback: true,
+                            isAntiAlias: true,
+                          ),
+                          SizedBox(height: sizeBoxHeight),
+                          Text(
+                            title,
+                            textAlign: TextAlign.center,
+                            style: getNotificationStyle(context),
+                          ),
+                          SizedBox(height: getDialogPaddingSize(context)),
+                          Text(
+                            description,
+                            textAlign: TextAlign.center,
+                            style: getGameOverStyle(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 }
