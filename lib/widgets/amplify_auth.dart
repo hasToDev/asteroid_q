@@ -40,34 +40,53 @@ class _AmplifyAuthState extends State<AmplifyAuth> {
     Size size = MediaQuery.sizeOf(context);
     bool useSingleChildScrollView = false;
     double separatorSize = getLegendItemSeparatorSize(context);
-    double availableHeight = size.height - heightLimit - logoHeightLimit - edgePadding - separatorSize;
+    double availableHeight = size.height - heightLimit - logoHeightLimit - (edgePadding * 2) - separatorSize;
     if (widget.isSignUp) availableHeight = availableHeight - 50;
     if (availableHeight <= 0) useSingleChildScrollView = true;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: EdgeInsets.all(edgePadding),
         child: Builder(builder: (context) {
           if (!useSingleChildScrollView) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.memory(
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                Builder(builder: (context) {
+                  if (!widget.isSignUp && availableHeight > 0) return SizedBox(height: availableHeight / 2);
+                  return const SizedBox();
+                }),
+                Builder(builder: (context) {
+                  double imageSize = logoHeightLimit;
+                  if (widget.isSignUp) {
+                    imageSize = imageSize - 20;
+                  }
+                  return Image.memory(
                     getIt<AssetByteService>().appLogo!,
                     fit: BoxFit.contain,
-                    height: logoHeightLimit,
-                    width: logoHeightLimit,
+                    height: imageSize,
+                    width: imageSize,
                     gaplessPlayback: true,
                     isAntiAlias: true,
-                  ),
-                  SizedBox(height: separatorSize),
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: widget.body,
-                  ),
-                ],
-              ),
+                  );
+                }),
+                SizedBox(height: separatorSize),
+                Builder(builder: (context) {
+                  double maxWidth = size.width - (edgePadding * 2);
+                  if (maxWidth > 400) maxWidth = 400;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: maxWidth, child: widget.body),
+                    ],
+                  );
+                }),
+                Builder(builder: (context) {
+                  if (availableHeight > 0) return SizedBox(height: availableHeight / 2);
+                  return const SizedBox();
+                }),
+              ],
             );
           }
 
@@ -75,19 +94,31 @@ class _AmplifyAuthState extends State<AmplifyAuth> {
             child: Center(
               child: Column(
                 children: [
-                  Image.memory(
-                    getIt<AssetByteService>().appLogo!,
-                    fit: BoxFit.contain,
-                    height: logoHeightLimit - 40,
-                    width: logoHeightLimit - 40,
-                    gaplessPlayback: true,
-                    isAntiAlias: true,
-                  ),
+                  Builder(builder: (context) {
+                    double imageSize = logoHeightLimit - 50;
+                    if (widget.isSignUp) {
+                      imageSize = imageSize - 20;
+                    }
+                    return Image.memory(
+                      getIt<AssetByteService>().appLogo!,
+                      fit: BoxFit.contain,
+                      height: imageSize,
+                      width: imageSize,
+                      gaplessPlayback: true,
+                      isAntiAlias: true,
+                    );
+                  }),
                   SizedBox(height: separatorSize),
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: widget.body,
-                  ),
+                  Builder(builder: (context) {
+                    double maxWidth = size.width - (edgePadding * 2);
+                    if (maxWidth > 400) maxWidth = 400;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: maxWidth, child: widget.body),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ),
