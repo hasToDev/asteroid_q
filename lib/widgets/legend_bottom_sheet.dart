@@ -3,7 +3,9 @@ import 'package:asteroid_q/core/core.dart';
 import 'package:flutter/material.dart';
 
 class LegendsBottomSheet extends StatelessWidget {
-  const LegendsBottomSheet({super.key});
+  const LegendsBottomSheet({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,29 +54,35 @@ class LegendsBottomSheet extends StatelessWidget {
       ),
     ];
 
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height - 24,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'LEGENDS',
-              style: getLeaderboardTitleStyle(context),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      expand: false,
+      snap: true,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'LEGENDS',
+                style: getLeaderboardTitleStyle(context),
+              ),
             ),
-          ),
-          const Divider(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: legendItems.length,
-              itemBuilder: (context, index) => legendItems[index],
+            const Divider(),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                controller: scrollController,
+                itemCount: legendItems.length,
+                itemBuilder: (context, index) => legendItems[index],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }
