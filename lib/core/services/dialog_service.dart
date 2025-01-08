@@ -280,29 +280,46 @@ class DialogService {
                     constraints: getGameOverDialogConstraints(context),
                     child: Padding(
                       padding: EdgeInsets.all(getDialogPaddingSize(context)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.memory(
-                            getIt<AssetByteService>().imageUPDATE!,
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                            isAntiAlias: true,
-                          ),
-                          SizedBox(height: sizeBoxHeight),
-                          Text(
-                            title,
-                            textAlign: TextAlign.center,
-                            style: getNotificationStyle(context),
-                          ),
-                          SizedBox(height: getDialogPaddingSize(context)),
-                          Text(
-                            description,
-                            textAlign: TextAlign.center,
-                            style: getGameOverStyle(context),
-                          ),
-                        ],
-                      ),
+                      child: Builder(builder: (context) {
+                        if (constraints.maxHeight < 160) return const SizedBox();
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Builder(builder: (context) {
+                              if (constraints.maxHeight < 365) {
+                                return Image.memory(
+                                  getIt<AssetByteService>().imageUPDATE!,
+                                  fit: BoxFit.contain,
+                                  height: constraints.maxHeight - 160,
+                                  width: constraints.maxHeight - 160,
+                                  gaplessPlayback: true,
+                                  isAntiAlias: true,
+                                );
+                              }
+
+                              return Image.memory(
+                                getIt<AssetByteService>().imageUPDATE!,
+                                fit: BoxFit.contain,
+                                gaplessPlayback: true,
+                                isAntiAlias: true,
+                              );
+                            }),
+                            SizedBox(height: sizeBoxHeight),
+                            Text(
+                              title,
+                              textAlign: TextAlign.center,
+                              style: getNotificationStyle(context),
+                            ),
+                            SizedBox(height: getDialogPaddingSize(context)),
+                            Text(
+                              description,
+                              textAlign: TextAlign.center,
+                              style: getGameOverStyle(context),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                   ),
                 ),

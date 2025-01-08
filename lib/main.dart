@@ -15,6 +15,15 @@ import 'amplifyconfiguration.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  String sck = const String.fromEnvironment('sck');
+  String sciv = const String.fromEnvironment('sciv');
+  String configURL = const String.fromEnvironment('configURL');
+
+  if (sck.isEmpty || sciv.isEmpty || configURL.isEmpty) {
+    debugPrint('ENV not initialized!');
+    throw Exception();
+  }
+
   await DependencyInjection.init();
   await getIt.isReady<AssetByteService>();
   await getIt.isReady<SharedPreferences>();
