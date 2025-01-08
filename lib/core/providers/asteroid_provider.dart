@@ -14,6 +14,8 @@ class AsteroidProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetIndex() => asteroidIndex = -1;
+
   void reset() {
     updateMarks = 0;
     asteroidIndex = -1;

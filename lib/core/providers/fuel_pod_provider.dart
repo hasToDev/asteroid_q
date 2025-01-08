@@ -16,6 +16,8 @@ class FuelPodProvider extends ChangeNotifier {
 
   void fuelPodHarvestingDONE() => isHarvesting = false;
 
+  void resetIndex() => fuelPodIndex = -1;
+
   void reset() {
     updateMarks = 0;
     fuelPodIndex = -1;

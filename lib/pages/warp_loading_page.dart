@@ -53,6 +53,10 @@ class _WarpLoadingPageState extends State<WarpLoadingPage> {
     getIt<GameStatsProvider>().saveCoordinate(widget.data.galaxyCoordinates);
     await getIt<GameStatsProvider>().processGalaxyData(dataOnCoordinate);
 
+    // reset Asteroid and Fuel Pod to avoid accidental rebuild that makes Asteroid destroyed or Fuel Pod harvested
+    getIt<AsteroidProvider>().resetIndex();
+    getIt<FuelPodProvider>().resetIndex();
+
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
