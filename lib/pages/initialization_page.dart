@@ -61,8 +61,6 @@ class _InitializationPageState extends State<InitializationPage> {
       http.Response response =
           await http.get(Uri.parse(const String.fromEnvironment('configURL'))).timeout(const Duration(seconds: 60));
 
-      debugPrint('${response.statusCode}');
-
       if (response.statusCode == 200) {
         return jsonDecode(response.body) as Map<String, dynamic>;
       } else {
