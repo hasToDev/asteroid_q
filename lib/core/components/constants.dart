@@ -20,7 +20,7 @@ const String gameOverLife = 'You\'ve been asteroidized!';
 
 const int leaderboardUpdateWaitingTime = 15;
 
-const String appVersion = '0.1.2';
+const String appVersion = '0.1.3';
 const String storedLeaderboardItokawa = 'itokawaLeaderboard';
 const String storedLeaderboardHygiea = 'hygieaLeaderboard';
 const String storedLeaderboardChiron = 'chironLeaderboard';

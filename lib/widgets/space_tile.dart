@@ -54,12 +54,17 @@ class _SpaceTileState extends State<SpaceTile> {
               currentConstraints = widget.constraints;
               isSelected = widget.index == widget.focusedIndex.value;
 
-              cache = Container(
-                margin: EdgeInsets.all(widget.spacing),
-                decoration: BoxDecoration(
-                  color: selectedIndex == widget.index ? spaceTileOrange : spaceTileBlue,
-                  borderRadius: BorderRadius.circular(widget.borderRadius),
-                ),
+              cache = Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(widget.spacing),
+                    decoration: BoxDecoration(
+                      color: selectedIndex == widget.index ? spaceTileOrange : spaceTileBlue,
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
+                    ),
+                  ),
+                  Container(color: transparentColor),
+                ],
               );
 
               return cache!;
