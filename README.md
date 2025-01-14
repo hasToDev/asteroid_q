@@ -23,11 +23,33 @@ This cross-platform game, built using the popular [Flutter](https://flutter.dev)
 
 Before getting started, you need to set up a few things:
 
-1. **Encryption Key and Initialization Vector:** Generate these using the [encrypt](https://pub.dev/packages/encrypt) package. These are essential for secure data storage.
+1. **Encryption Key and Initialization Vector:** Generate these using the [encrypt](https://pub.dev/packages/encrypt)
+   package. These are essential for secure data storage.
 
 2. **JSON Configuration File:** You'll need a JSON file to configure the game. We've stored our configuration in Cloudflare R2 Object Storage and provided an example URL.
 
 You can find example files and further instructions in the [cloudflare](cloudflare/config.example.json) and [env](env/env.example.json) directories.
+
+You will also have to set up the backend involves using the Amplify CLI to configure authentication and the leaderboard REST API. Here's a breakdown:
+
+1. **DynamoDB Tables:** You'll need three DynamoDB tables (one for each device category: desktop, tablet, and mobile).
+
+2. **Lambda Functions:** Each table requires two Lambda function paths:
+   * One to retrieve the entire leaderboard (e.g., `/desktop`).
+   * Another to fetch a specific player's entry (e.g., `/desktop/{player}`).
+
+3. **Table Structure:**  Each DynamoDB table has the following columns:
+
+   | Column     | Data Type |
+                |------------|-----------|
+   | `player`   | String    |
+   | `distance` | Number    |
+   | `rotate`   | Number    |
+   | `refuel`   | Number    |
+   | `galaxy`   | Number    |
+   | `timestamp`| Number    |
+
+   The `player` column serves as the partition key for each table."
 
 The Asteroid Q game in this repository was developed using `Flutter version 3.27.1` and `Dart version 3.6.0`
 
