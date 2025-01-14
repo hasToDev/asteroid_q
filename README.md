@@ -41,7 +41,7 @@ You will also have to set up the backend involves using the Amplify CLI to confi
 3. **Table Structure:**  Each DynamoDB table has the following columns:
 
    | Column     | Data Type |
-                |------------|-----------|
+   |------------|-----------|
    | `player`   | String    |
    | `distance` | Number    |
    | `rotate`   | Number    |
