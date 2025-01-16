@@ -38,11 +38,14 @@ class DialogService {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.memory(
-                            getIt<AssetByteService>().imageGAMEOVER!,
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                            isAntiAlias: true,
+                          IntrinsicWidth(
+                            child: Image.memory(
+                              getIt<AssetByteService>().imageGAMEOVER!,
+                              fit: BoxFit.contain,
+                              width: constraints.maxHeight - 160,
+                              gaplessPlayback: true,
+                              isAntiAlias: true,
+                            ),
                           ),
                           Text(
                             description,
@@ -200,11 +203,14 @@ class DialogService {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.memory(
-                            imageByte,
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                            isAntiAlias: true,
+                          IntrinsicWidth(
+                            child: Image.memory(
+                              imageByte,
+                              fit: BoxFit.contain,
+                              width: constraints.maxHeight - 160,
+                              gaplessPlayback: true,
+                              isAntiAlias: true,
+                            ),
                           ),
                           SizedBox(height: sizeBoxHeight),
                           Text(
@@ -286,25 +292,15 @@ class DialogService {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Builder(builder: (context) {
-                              if (constraints.maxHeight < 365) {
-                                return Image.memory(
-                                  getIt<AssetByteService>().imageUPDATE!,
-                                  fit: BoxFit.contain,
-                                  height: constraints.maxHeight - 160,
-                                  width: constraints.maxHeight - 160,
-                                  gaplessPlayback: true,
-                                  isAntiAlias: true,
-                                );
-                              }
-
-                              return Image.memory(
+                            IntrinsicWidth(
+                              child: Image.memory(
                                 getIt<AssetByteService>().imageUPDATE!,
                                 fit: BoxFit.contain,
+                                width: constraints.maxHeight - 160,
                                 gaplessPlayback: true,
                                 isAntiAlias: true,
-                              );
-                            }),
+                              ),
+                            ),
                             SizedBox(height: sizeBoxHeight),
                             Text(
                               title,
