@@ -65,7 +65,7 @@ class _GameplayPageState extends State<GameplayPage> {
                 child: Builder(
                   builder: (context) {
                     if (horizontalSpace != 0) {
-                      return GameRightPanel(horizontalSpace: horizontalSpace);
+                      return GameRightPanel(horizontalSpace: horizontalSpace, screenHeight: size.height);
                     }
                     return const SizedBox();
                   },
